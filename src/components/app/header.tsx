@@ -10,8 +10,12 @@ export function Header() {
             <Logo className="h-8 w-8" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold font-headline text-primary">InfraWise</h1>
-            <p className="text-muted-foreground">Cloud vs. On-Prem TCO Analysis</p>
+            <h1 className="text-2xl font-bold font-headline text-primary">
+              InfraWise
+            </h1>
+            <p className="text-muted-foreground">
+              Cloud vs. On-Prem TCO Analysis
+            </p>
           </div>
         </div>
         <ThemeToggle />
@@ -19,5 +23,3 @@ export function Header() {
     </header>
   );
 }
-
-    

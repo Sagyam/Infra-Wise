@@ -1,20 +1,22 @@
-import { describe, it, expect, vi } from 'vitest';
-import { calculateCosts } from './actions';
-import type { CostFormValues } from './types';
-import * as InflationModeling from '@/ai/flows/inflation-modeling';
+import { describe, expect, it, vi } from "vitest";
+import { calculateCosts } from "./actions";
+import type { CostFormValues } from "./types";
 
 // Mock the AI inflation model to return a predictable value
-vi.mock('@/ai/flows/inflation-modeling', () => ({
-  modelInflation: vi.fn(async ({ initialCost, inflationRate, analysisPeriod }) => {
-    // FV = P * (1 + r)^n
-    const inflatedCost = initialCost * Math.pow(1 + inflationRate, analysisPeriod);
-    return { inflatedCost: inflatedCost };
-  }),
+vi.mock("@/ai/flows/inflation-modeling", () => ({
+  modelInflation: vi.fn(
+    async ({ initialCost, inflationRate, analysisPeriod }) => {
+      // FV = P * (1 + r)^n
+      const inflatedCost =
+        initialCost * Math.pow(1 + inflationRate, analysisPeriod);
+      return { inflatedCost: inflatedCost };
+    }
+  ),
 }));
 
 const defaultTestValues: CostFormValues = {
   analysisPeriod: 5,
-  dataUnit: 'TB',
+  dataUnit: "TB",
   onPremHardwareCost: 50000,
   onPremSalvageValue: 10, // Added salvage value
   onPremYearlyLicensingCost: 5000,
@@ -49,18 +51,18 @@ const defaultTestValues: CostFormValues = {
   cloudArchiveStorageCost: 0.0036,
   cloudEgressCostPerUnit: 0.09,
   inflationRate: 2.5,
-  calculationMode: 'tco',
+  calculationMode: "tco",
 };
 
-describe('calculateCosts', () => {
-  it('should calculate TCO correctly for a simple scenario', async () => {
+describe("calculateCosts", () => {
+  it("should calculate TCO correctly for a simple scenario", async () => {
     const values = { ...defaultTestValues };
     const result = await calculateCosts(values);
 
     if (!result.success) {
       throw new Error(result.error);
     }
-    
+
     // These are snapshot values. If the logic changes, they need to be updated.
     expect(result.data.onPremTCO).toBeCloseTo(151240.2, 1);
     expect(result.data.cloudTCO).toBeCloseTo(350175.7, 1);
@@ -69,7 +71,7 @@ describe('calculateCosts', () => {
     expect(result.data.breakevenPoint).toBeNull();
   });
 
-  it('should handle a 1-year analysis period', async () => {
+  it("should handle a 1-year analysis period", async () => {
     const values = { ...defaultTestValues, analysisPeriod: 1 };
     const result = await calculateCosts(values);
 
@@ -80,10 +82,10 @@ describe('calculateCosts', () => {
     expect(result.data.onPremTCO).toBeCloseTo(69106, 0);
     expect(result.data.cloudTCO).toBeCloseTo(42086, 0);
     expect(result.data.savings).toBeCloseTo(27020, 0);
-    expect(result.data.breakevenPoint).toBe('Year 1');
+    expect(result.data.breakevenPoint).toBe("Year 1");
   });
 
-  it('should factor in replication costs', async () => {
+  it("should factor in replication costs", async () => {
     const values: CostFormValues = {
       ...defaultTestValues,
       analysisPeriod: 1,
@@ -95,22 +97,22 @@ describe('calculateCosts', () => {
     if (!result.success) {
       throw new Error(result.error);
     }
-    
+
     // On-prem TCO should roughly double the hardware and recurring costs, but not backup or salvage
-    expect(result.data.onPremTCO).toBeCloseTo(133662, 0); 
+    expect(result.data.onPremTCO).toBeCloseTo(133662, 0);
     expect(result.data.cloudTCO).toBeCloseTo(42086, 0);
   });
 
-  it('should return an error for invalid input', async () => {
+  it("should return an error for invalid input", async () => {
     const values = { ...defaultTestValues, analysisPeriod: 0 };
-    const result = await calculateCosts(values as any); 
+    const result = await calculateCosts(values as any);
     expect(result.success).toBe(false);
     if (!result.success) {
-      expect(result.error).toContain('Analysis period');
+      expect(result.error).toContain("Analysis period");
     }
   });
 
-  it('should correctly identify a breakeven point', async () => {
+  it("should correctly identify a breakeven point", async () => {
     const values = {
       ...defaultTestValues,
       onPremHardwareCost: 10000, // Lower initial on-prem cost
@@ -120,6 +122,6 @@ describe('calculateCosts', () => {
     if (!result.success) {
       throw new Error(result.error);
     }
-    expect(result.data.breakevenPoint).toBe('Year 1, Month 3');
+    expect(result.data.breakevenPoint).toBe("Year 1, Month 3");
   });
 });

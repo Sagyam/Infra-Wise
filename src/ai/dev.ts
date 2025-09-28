@@ -1,4 +1,5 @@
-import { config } from 'dotenv';
-config();
+import { config } from "dotenv";
 
-import '@/ai/flows/inflation-modeling.ts';
+import "@/ai/flows/inflation-modeling.ts";
+
+config();
