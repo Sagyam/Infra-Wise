@@ -91,6 +91,8 @@ const defaultValues: CostFormValues = {
   onPremTotalDrives: 24,
   onPremStoragePerDrive: 8, // in TB
   onPremRaidFactor: 20,
+  useOnPremSoftware: true,
+  useOnPremBandwidth: true,
   onPremBandwidthUsage: 5000,
   onPremBandwidthCostPerGb: 0.02,
   onPremAnnualTrafficGrowth: 15,
@@ -227,6 +229,14 @@ export function CostForm({
     }
   };
 
+  const useOnPremSoftware = useWatch({
+    control: form.control,
+    name: "useOnPremSoftware",
+  });
+  const useOnPremBandwidth = useWatch({
+    control: form.control,
+    name: "useOnPremBandwidth",
+  });
   const useOnPremCdn = useWatch({
     control: form.control,
     name: "useOnPremCdn",
@@ -403,7 +413,7 @@ export function CostForm({
                     "Annual Inflation Rate",
                     <TrendingUp />,
                     "%",
-                    "The expected annual rate of inflation, used to project future costs.",
+                    "The expected annual rate of inflation, used for amortization.",
                     { step: 0.1 }
                   )}
                   <FormField
@@ -517,17 +527,6 @@ export function CostForm({
                     )}
                   </div>
 
-                  <p className="text-sm font-medium">Software</p>
-                  <div className="grid grid-cols-1 gap-4 rounded-lg border p-4">
-                    {renderInput(
-                      "onPremYearlyLicensingCost",
-                      "Yearly Licensing Cost",
-                      <FileText />,
-                      "$/year",
-                      "Annual recurring cost for software licenses (e.g., operating systems, databases, virtualization)."
-                    )}
-                  </div>
-
                   <p className="text-sm font-medium">Power</p>
                   <div className="grid grid-cols-1 gap-4 rounded-lg border p-4">
                     {renderInput(
@@ -554,29 +553,78 @@ export function CostForm({
                     )}
                   </div>
 
+                  <p className="text-sm font-medium">Software</p>
+                  <div className="grid grid-cols-1 gap-4 rounded-lg border p-4">
+                    <FormField
+                      control={form.control}
+                      name="useOnPremSoftware"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between">
+                          <FormLabel>Include Software Costs</FormLabel>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    {useOnPremSoftware && (
+                      <>
+                        {renderInput(
+                          "onPremYearlyLicensingCost",
+                          "Yearly Licensing Cost",
+                          <FileText />,
+                          "$/year",
+                          "Annual recurring cost for software licenses (e.g., operating systems, databases, virtualization)."
+                        )}
+                      </>
+                    )}
+                  </div>
+
                   <p className="text-sm font-medium">Bandwidth</p>
                   <div className="grid grid-cols-1 gap-4 rounded-lg border p-4">
-                    {renderInput(
-                      "onPremBandwidthUsage",
-                      "Annual Bandwidth Usage",
-                      <Network />,
-                      "GB/year",
-                      "Estimated total data transferred out from your data center annually."
-                    )}
-                    {renderInput(
-                      "onPremBandwidthCostPerGb",
-                      "Bandwidth Cost per GB",
-                      <DollarSign />,
-                      "$/GB",
-                      "The price per GB of data transferred.",
-                      "0.001"
-                    )}
-                    {renderSlider(
-                      "onPremAnnualTrafficGrowth",
-                      "Annual Traffic Growth",
-                      <TrendingUp />,
-                      "%",
-                      "The percentage by which your egress traffic is expected to grow each year."
+                    <FormField
+                      control={form.control}
+                      name="useOnPremBandwidth"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between">
+                          <FormLabel>Include Bandwidth Costs</FormLabel>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                    {useOnPremBandwidth && (
+                      <>
+                        {renderInput(
+                          "onPremBandwidthUsage",
+                          "Annual Bandwidth Usage",
+                          <Network />,
+                          "GB/year",
+                          "Estimated total data transferred out from your data center annually."
+                        )}
+                        {renderInput(
+                          "onPremBandwidthCostPerGb",
+                          "Bandwidth Cost per GB",
+                          <DollarSign />,
+                          "$/GB",
+                          "The price per GB of data transferred.",
+                          "0.001"
+                        )}
+                        {renderSlider(
+                          "onPremAnnualTrafficGrowth",
+                          "Annual Traffic Growth",
+                          <TrendingUp />,
+                          "%",
+                          "The percentage by which your egress traffic is expected to grow each year."
+                        )}
+                      </>
                     )}
                   </div>
 

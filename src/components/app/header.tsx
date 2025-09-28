@@ -1,5 +1,6 @@
 import { Logo } from "@/components/icons/logo";
 import { ThemeToggle } from "./theme-toggle";
+import { Github } from "lucide-react";
 
 export function Header() {
   return (
@@ -18,7 +19,18 @@ export function Header() {
             </p>
           </div>
         </div>
-        <ThemeToggle />
+        <div className="flex items-center gap-2">
+          <a
+            href="https://github.com/Sagyam/Infra-Wise"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="p-2 rounded-lg hover:bg-accent transition-colors"
+            aria-label="View source on GitHub"
+          >
+            <Github className="h-5 w-5" />
+          </a>
+          <ThemeToggle />
+        </div>
       </div>
     </header>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, Lightbulb } from "lucide-react";
+import { AlertTriangle, Lightbulb, Github } from "lucide-react";
 import { useState } from "react";
 import { CostForm } from "@/components/app/cost-form";
 import { Header } from "@/components/app/header";
@@ -107,7 +107,20 @@ export default function Home() {
         </div>
       </main>
       <footer className="py-6 text-center text-muted-foreground text-sm border-t">
-        © {new Date().getFullYear()} InfraWise. A financial modeling tool.
+        <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div>
+            © {new Date().getFullYear()} InfraWise. A financial modeling tool.
+          </div>
+          <a
+            href="https://github.com/Sagyam/Infra-Wise"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 hover:text-foreground transition-colors"
+          >
+            <Github className="h-4 w-4" />
+            View on GitHub
+          </a>
+        </div>
       </footer>
     </div>
   );

@@ -33,8 +33,8 @@ A financial modeling tool for comparing Total Cost of Ownership (TCO) between cl
 
 ### Prerequisites
 
-- Node.js 18+ 
-- pnpm 8+
+- Node.js 22+ 
+- pnpm 10+
 
 ### Installation
 

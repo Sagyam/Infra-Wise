@@ -169,7 +169,7 @@ export function ResultsDisplay({
         <Tabs defaultValue="chart">
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="chart">Chart</TabsTrigger>
-            <TabsTrigger value="table">Table</TabsTrigger>
+            <TabsTrigger value="table">Cumulative</TabsTrigger>
             <TabsTrigger value="breakdown">Breakdown</TabsTrigger>
           </TabsList>
           <TabsContent value="chart" className="pt-4">

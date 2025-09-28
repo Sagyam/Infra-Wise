@@ -46,6 +46,8 @@ export const CostFormSchema = z
       .number()
       .min(0)
       .max(50, "RAID capacity loss cannot exceed 50%."),
+    useOnPremSoftware: z.boolean().optional(),
+    useOnPremBandwidth: z.boolean().optional(),
     onPremBandwidthUsage: z.number().min(0).optional(),
     onPremBandwidthCostPerGb: z.number().min(0).optional(),
     onPremAnnualTrafficGrowth: z.number().min(0).max(100).optional(),
