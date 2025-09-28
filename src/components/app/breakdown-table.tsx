@@ -10,9 +10,7 @@ import {
   TableFooter,
 } from "@/components/ui/table";
 import type { YearlyCost } from "@/lib/types";
-import type { YearlyCost } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 
 interface BreakdownTableProps {
   data: YearlyCost[];

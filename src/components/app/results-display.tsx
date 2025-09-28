@@ -10,11 +10,10 @@ import {
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { CalculationResult, CostFormValues } from "@/lib/types";
-import type { CalculationResult, CostFormValues } from "@/lib/types";
 import { jsonToCSV } from "@/lib/utils";
+import {useMemo} from "react";
 import { Button } from "../ui/button";
 import { BreakdownTable } from "./breakdown-table";
-import { CostChart } from "./cost-chart";
 import { CostChart } from "./cost-chart";
 import { ResultsTable } from "./results-table";
 
