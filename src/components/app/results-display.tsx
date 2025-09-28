@@ -1,6 +1,7 @@
 "use client";
 
 import { Download, Trophy } from "lucide-react";
+import { useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -11,7 +12,6 @@ import {
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { CalculationResult, CostFormValues } from "@/lib/types";
 import { jsonToCSV } from "@/lib/utils";
-import {useMemo} from "react";
 import { Button } from "../ui/button";
 import { BreakdownTable } from "./breakdown-table";
 import { CostChart } from "./cost-chart";

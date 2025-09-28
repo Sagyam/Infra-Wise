@@ -9,6 +9,7 @@ import {
   TableRow,
   TableFooter,
 } from "@/components/ui/table";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import type { YearlyCost } from "@/lib/types";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 

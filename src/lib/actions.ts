@@ -1,6 +1,6 @@
 "use server";
 
-import { modelInflation } from "@/ai/flows/inflation-modeling";
+import { modelInflation } from "@/lib/inflation";
 import {
   type CalculationResult,
   type CostBreakdown,
