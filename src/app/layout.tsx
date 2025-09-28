@@ -7,7 +7,10 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "InfraWise - Cloud vs. On-Prem TCO Analysis",
   description:
-    "InfraWise is an AI-powered financial modeling tool to compare the Total Cost of Ownership (TCO) between cloud and on-premise infrastructure. Make informed decisions with detailed cost breakdowns and breakeven analysis.",
+    "InfraWise is an financial modeling tool to compare the Total Cost of Ownership (TCO) between cloud and on-premise infrastructure. Make informed decisions with detailed cost breakdowns and breakeven analysis.",
+  icons: {
+    icon: "/favicon.svg",
+  },
   keywords: [
     "TCO calculator",
     "cloud vs on-premise",
@@ -19,7 +22,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "InfraWise - Cloud vs. On-Prem TCO Analysis",
     description:
-      "Compare cloud and on-premise infrastructure costs with our AI-powered TCO calculator.",
+      "Compare cloud and on-premise infrastructure costs with this calculator.",
     url: "https://infrawise.sagyamthapa.com.np",
     siteName: "InfraWise",
     images: [
@@ -36,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "InfraWise - Cloud vs. On-Prem TCO Analysis",
     description:
-      "Make informed infrastructure decisions. Compare cloud vs. on-premise TCO with our AI-powered tool.",
+      "Make informed infrastructure decisions. Compare cloud vs. on-premise TCO with this tool.",
     // creator: '@sagyam21',
     images: ["https://infrawise.sagyamthapa.com.np/og-image.png"],
   },

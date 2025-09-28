@@ -270,6 +270,7 @@ export async function calculateCosts(
         onPremBreakdown["Hardware"] += singleSiteHardware * replicationFactor;
         onPremBreakdown["Software"] +=
           inflatedRecurring.softwareCost * replicationFactor;
+
         onPremBreakdown["Power"] +=
           inflatedRecurring.powerCost * replicationFactor;
         onPremBreakdown["Bandwidth"] +=
