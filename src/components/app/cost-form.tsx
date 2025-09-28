@@ -627,7 +627,7 @@ export function CostForm({
                       name="useOnPremBackup"
                       render={({ field }) => (
                         <FormItem className="flex flex-row items-center justify-between">
-                          <FormLabel>Use On-Prem Backup</FormLabel>
+                          <FormLabel>Off site Backup</FormLabel>
                           <FormControl>
                             <Switch
                               checked={field.value}
@@ -665,7 +665,7 @@ export function CostForm({
                       name="useOnPremReplication"
                       render={({ field }) => (
                         <FormItem className="flex flex-row items-center justify-between">
-                          <FormLabel>Use On-Prem Replication</FormLabel>
+                          <FormLabel>Number of Replication Sites</FormLabel>
                           <FormControl>
                             <Switch
                               checked={field.value}

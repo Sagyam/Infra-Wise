@@ -1,70 +1,90 @@
-# InfraWise: AI-Powered Cloud vs. On-Premise TCO Analysis
+# InfraWise 📊
 
-InfraWise is a web-based financial modeling tool designed to provide a comprehensive Total Cost of Ownership (TCO) comparison between cloud and on-premise infrastructure solutions. By leveraging detailed user inputs and an AI-powered inflation model, InfraWise delivers clear, actionable insights to help businesses make informed infrastructure decisions.
+A financial modeling tool for comparing Total Cost of Ownership (TCO) between cloud and on-premise infrastructure solutions. Make informed infrastructure decisions with detailed cost breakdowns and breakeven analysis.
 
-This application is built with Next.js, React, ShadCN, Tailwind CSS, and Genkit.
+## Screenshot
+<img src="./public/demo.png" alt="InfraWise Screenshot" width="600"/>
 
-## Core Features
+## ✨ Features
 
--   **Data-Driven Analysis**: Collects detailed user inputs for a wide range of cost factors, including hardware, software, power, bandwidth, storage tiers, and data egress.
--   **Cloud vs. On-Premise Calculation**: Computes the TCO for both cloud and on-premise setups over a specified analysis period.
--   **AI-Powered Inflation Modeling**: Integrates a Genkit AI flow to project the impact of inflation on future costs, providing a more realistic long-term forecast.
--   **Breakeven and Savings Analysis**: Pinpoints the exact moment one solution becomes more cost-effective than the other and quantifies the total potential savings.
--   **Interactive Results Visualization**: Displays results through clear summary cards, detailed data tables, and interactive stacked bar charts to show the evolution of costs over time.
--   **TCO vs. Amortized Views**: Offers two distinct calculation modes—Total Cost of Ownership for a cumulative view and Amortized Cost for an average annual perspective.
--   **CSV Export**: Allows users to download the complete, detailed cost analysis as a CSV file for offline analysis or reporting.
--   **Responsive Design**: Features a clean, responsive interface with a switchable light/dark theme, optimized for both desktop and mobile use.
+- 💰 **Comprehensive TCO Analysis**: Compare cloud vs on-premise costs across hardware, software, power, bandwidth, and storage
+- ⚖️ **Breakeven Analysis**: Identify when one solution becomes more cost-effective than the other
+- 📈 **Interactive Visualizations**: View cost evolution through stacked bar charts and detailed tables
+- 📊 **Export Capabilities**: Download complete analysis as CSV for reporting
+- 🎨 **Responsive Design**: Clean interface with light/dark theme support
+- 🔒 **TypeScript**: Full type safety throughout the application
 
-## Tech Stack
+## 🛠️ Tech Stack
 
--   **Frontend**: Next.js (App Router), React, TypeScript
--   **UI Components**: ShadCN UI
--   **Styling**: Tailwind CSS
--   **AI/Generative**: Genkit, Google AI
--   **Form Management**: React Hook Form, Zod
--   **Charts**: Recharts
--   **Testing**: Vitest, React Testing Library
+- ⚡ **Framework**: Next.js 15 with App Router
+- 📝 **Language**: TypeScript
+- 🎨 **Styling**: Tailwind CSS
+- 🧩 **UI Components**: Radix UI primitives with shadcn/ui
+- 📋 **Forms**: React Hook Form with Zod validation
+- 📊 **Charts**: Recharts
+- 📦 **Package Manager**: pnpm
 
-## Getting Started
+## 🚀 Getting Started
 
-To run this project locally, you'll need Node.js and npm installed.
+### Prerequisites
 
-### 1. Install Dependencies
+- Node.js 18+ 
+- pnpm 8+
 
-Clone the repository and install the required packages:
+### Installation
 
+1. Clone the repository:
 ```bash
-npm install
+git clone <repository-url>
+cd infra-wise
 ```
 
-### 2. Set Up Environment Variables
-
-This project uses Genkit for its AI features, which requires an API key for the Google AI provider.
-
-1.  Create a `.env` file in the root of the project.
-2.  Add your Google AI API key to the file:
-
-```
-GEMINI_API_KEY=your_api_key_here
-```
-
-### 3. Run the Development Server
-
-Start the Next.js development server:
-
+2. Install dependencies:
 ```bash
-npm run dev
+pnpm install
 ```
 
-The application will be available at `http://localhost:9002`.
-
-### 4. Running Tests
-
-To run the unit tests for the calculation logic, use the following command:
-
+3. Start the development server:
 ```bash
-npm run test
+pnpm dev
 ```
 
-This will execute the test files using Vitest and provide a summary of the results.
+The application will be available at `http://localhost:3000`.
 
+## 📜 Available Scripts
+
+- `pnpm dev` - Start development server with Turbopack ⚡
+- `pnpm build` - Build for production 🏗️
+- `pnpm start` - Start production server 🌐
+- `pnpm lint` - Run ESLint with auto-fix 🧹
+- `pnpm lint:check` - Check linting without fixes 👀
+- `pnpm format` - Format code with Prettier ✨
+- `pnpm format:check` - Check formatting without changes 🔍
+- `pnpm typecheck` - Run TypeScript type checking 🔒
+
+## 📁 Project Structure
+
+```
+src/
+├── app/                 # Next.js app router pages
+├── components/
+│   ├── app/            # Application-specific components
+│   ├── icons/          # Icon components
+│   └── ui/             # Reusable UI components
+├── hooks/              # Custom React hooks
+└── lib/                # Utilities and types
+```
+
+## 🧑‍💻 Development
+
+This project uses:
+- 🧹 **ESLint** for code linting
+- ✨ **Prettier** for code formatting
+- 🔒 **TypeScript** for type safety
+- 🎨 **Tailwind CSS** for styling
+
+Run `pnpm lint` and `pnpm typecheck` before committing changes.
+
+## 📄 License
+
+Private project - All rights reserved.

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     "InfraWise is an financial modeling tool to compare the Total Cost of Ownership (TCO) between cloud and on-premise infrastructure. Make informed decisions with detailed cost breakdowns and breakeven analysis.",
   icons: {
-    icon: "/favicon.svg",
+    icon: "/favicon.png",
   },
   keywords: [
     "TCO calculator",
