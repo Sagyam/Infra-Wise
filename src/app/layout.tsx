@@ -60,6 +60,9 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Source+Code+Pro:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap"
           rel="stylesheet"
         />
+        <title>
+            InfraWise - Cloud vs. On-Prem Analysis
+        </title>
       </head>
       <body className="font-body antialiased" suppressHydrationWarning>
         <ThemeProvider
