@@ -4,6 +4,11 @@ A financial modeling tool for comparing Total Cost of Ownership (TCO) between cl
 
 ## Screenshot
 <img src="./public/demo.png" alt="InfraWise Screenshot" width="600"/>
+<br/>
+<div style="display: flex; gap: 10px;">
+<img src="./public/demo-2.png" alt="InfraWise Screenshot 2" width="400"/>
+<img src="./public/demo-3.png" alt="InfraWise Screenshot 3" width="400"/>
+</div>
 
 ## ✨ Features
 
@@ -35,7 +40,7 @@ A financial modeling tool for comparing Total Cost of Ownership (TCO) between cl
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone https://github.com/Sagyam/Infra-Wise.git
 cd infra-wise
 ```
 
@@ -87,4 +92,4 @@ Run `pnpm lint` and `pnpm typecheck` before committing changes.
 
 ## 📄 License
 
-Private project - All rights reserved.
+MIT License. See `LICENSE` for details.
