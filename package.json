@@ -6,10 +6,9 @@
     "dev": "next dev --turbopack -p 3000",
     "build": "NODE_ENV=production next build",
     "start": "next start",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
-    "lint:check": "eslint src --ext .js,.jsx,.ts,.tsx",
-    "format": "prettier --write src/**/*.{js,jsx,ts,tsx,json,css,md}",
-    "format:check": "prettier --check src/**/*.{js,jsx,ts,tsx,json,css,md}",
+    "lint": "biome lint src",
+    "format": "biome format --write src",
+    "format:check": "biome format src",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -55,26 +54,12 @@
     "zod": "^3.24.2"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3.3.1",
-    "@eslint/js": "^9.36.0",
-    "@trivago/prettier-plugin-sort-imports": "^5.2.2",
+    "@biomejs/biome": "^2.2.5",
     "@types/node": "^20",
     "@types/papaparse": "^5.3.14",
     "@types/react": "^18",
     "@types/react-dom": "^18",
-    "@typescript-eslint/eslint-plugin": "^8.44.1",
-    "@typescript-eslint/parser": "^8.44.1",
-    "eslint": "^9.36.0",
-    "eslint-config-next": "^15.5.4",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-import": "^2.32.0",
-    "eslint-plugin-next": "^0.0.0",
-    "eslint-plugin-prettier": "^5.5.4",
-    "eslint-plugin-react": "^7.37.5",
-    "eslint-plugin-react-hooks": "^5.2.0",
-    "eslint-plugin-unused-imports": "^4.2.0",
     "postcss": "^8",
-    "prettier": "^3.6.2",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

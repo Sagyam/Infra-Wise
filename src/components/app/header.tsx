@@ -1,6 +1,6 @@
-import { Logo } from "@/components/icons/logo";
-import { ThemeToggle } from "./theme-toggle";
-import { Github } from "lucide-react";
+import { Logo } from '@/components/icons/logo'
+import { ThemeToggle } from './theme-toggle'
+import { Github } from 'lucide-react'
 
 export function Header() {
   return (
@@ -33,5 +33,5 @@ export function Header() {
         </div>
       </div>
     </header>
-  );
+  )
 }

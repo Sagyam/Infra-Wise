@@ -1,37 +1,37 @@
-"use client";
+'use client'
 
-import { AlertTriangle, Lightbulb, Github } from "lucide-react";
-import { useState } from "react";
-import { CostForm } from "@/components/app/cost-form";
-import { Header } from "@/components/app/header";
-import { ResultsDisplay } from "@/components/app/results-display";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import type { CalculationResult, CostFormValues } from "@/lib/types";
+import { AlertTriangle, Lightbulb, Github } from 'lucide-react'
+import { useState } from 'react'
+import { CostForm } from '@/components/app/cost-form'
+import { Header } from '@/components/app/header'
+import { ResultsDisplay } from '@/components/app/results-display'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Skeleton } from '@/components/ui/skeleton'
+import type { CalculationResult, CostFormValues } from '@/lib/types'
 
 export default function Home() {
-  const [results, setResults] = useState<CalculationResult | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [results, setResults] = useState<CalculationResult | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
   const [calculationMode, setCalculationMode] =
-    useState<CostFormValues["calculationMode"]>("tco");
+    useState<CostFormValues['calculationMode']>('tco')
 
   const handleCalculate = (
     data: CalculationResult | null,
-    errorMsg: string | null
+    errorMsg: string | null,
   ) => {
     if (data) {
-      setResults(data);
-      setCalculationMode(data.calculationMode);
+      setResults(data)
+      setCalculationMode(data.calculationMode)
     }
-    setError(errorMsg);
-    setIsLoading(false);
-  };
+    setError(errorMsg)
+    setIsLoading(false)
+  }
 
   const handleLoading = () => {
-    setIsLoading(true);
-    setError(null);
-  };
+    setIsLoading(true)
+    setError(null)
+  }
 
   return (
     <div className="flex flex-col min-h-screen bg-background">
@@ -123,5 +123,5 @@ export default function Home() {
         </div>
       </footer>
     </div>
-  );
+  )
 }

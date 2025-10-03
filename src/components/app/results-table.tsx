@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   Table,
@@ -7,21 +7,21 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import type { YearlyCost } from "@/lib/types";
+} from '@/components/ui/table'
+import type { YearlyCost } from '@/lib/types'
 
 interface ResultsTableProps {
-  data: YearlyCost[];
+  data: YearlyCost[]
 }
 
 const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(value);
-};
+  }).format(value)
+}
 
 export function ResultsTable({ data }: ResultsTableProps) {
   return (
@@ -37,7 +37,7 @@ export function ResultsTable({ data }: ResultsTableProps) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.map(row => (
+          {data.map((row) => (
             <TableRow key={row.year}>
               <TableCell className="font-medium">{row.year}</TableCell>
               <TableCell>{formatCurrency(row.onPremCost)}</TableCell>
@@ -49,5 +49,5 @@ export function ResultsTable({ data }: ResultsTableProps) {
         </TableBody>
       </Table>
     </div>
-  );
+  )
 }

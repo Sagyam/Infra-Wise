@@ -1,35 +1,35 @@
-"use client";
+'use client'
 
-import { Download, Trophy } from "lucide-react";
-import { useMemo } from "react";
+import { Download, Trophy } from 'lucide-react'
+import { useMemo } from 'react'
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { CalculationResult, CostFormValues } from "@/lib/types";
-import { jsonToCSV } from "@/lib/utils";
-import { Button } from "../ui/button";
-import { BreakdownTable } from "./breakdown-table";
-import { CostChart } from "./cost-chart";
-import { ResultsTable } from "./results-table";
+} from '@/components/ui/card'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import type { CalculationResult, CostFormValues } from '@/lib/types'
+import { jsonToCSV } from '@/lib/utils'
+import { Button } from '../ui/button'
+import { BreakdownTable } from './breakdown-table'
+import { CostChart } from './cost-chart'
+import { ResultsTable } from './results-table'
 
 interface ResultsDisplayProps {
-  results: CalculationResult;
-  calculationMode: CostFormValues["calculationMode"];
+  results: CalculationResult
+  calculationMode: CostFormValues['calculationMode']
 }
 
 const formatCurrency = (value: number) => {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(value);
-};
+  }).format(value)
+}
 
 export function ResultsDisplay({
   results,
@@ -42,69 +42,69 @@ export function ResultsDisplay({
     yearlyCosts,
     analysisPeriod,
     breakevenPoint,
-  } = results;
+  } = results
 
   const winningOption = useMemo(
-    () => (savings > 0 ? "Cloud" : "On-Premise"),
-    [savings]
-  );
+    () => (savings > 0 ? 'Cloud' : 'On-Premise'),
+    [savings],
+  )
   const winningSavings = useMemo(
     () => (savings > 0 ? savings : -savings),
-    [savings]
-  );
+    [savings],
+  )
 
   const onPremDisplay = useMemo(
     () =>
-      calculationMode === "amortized" ? onPremTCO / analysisPeriod : onPremTCO,
-    [calculationMode, onPremTCO, analysisPeriod]
-  );
+      calculationMode === 'amortized' ? onPremTCO / analysisPeriod : onPremTCO,
+    [calculationMode, onPremTCO, analysisPeriod],
+  )
   const cloudDisplay = useMemo(
     () =>
-      calculationMode === "amortized" ? cloudTCO / analysisPeriod : cloudTCO,
-    [calculationMode, cloudTCO, analysisPeriod]
-  );
+      calculationMode === 'amortized' ? cloudTCO / analysisPeriod : cloudTCO,
+    [calculationMode, cloudTCO, analysisPeriod],
+  )
   const savingsDisplay = useMemo(
     () =>
-      calculationMode === "amortized"
+      calculationMode === 'amortized'
         ? winningSavings / analysisPeriod
         : winningSavings,
-    [calculationMode, winningSavings, analysisPeriod]
-  );
+    [calculationMode, winningSavings, analysisPeriod],
+  )
 
   const displayTitle =
-    calculationMode === "amortized"
+    calculationMode === 'amortized'
       ? `Amortized Cost Per Year over ${analysisPeriod} years`
-      : `Total Cost of Ownership (TCO) over ${analysisPeriod} years`;
+      : `Total Cost of Ownership (TCO) over ${analysisPeriod} years`
 
   const handleExport = () => {
-    const flattenedData = yearlyCosts.map(y => ({
+    const flattenedData = yearlyCosts.map((y) => ({
       Year: y.year,
-      "On-Prem Cost": y.onPremCost,
-      "Cloud Cost": y.cloudCost,
-      "Cumulative On-Prem": y.cumulativeOnPrem,
-      "Cumulative Cloud": y.cumulativeCloud,
-      "On-Prem Hardware": y.onPremBreakdown.Hardware || 0,
-      "On-Prem Software": y.onPremBreakdown.Software || 0,
-      "On-Prem Power": y.onPremBreakdown.Power || 0,
-      "On-Prem Bandwidth": y.onPremBreakdown.Bandwidth || 0,
-      "On-Prem CDN": y.onPremBreakdown.CDN || 0,
-      "On-Prem Backup": y.onPremBreakdown.Backup || 0,
-      "Cloud Hot Storage": y.cloudBreakdown["Hot Storage"] || 0,
-      "Cloud Standard Storage": y.cloudBreakdown["Standard Storage"] || 0,
-      "Cloud Archive Storage": y.cloudBreakdown["Archive Storage"] || 0,
-      "Cloud Bandwidth (Egress)": y.cloudBreakdown["Bandwidth (Egress)"] || 0,
-    }));
-    const csv = jsonToCSV(flattenedData);
-    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    const link = document.createElement("a");
-    const url = URL.createObjectURL(blob);
-    link.setAttribute("href", url);
-    link.setAttribute("download", "infrawise_tco_analysis.csv");
-    link.style.visibility = "hidden";
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  };
+      'On-Prem Cost': y.onPremCost,
+      'Cloud Cost': y.cloudCost,
+      'Cumulative On-Prem': y.cumulativeOnPrem,
+      'Cumulative Cloud': y.cumulativeCloud,
+      'On-Prem Hardware': y.onPremBreakdown.Hardware || 0,
+      'On-Prem Software': y.onPremBreakdown.Software || 0,
+      'On-Prem Power': y.onPremBreakdown.Power || 0,
+      'On-Prem Bandwidth': y.onPremBreakdown.Bandwidth || 0,
+      'On-Prem CDN': y.onPremBreakdown.CDN || 0,
+      'On-Prem Backup': y.onPremBreakdown.Backup || 0,
+      'Cloud Hot Storage': y.cloudBreakdown['Hot Storage'] || 0,
+      'Cloud Standard Storage': y.cloudBreakdown['Standard Storage'] || 0,
+      'Cloud Archive Storage': y.cloudBreakdown['Archive Storage'] || 0,
+      'Cloud Bandwidth (Egress)': y.cloudBreakdown['Bandwidth (Egress)'] || 0,
+    }))
+    const csv = jsonToCSV(flattenedData)
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+    const link = document.createElement('a')
+    const url = URL.createObjectURL(blob)
+    link.setAttribute('href', url)
+    link.setAttribute('download', 'infrawise_tco_analysis.csv')
+    link.style.visibility = 'hidden'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
 
   return (
     <Card>
@@ -130,7 +130,7 @@ export function ResultsDisplay({
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                On-Premise {calculationMode === "amortized" ? " / year" : "TCO"}
+                On-Premise {calculationMode === 'amortized' ? ' / year' : 'TCO'}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -142,7 +142,7 @@ export function ResultsDisplay({
           <Card>
             <CardHeader>
               <CardTitle className="text-sm font-medium text-muted-foreground">
-                Cloud {calculationMode === "amortized" ? " / year" : "TCO"}
+                Cloud {calculationMode === 'amortized' ? ' / year' : 'TCO'}
               </CardTitle>
             </CardHeader>
             <CardContent>
@@ -204,5 +204,5 @@ export function ResultsDisplay({
         </Tabs>
       </CardContent>
     </Card>
-  );
+  )
 }

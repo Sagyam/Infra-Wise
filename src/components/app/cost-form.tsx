@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
   ArrowRightLeft,
   Calendar,
@@ -22,10 +22,10 @@ import {
   TestTube2,
   TrendingUp,
   Zap,
-} from "lucide-react";
-import React from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { Button } from "@/components/ui/button";
+} from 'lucide-react'
+import React from 'react'
+import { useForm, useWatch } from 'react-hook-form'
+import { Button } from '@/components/ui/button'
 import {
   Card,
   CardContent,
@@ -33,7 +33,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from '@/components/ui/card'
 import {
   Form,
   FormControl,
@@ -42,42 +42,42 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Slider } from "@/components/ui/slider";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from '@/components/ui/form'
+import { Input } from '@/components/ui/input'
+import { Slider } from '@/components/ui/slider'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { calculateCosts } from "@/lib/actions";
+} from '@/components/ui/tooltip'
+import { calculateCosts } from '@/lib/actions'
 import {
   type CalculationResult,
   CostFormSchema,
   type CostFormValues,
-} from "@/lib/types";
+} from '@/lib/types'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../ui/select";
-import { Switch } from "../ui/switch";
+} from '../ui/select'
+import { Switch } from '../ui/switch'
 
 interface CostFormProps {
-  onCalculate: (data: CalculationResult | null, error: string | null) => void;
-  onLoading: () => void;
-  isLoading: boolean;
-  calculationMode: CostFormValues["calculationMode"];
-  onCalculationModeChange: (mode: CostFormValues["calculationMode"]) => void;
+  onCalculate: (data: CalculationResult | null, error: string | null) => void
+  onLoading: () => void
+  isLoading: boolean
+  calculationMode: CostFormValues['calculationMode']
+  onCalculationModeChange: (mode: CostFormValues['calculationMode']) => void
 }
 
 const defaultValues: CostFormValues = {
   analysisPeriod: 5,
-  dataUnit: "TB",
+  dataUnit: 'TB',
 
   // On-prem
   onPremHardwareCost: 25000,
@@ -120,17 +120,17 @@ const defaultValues: CostFormValues = {
 
   // General
   inflationRate: 3.0,
-  calculationMode: "tco",
-};
+  calculationMode: 'tco',
+}
 
 const TooltipLabel = ({
   label,
   tooltipText,
   icon,
 }: {
-  label: string;
-  tooltipText: string;
-  icon: React.ReactNode;
+  label: string
+  tooltipText: string
+  icon: React.ReactNode
 }) => (
   <TooltipProvider>
     <Tooltip>
@@ -144,7 +144,7 @@ const TooltipLabel = ({
       </TooltipContent>
     </Tooltip>
   </TooltipProvider>
-);
+)
 
 export function CostForm({
   onCalculate,
@@ -156,99 +156,99 @@ export function CostForm({
   const form = useForm<CostFormValues>({
     resolver: zodResolver(CostFormSchema),
     defaultValues,
-  });
+  })
 
   React.useEffect(() => {
-    form.setValue("calculationMode", calculationMode);
-  }, [calculationMode, form]);
+    form.setValue('calculationMode', calculationMode)
+  }, [calculationMode, form])
 
   const onSubmit = async (values: CostFormValues) => {
-    onLoading();
-    const result = await calculateCosts(values);
+    onLoading()
+    const result = await calculateCosts(values)
     if (result.success) {
-      onCalculate(result.data, null);
+      onCalculate(result.data, null)
     } else {
-      onCalculate(null, result.error);
+      onCalculate(null, result.error)
     }
-  };
+  }
 
-  const dataUnit = useWatch({ control: form.control, name: "dataUnit" });
+  const dataUnit = useWatch({ control: form.control, name: 'dataUnit' })
   const onPremStoragePerDrive = useWatch({
     control: form.control,
-    name: "onPremStoragePerDrive",
-  });
+    name: 'onPremStoragePerDrive',
+  })
   const onPremTotalDrives = useWatch({
     control: form.control,
-    name: "onPremTotalDrives",
-  });
+    name: 'onPremTotalDrives',
+  })
   const onPremRaidFactor = useWatch({
     control: form.control,
-    name: "onPremRaidFactor",
-  });
+    name: 'onPremRaidFactor',
+  })
 
   React.useEffect(() => {
-    const onPremStoragePerDriveInUnit = onPremStoragePerDrive; // always TB
-    const totalRawSize = onPremStoragePerDriveInUnit * onPremTotalDrives;
-    const raidOverhead = totalRawSize * (onPremRaidFactor / 100);
-    const usableSize = totalRawSize - raidOverhead;
+    const onPremStoragePerDriveInUnit = onPremStoragePerDrive // always TB
+    const totalRawSize = onPremStoragePerDriveInUnit * onPremTotalDrives
+    const raidOverhead = totalRawSize * (onPremRaidFactor / 100)
+    const usableSize = totalRawSize - raidOverhead
 
-    const conversionFactor = { GB: 1024, TB: 1, PB: 1 / 1024 }[dataUnit] || 1;
-    const usableSizeInDataUnit = usableSize * conversionFactor;
+    const conversionFactor = { GB: 1024, TB: 1, PB: 1 / 1024 }[dataUnit] || 1
+    const usableSizeInDataUnit = usableSize * conversionFactor
 
-    form.setValue("onPremBackupStorage", Math.max(0, usableSizeInDataUnit));
+    form.setValue('onPremBackupStorage', Math.max(0, usableSizeInDataUnit))
   }, [
     onPremStoragePerDrive,
     onPremTotalDrives,
     onPremRaidFactor,
     dataUnit,
     form,
-  ]);
+  ])
 
   const cloudHotTier = useWatch({
     control: form.control,
-    name: "cloudHotTier",
-  });
+    name: 'cloudHotTier',
+  })
   const cloudStandardTier = useWatch({
     control: form.control,
-    name: "cloudStandardTier",
-  });
+    name: 'cloudStandardTier',
+  })
 
   const handleHotChange = (value: number) => {
-    const archiveTier = 100 - value - cloudStandardTier;
+    const archiveTier = 100 - value - cloudStandardTier
     if (archiveTier >= 0) {
-      form.setValue("cloudHotTier", value);
-      form.setValue("cloudArchiveTier", archiveTier);
+      form.setValue('cloudHotTier', value)
+      form.setValue('cloudArchiveTier', archiveTier)
     }
-  };
+  }
 
   const handleStandardChange = (value: number) => {
-    const archiveTier = 100 - cloudHotTier - value;
+    const archiveTier = 100 - cloudHotTier - value
     if (archiveTier >= 0) {
-      form.setValue("cloudStandardTier", value);
-      form.setValue("cloudArchiveTier", archiveTier);
+      form.setValue('cloudStandardTier', value)
+      form.setValue('cloudArchiveTier', archiveTier)
     }
-  };
+  }
 
   const useOnPremSoftware = useWatch({
     control: form.control,
-    name: "useOnPremSoftware",
-  });
+    name: 'useOnPremSoftware',
+  })
   const useOnPremBandwidth = useWatch({
     control: form.control,
-    name: "useOnPremBandwidth",
-  });
+    name: 'useOnPremBandwidth',
+  })
   const useOnPremCdn = useWatch({
     control: form.control,
-    name: "useOnPremCdn",
-  });
+    name: 'useOnPremCdn',
+  })
   const useOnPremBackup = useWatch({
     control: form.control,
-    name: "useOnPremBackup",
-  });
+    name: 'useOnPremBackup',
+  })
   const useOnPremReplication = useWatch({
     control: form.control,
-    name: "useOnPremReplication",
-  });
+    name: 'useOnPremReplication',
+  })
 
   const renderInput = (
     name: keyof CostFormValues,
@@ -256,7 +256,7 @@ export function CostForm({
     icon: React.ReactNode,
     unit?: string,
     tooltip?: string,
-    step: string = "1"
+    step: string = '1',
   ) => (
     <FormField
       control={form.control}
@@ -279,7 +279,7 @@ export function CostForm({
                 placeholder="0"
                 step={step}
                 {...field}
-                onChange={e => field.onChange(e.target.valueAsNumber || 0)}
+                onChange={(e) => field.onChange(e.target.valueAsNumber || 0)}
                 className="flex-1"
               />
             </FormControl>
@@ -291,7 +291,7 @@ export function CostForm({
         </FormItem>
       )}
     />
-  );
+  )
 
   const renderSlider = (
     name: keyof CostFormValues,
@@ -300,12 +300,12 @@ export function CostForm({
     unit: string,
     tooltip?: string,
     props: {
-      max?: number;
-      min?: number;
-      step?: number;
-      disabled?: boolean;
-      onValueChange?: (value: number) => void;
-    } = {}
+      max?: number
+      min?: number
+      step?: number
+      disabled?: boolean
+      onValueChange?: (value: number) => void
+    } = {},
   ) => (
     <FormField
       control={form.control}
@@ -325,9 +325,9 @@ export function CostForm({
             <FormControl>
               <Slider
                 value={[field.value]}
-                onValueChange={vals => {
-                  field.onChange(vals[0]);
-                  if (props.onValueChange) props.onValueChange(vals[0]);
+                onValueChange={(vals) => {
+                  field.onChange(vals[0])
+                  if (props.onValueChange) props.onValueChange(vals[0])
                 }}
                 max={props.max ?? 100}
                 min={props.min ?? 0}
@@ -337,8 +337,8 @@ export function CostForm({
             </FormControl>
             <span className="text-sm font-medium w-20 text-right">
               {field.value.toFixed(
-                props.step === 0.01 || props.step === 0.1 ? 2 : 0
-              )}{" "}
+                props.step === 0.01 || props.step === 0.1 ? 2 : 0,
+              )}{' '}
               {unit}
             </span>
           </div>
@@ -346,7 +346,7 @@ export function CostForm({
         </FormItem>
       )}
     />
-  );
+  )
 
   return (
     <Card className="h-full flex flex-col max-h-[calc(100vh-10rem)]">
@@ -374,11 +374,11 @@ export function CostForm({
               <div className="space-y-6">
                 <TabsContent value="general" className="mt-0 space-y-6">
                   {renderInput(
-                    "analysisPeriod",
-                    "Analysis Period",
+                    'analysisPeriod',
+                    'Analysis Period',
                     <Calendar />,
-                    "Years",
-                    "The number of years to forecast costs."
+                    'Years',
+                    'The number of years to forecast costs.',
                   )}
                   <FormField
                     control={form.control}
@@ -409,12 +409,12 @@ export function CostForm({
                     )}
                   />
                   {renderSlider(
-                    "inflationRate",
-                    "Annual Inflation Rate",
+                    'inflationRate',
+                    'Annual Inflation Rate',
                     <TrendingUp />,
-                    "%",
-                    "The expected annual rate of inflation, used for amortization.",
-                    { step: 0.1 }
+                    '%',
+                    'The expected annual rate of inflation, used for amortization.',
+                    { step: 0.1 },
                   )}
                   <FormField
                     control={form.control}
@@ -428,20 +428,20 @@ export function CostForm({
                               className="absolute top-1 left-1 h-[calc(100%-0.5rem)] w-[calc(50%-0.25rem)] bg-primary rounded-md transition-all duration-300"
                               style={{
                                 transform: `translateX(${
-                                  field.value === "amortized" ? "100%" : "0%"
+                                  field.value === 'amortized' ? '100%' : '0%'
                                 })`,
                               }}
                             ></div>
                             <button
                               type="button"
                               onClick={() => {
-                                field.onChange("tco");
-                                onCalculationModeChange("tco");
+                                field.onChange('tco')
+                                onCalculationModeChange('tco')
                               }}
                               className={`relative z-10 p-2 rounded-md text-center transition-colors ${
-                                field.value === "tco"
-                                  ? "text-primary-foreground"
-                                  : ""
+                                field.value === 'tco'
+                                  ? 'text-primary-foreground'
+                                  : ''
                               }`}
                             >
                               TCO
@@ -449,13 +449,13 @@ export function CostForm({
                             <button
                               type="button"
                               onClick={() => {
-                                field.onChange("amortized");
-                                onCalculationModeChange("amortized");
+                                field.onChange('amortized')
+                                onCalculationModeChange('amortized')
                               }}
                               className={`relative z-10 p-2 rounded-md text-center transition-colors ${
-                                field.value === "amortized"
-                                  ? "text-primary-foreground"
-                                  : ""
+                                field.value === 'amortized'
+                                  ? 'text-primary-foreground'
+                                  : ''
                               }`}
                             >
                               Amortized
@@ -463,9 +463,9 @@ export function CostForm({
                           </div>
                         </FormControl>
                         <FormDescription>
-                          {field.value === "tco"
-                            ? "Total Cost of Ownership (TCO) shows the cumulative cost over the entire analysis period."
-                            : "Amortized Cost shows the average cost per year, spreading the initial investment over time."}
+                          {field.value === 'tco'
+                            ? 'Total Cost of Ownership (TCO) shows the cumulative cost over the entire analysis period.'
+                            : 'Amortized Cost shows the average cost per year, spreading the initial investment over time.'}
                         </FormDescription>
                         <FormMessage />
                       </FormItem>
@@ -476,80 +476,80 @@ export function CostForm({
                   <p className="text-sm font-medium">Hardware</p>
                   <div className="grid grid-cols-1 gap-4 rounded-lg border p-4">
                     {renderInput(
-                      "onPremHardwareCost",
-                      "Upfront Hardware Cost",
+                      'onPremHardwareCost',
+                      'Upfront Hardware Cost',
                       <Server />,
-                      "$",
-                      "Initial capital expenditure for all on-premise hardware (servers, racks, networking)."
+                      '$',
+                      'Initial capital expenditure for all on-premise hardware (servers, racks, networking).',
                     )}
                     {renderSlider(
-                      "onPremSalvageValue",
-                      "Salvage Value",
+                      'onPremSalvageValue',
+                      'Salvage Value',
                       <Receipt />,
-                      "%",
-                      "The residual value of the hardware at the end of the analysis period, as a percentage of the initial cost."
+                      '%',
+                      'The residual value of the hardware at the end of the analysis period, as a percentage of the initial cost.',
                     )}
                     {renderInput(
-                      "onPremStoragePerDrive",
-                      "Storage per Drive",
+                      'onPremStoragePerDrive',
+                      'Storage per Drive',
                       <HardDrive />,
-                      "TB",
-                      "Capacity of a single drive in your on-premise setup (in Terabytes)."
+                      'TB',
+                      'Capacity of a single drive in your on-premise setup (in Terabytes).',
                     )}
                     {renderInput(
-                      "onPremTotalDrives",
-                      "Number of Drives",
+                      'onPremTotalDrives',
+                      'Number of Drives',
                       <Factory />,
-                      "drives",
-                      "Total number of physical drives in your on-premise setup."
+                      'drives',
+                      'Total number of physical drives in your on-premise setup.',
                     )}
                     {renderSlider(
-                      "onPremRaidFactor",
-                      "RAID Capacity Loss",
+                      'onPremRaidFactor',
+                      'RAID Capacity Loss',
                       <Percent />,
-                      "%",
-                      "The percentage of total storage capacity lost to RAID overhead for redundancy.",
-                      { max: 50 }
+                      '%',
+                      'The percentage of total storage capacity lost to RAID overhead for redundancy.',
+                      { max: 50 },
                     )}
                     {renderSlider(
-                      "onPremDriveFailureRate",
-                      "Annual Drive Failure Rate",
+                      'onPremDriveFailureRate',
+                      'Annual Drive Failure Rate',
                       <TestTube2 />,
-                      "%",
-                      "The percentage of drives expected to fail and need replacement each year."
+                      '%',
+                      'The percentage of drives expected to fail and need replacement each year.',
                     )}
                     {renderInput(
-                      "onPremDriveReplacementCost",
-                      "Cost per Replacement Drive",
+                      'onPremDriveReplacementCost',
+                      'Cost per Replacement Drive',
                       <Replace />,
-                      "$",
-                      "The cost to purchase a single replacement drive."
+                      '$',
+                      'The cost to purchase a single replacement drive.',
                     )}
                   </div>
 
                   <p className="text-sm font-medium">Power</p>
                   <div className="grid grid-cols-1 gap-4 rounded-lg border p-4">
                     {renderInput(
-                      "onPremPowerRating",
-                      "Power Rating per Server",
+                      'onPremPowerRating',
+                      'Power Rating per Server',
                       <Power />,
-                      "Watts",
-                      "The power consumption of a single server under load."
+                      'Watts',
+                      'The power consumption of a single server under load.',
                     )}
                     {renderSlider(
-                      "onPremLoadFactor",
-                      "Avg. Load Factor",
+                      'onPremLoadFactor',
+                      'Avg. Load Factor',
                       <Percent />,
-                      "%",
-                      "The average utilization percentage of your servers."
+                      '%',
+                      'The average utilization percentage of your servers.',
                     )}
                     {renderInput(
-                      "onPremElectricityCost",
-                      "Electricity Cost",
+                      'onPremElectricityCost',
+                      'Electricity Cost',
                       <Zap />,
-                      "$/kWh",
-                      "The cost of electricity from your utility provider.",
-                      "0.01"
+                      '$/kWh',
+                      'The cost of electricity from your utility provider.',
+                      '0.01',
                     )}
                   </div>
 
@@ -573,11 +573,11 @@ export function CostForm({
                     {useOnPremSoftware && (
                       <>
                         {renderInput(
-                          "onPremYearlyLicensingCost",
-                          "Yearly Licensing Cost",
+                          'onPremYearlyLicensingCost',
+                          'Yearly Licensing Cost',
                           <FileText />,
-                          "$/year",
-                          "Annual recurring cost for software licenses (e.g., operating systems, databases, virtualization)."
+                          '$/year',
+                          'Annual recurring cost for software licenses (e.g., operating systems, databases, virtualization).',
                         )}
                       </>
                     )}
@@ -603,26 +603,26 @@ export function CostForm({
                     {useOnPremBandwidth && (
                       <>
                         {renderInput(
-                          "onPremBandwidthUsage",
-                          "Annual Bandwidth Usage",
+                          'onPremBandwidthUsage',
+                          'Annual Bandwidth Usage',
                           <Network />,
-                          "GB/year",
-                          "Estimated total data transferred out from your data center annually."
+                          'GB/year',
+                          'Estimated total data transferred out from your data center annually.',
                         )}
                         {renderInput(
-                          "onPremBandwidthCostPerGb",
-                          "Bandwidth Cost per GB",
+                          'onPremBandwidthCostPerGb',
+                          'Bandwidth Cost per GB',
                           <DollarSign />,
-                          "$/GB",
-                          "The price per GB of data transferred.",
-                          "0.001"
+                          '$/GB',
+                          'The price per GB of data transferred.',
+                          '0.001',
                         )}
                         {renderSlider(
-                          "onPremAnnualTrafficGrowth",
-                          "Annual Traffic Growth",
+                          'onPremAnnualTrafficGrowth',
+                          'Annual Traffic Growth',
                           <TrendingUp />,
-                          "%",
-                          "The percentage by which your egress traffic is expected to grow each year."
+                          '%',
+                          'The percentage by which your egress traffic is expected to grow each year.',
                         )}
                       </>
                     )}
@@ -650,19 +650,19 @@ export function CostForm({
                     {useOnPremCdn && (
                       <>
                         {renderInput(
-                          "onPremCdnUsage",
-                          "Annual CDN Usage",
+                          'onPremCdnUsage',
+                          'Annual CDN Usage',
                           <Globe />,
-                          "GB/year",
-                          "Estimated total data transferred via your Content Delivery Network annually."
+                          'GB/year',
+                          'Estimated total data transferred via your Content Delivery Network annually.',
                         )}
                         {renderInput(
-                          "onPremCdnCostPerGb",
-                          "CDN Cost per GB",
+                          'onPremCdnCostPerGb',
+                          'CDN Cost per GB',
                           <DollarSign />,
-                          "$/GB",
-                          "The price per GB of data transferred through the CDN.",
-                          "0.01"
+                          '$/GB',
+                          'The price per GB of data transferred through the CDN.',
+                          '0.01',
                         )}
                       </>
                     )}
@@ -688,19 +688,19 @@ export function CostForm({
                     {useOnPremBackup && (
                       <>
                         {renderInput(
-                          "onPremBackupStorage",
-                          "Data to Backup",
+                          'onPremBackupStorage',
+                          'Data to Backup',
                           <Save />,
                           dataUnit,
-                          "Total amount of data to be backed up. Auto-calculated from drive specs but can be overridden."
+                          'Total amount of data to be backed up. Auto-calculated from drive specs but can be overridden.',
                         )}
                         {renderInput(
-                          "onPremBackupCostPerUnit",
-                          "Backup Cost per Unit",
+                          'onPremBackupCostPerUnit',
+                          'Backup Cost per Unit',
                           <DollarSign />,
                           `$/${dataUnit}/year`,
-                          "The cost to store one unit of backup data for a year.",
-                          "0.01"
+                          'The cost to store one unit of backup data for a year.',
+                          '0.01',
                         )}
                       </>
                     )}
@@ -717,12 +717,12 @@ export function CostForm({
                           <FormControl>
                             <Switch
                               checked={field.value}
-                              onCheckedChange={checked => {
-                                field.onChange(checked);
+                              onCheckedChange={(checked) => {
+                                field.onChange(checked)
                                 if (!checked) {
-                                  form.setValue("onPremReplicationFactor", 0);
+                                  form.setValue('onPremReplicationFactor', 0)
                                 } else {
-                                  form.setValue("onPremReplicationFactor", 1);
+                                  form.setValue('onPremReplicationFactor', 1)
                                 }
                               }}
                             />
@@ -733,12 +733,12 @@ export function CostForm({
                     {useOnPremReplication && (
                       <div className="pt-4">
                         {renderSlider(
-                          "onPremReplicationFactor",
-                          "Replication Sites",
+                          'onPremReplicationFactor',
+                          'Replication Sites',
                           <Copy />,
-                          "sites",
-                          "The number of additional, fully replicated on-premise sites for disaster recovery.",
-                          { min: 1, max: 10, step: 1 }
+                          'sites',
+                          'The number of additional, fully replicated on-premise sites for disaster recovery.',
+                          { min: 1, max: 10, step: 1 },
                         )}
                       </div>
                     )}
@@ -748,100 +748,100 @@ export function CostForm({
                   <p className="text-sm font-medium">Storage</p>
                   <div className="grid grid-cols-1 gap-4 rounded-lg border p-4">
                     {renderInput(
-                      "cloudStorageSize",
-                      "Initial Storage Size",
+                      'cloudStorageSize',
+                      'Initial Storage Size',
                       <Container />,
                       dataUnit,
-                      "The starting amount of data you will store in the cloud."
+                      'The starting amount of data you will store in the cloud.',
                     )}
                     {renderSlider(
-                      "cloudGrowthRate",
-                      "Annual Data Growth Rate",
+                      'cloudGrowthRate',
+                      'Annual Data Growth Rate',
                       <TrendingUp />,
-                      "%",
-                      "The percentage by which your stored data is expected to grow each year."
+                      '%',
+                      'The percentage by which your stored data is expected to grow each year.',
                     )}
                   </div>
 
                   <p className="text-sm font-medium">Bandwidth</p>
                   <div className="grid grid-cols-1 gap-4 rounded-lg border p-4">
                     {renderInput(
-                      "cloudEgress",
-                      "Monthly Data Egress",
+                      'cloudEgress',
+                      'Monthly Data Egress',
                       <ArrowRightLeft />,
-                      "TB",
-                      "The amount of data transferred out of the cloud each month."
+                      'TB',
+                      'The amount of data transferred out of the cloud each month.',
                     )}
                     {renderSlider(
-                      "cloudEgressGrowthRate",
-                      "Annual Egress Growth",
+                      'cloudEgressGrowthRate',
+                      'Annual Egress Growth',
                       <TrendingUp />,
-                      "%",
-                      "The percentage by which your egress traffic is expected to grow each year."
+                      '%',
+                      'The percentage by which your egress traffic is expected to grow each year.',
                     )}
                   </div>
 
                   <p className="text-sm font-medium">Cloud Pricing</p>
                   <div className="grid grid-cols-1 gap-4 rounded-lg border p-4">
                     {renderInput(
-                      "cloudHotStorageCost",
-                      "Hot Storage Price",
+                      'cloudHotStorageCost',
+                      'Hot Storage Price',
                       <DollarSign />,
-                      "$/GB/mo",
-                      "Price for frequently accessed data. Typically the most expensive tier.",
-                      "0.001"
+                      '$/GB/mo',
+                      'Price for frequently accessed data. Typically the most expensive tier.',
+                      '0.001',
                     )}
                     {renderInput(
-                      "cloudStandardStorageCost",
-                      "Standard Storage Price",
+                      'cloudStandardStorageCost',
+                      'Standard Storage Price',
                       <DollarSign />,
-                      "$/GB/mo",
-                      "Price for less frequently accessed data with slightly lower retrieval times.",
-                      "0.001"
+                      '$/GB/mo',
+                      'Price for less frequently accessed data with slightly lower retrieval times.',
+                      '0.001',
                     )}
                     {renderInput(
-                      "cloudArchiveStorageCost",
-                      "Archive Storage Price",
+                      'cloudArchiveStorageCost',
+                      'Archive Storage Price',
                       <DollarSign />,
-                      "$/GB/mo",
-                      "Price for long-term data archival with the slowest retrieval times. Typically the cheapest tier.",
-                      "0.0001"
+                      '$/GB/mo',
+                      'Price for long-term data archival with the slowest retrieval times. Typically the cheapest tier.',
+                      '0.0001',
                     )}
                     {renderInput(
-                      "cloudEgressCostPerUnit",
-                      "Egress Price",
+                      'cloudEgressCostPerUnit',
+                      'Egress Price',
                       <DollarSign />,
                       `$/GB`,
                       `Price to transfer one GB of data out of the cloud provider's network.`,
-                      "0.01"
+                      '0.01',
                     )}
                   </div>
 
                   <p className="text-sm font-medium">Storage Tier Split</p>
                   <div className="grid grid-cols-1 gap-4 rounded-lg border p-4">
                     {renderSlider(
-                      "cloudHotTier",
-                      "Hot Tier Split",
+                      'cloudHotTier',
+                      'Hot Tier Split',
                       <Percent />,
-                      "%",
+                      '%',
                       "Percentage of your data in the high-performance 'Hot' tier, for frequently accessed data.",
-                      { onValueChange: handleHotChange }
+                      { onValueChange: handleHotChange },
                     )}
                     {renderSlider(
-                      "cloudStandardTier",
-                      "Standard Tier Split",
+                      'cloudStandardTier',
+                      'Standard Tier Split',
                       <Percent />,
-                      "%",
+                      '%',
                       "Percentage of your data in the 'Standard' tier, for regularly accessed data.",
-                      { onValueChange: handleStandardChange }
+                      { onValueChange: handleStandardChange },
                     )}
                     {renderSlider(
-                      "cloudArchiveTier",
-                      "Archive Tier Split",
+                      'cloudArchiveTier',
+                      'Archive Tier Split',
                       <Percent />,
-                      "%",
+                      '%',
                       "Percentage of your data in the 'Archive' tier, for long-term backups. (This is calculated automatically).",
-                      { disabled: true }
+                      { disabled: true },
                     )}
                   </div>
                 </TabsContent>
@@ -850,11 +850,11 @@ export function CostForm({
           </Tabs>
           <CardFooter className="pt-6 border-t">
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Calculating..." : "Calculate"}
+              {isLoading ? 'Calculating...' : 'Calculate'}
             </Button>
           </CardFooter>
         </form>
       </Form>
     </Card>
-  );
+  )
 }

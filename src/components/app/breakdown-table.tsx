@@ -1,4 +1,4 @@
-"use client";
+'use client'
 
 import {
   Table,
@@ -8,63 +8,63 @@ import {
   TableHeader,
   TableRow,
   TableFooter,
-} from "@/components/ui/table";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { YearlyCost } from "@/lib/types";
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+} from '@/components/ui/table'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import type { YearlyCost } from '@/lib/types'
+import { Card, CardContent, CardHeader, CardTitle } from '../ui/card'
 
 interface BreakdownTableProps {
-  data: YearlyCost[];
+  data: YearlyCost[]
 }
 
 const formatCurrency = (value: number) => {
-  if (value === 0) return "-";
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
+  if (value === 0) return '-'
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
-  }).format(value);
-};
+  }).format(value)
+}
 
 const onPremCategories = [
-  "Hardware",
-  "Software",
-  "Power",
-  "Bandwidth",
-  "CDN",
-  "Backup",
-  "Salvage Value",
-];
+  'Hardware',
+  'Software',
+  'Power',
+  'Bandwidth',
+  'CDN',
+  'Backup',
+  'Salvage Value',
+]
 const cloudCategories = [
-  "Hot Storage",
-  "Standard Storage",
-  "Archive Storage",
-  "Bandwidth (Egress)",
-];
+  'Hot Storage',
+  'Standard Storage',
+  'Archive Storage',
+  'Bandwidth (Egress)',
+]
 
 export function BreakdownTable({ data }: BreakdownTableProps) {
   const onPremTotals = onPremCategories.reduce(
     (acc, category) => {
       acc[category] = data.reduce(
         (sum, year) => sum + (year.onPremBreakdown[category] || 0),
-        0
-      );
-      return acc;
+        0,
+      )
+      return acc
     },
-    {} as Record<string, number>
-  );
+    {} as Record<string, number>,
+  )
 
   const cloudTotals = cloudCategories.reduce(
     (acc, category) => {
       acc[category] = data.reduce(
         (sum, year) => sum + (year.cloudBreakdown[category] || 0),
-        0
-      );
-      return acc;
+        0,
+      )
+      return acc
     },
-    {} as Record<string, number>
-  );
+    {} as Record<string, number>,
+  )
 
   return (
     <Tabs defaultValue="onprem">
@@ -84,7 +84,7 @@ export function BreakdownTable({ data }: BreakdownTableProps) {
               <TableHeader>
                 <TableRow>
                   <TableHead>Category</TableHead>
-                  {data.map(y => (
+                  {data.map((y) => (
                     <TableHead key={y.year} className="text-right">
                       Year {y.year}
                     </TableHead>
@@ -93,10 +93,10 @@ export function BreakdownTable({ data }: BreakdownTableProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {onPremCategories.map(category => (
+                {onPremCategories.map((category) => (
                   <TableRow key={category}>
                     <TableCell className="font-medium">{category}</TableCell>
-                    {data.map(year => (
+                    {data.map((year) => (
                       <TableCell key={year.year} className="text-right">
                         {formatCurrency(year.onPremBreakdown[category] || 0)}
                       </TableCell>
@@ -110,7 +110,7 @@ export function BreakdownTable({ data }: BreakdownTableProps) {
               <TableFooter>
                 <TableRow>
                   <TableCell className="font-bold">Total</TableCell>
-                  {data.map(year => (
+                  {data.map((year) => (
                     <TableCell key={year.year} className="text-right font-bold">
                       {formatCurrency(year.onPremCost)}
                     </TableCell>
@@ -136,7 +136,7 @@ export function BreakdownTable({ data }: BreakdownTableProps) {
               <TableHeader>
                 <TableRow>
                   <TableHead>Category</TableHead>
-                  {data.map(y => (
+                  {data.map((y) => (
                     <TableHead key={y.year} className="text-right">
                       Year {y.year}
                     </TableHead>
@@ -145,10 +145,10 @@ export function BreakdownTable({ data }: BreakdownTableProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {cloudCategories.map(category => (
+                {cloudCategories.map((category) => (
                   <TableRow key={category}>
                     <TableCell className="font-medium">{category}</TableCell>
-                    {data.map(year => (
+                    {data.map((year) => (
                       <TableCell key={year.year} className="text-right">
                         {formatCurrency(year.cloudBreakdown[category] || 0)}
                       </TableCell>
@@ -162,7 +162,7 @@ export function BreakdownTable({ data }: BreakdownTableProps) {
               <TableFooter>
                 <TableRow>
                   <TableCell className="font-bold">Total</TableCell>
-                  {data.map(year => (
+                  {data.map((year) => (
                     <TableCell key={year.year} className="text-right font-bold">
                       {formatCurrency(year.cloudCost)}
                     </TableCell>
@@ -177,5 +177,5 @@ export function BreakdownTable({ data }: BreakdownTableProps) {
         </Card>
       </TabsContent>
     </Tabs>
-  );
+  )
 }

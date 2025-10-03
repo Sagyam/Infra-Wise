@@ -1,54 +1,54 @@
-import type { Metadata } from "next";
-import { ThemeProvider } from "@/components/app/theme-provider";
-import { Toaster } from "@/components/ui/toaster";
+import type { Metadata } from 'next'
+import { ThemeProvider } from '@/components/app/theme-provider'
+import { Toaster } from '@/components/ui/toaster'
 
-import "./globals.css";
+import './globals.css'
 
 export const metadata: Metadata = {
-  title: "InfraWise - Cloud vs. On-Prem TCO Analysis",
+  title: 'InfraWise - Cloud vs. On-Prem TCO Analysis',
   description:
-    "InfraWise is an financial modeling tool to compare the Total Cost of Ownership (TCO) between cloud and on-premise infrastructure. Make informed decisions with detailed cost breakdowns and breakeven analysis.",
+    'InfraWise is an financial modeling tool to compare the Total Cost of Ownership (TCO) between cloud and on-premise infrastructure. Make informed decisions with detailed cost breakdowns and breakeven analysis.',
   icons: {
-    icon: "/favicon.png",
+    icon: '/favicon.png',
   },
   keywords: [
-    "TCO calculator",
-    "cloud vs on-premise",
-    "cost analysis",
-    "financial modeling",
-    "infrastructure cost",
-    "AI",
+    'TCO calculator',
+    'cloud vs on-premise',
+    'cost analysis',
+    'financial modeling',
+    'infrastructure cost',
+    'AI',
   ],
   openGraph: {
-    title: "InfraWise - Cloud vs. On-Prem TCO Analysis",
+    title: 'InfraWise - Cloud vs. On-Prem TCO Analysis',
     description:
-      "Compare cloud and on-premise infrastructure costs with this calculator.",
-    url: "https://infrawise.sagyamthapa.com.np",
-    siteName: "InfraWise",
+      'Compare cloud and on-premise infrastructure costs with this calculator.',
+    url: 'https://infrawise.sagyamthapa.com.np',
+    siteName: 'InfraWise',
     images: [
       {
-        url: "https://infrawise.sagyamthapa.com.np/og-image.png",
+        url: 'https://infrawise.sagyamthapa.com.np/og-image.png',
         width: 1200,
         height: 630,
       },
     ],
-    locale: "en_US",
-    type: "website",
+    locale: 'en_US',
+    type: 'website',
   },
   twitter: {
-    card: "summary_large_image",
-    title: "InfraWise - Cloud vs. On-Prem TCO Analysis",
+    card: 'summary_large_image',
+    title: 'InfraWise - Cloud vs. On-Prem TCO Analysis',
     description:
-      "Make informed infrastructure decisions. Compare cloud vs. on-premise TCO with this tool.",
+      'Make informed infrastructure decisions. Compare cloud vs. on-premise TCO with this tool.',
     // creator: '@sagyam21',
-    images: ["https://infrawise.sagyamthapa.com.np/og-image.png"],
+    images: ['https://infrawise.sagyamthapa.com.np/og-image.png'],
   },
-};
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -63,9 +63,7 @@ export default function RootLayout({
           href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Source+Code+Pro:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap"
           rel="stylesheet"
         />
-        <title>
-            InfraWise - Cloud vs. On-Prem Analysis
-        </title>
+        <title>InfraWise - Cloud vs. On-Prem Analysis</title>
       </head>
       <body className="font-body antialiased" suppressHydrationWarning>
         <ThemeProvider
@@ -79,5 +77,5 @@ export default function RootLayout({
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }
