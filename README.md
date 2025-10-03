@@ -3,11 +3,6 @@
 A financial modeling tool for comparing Total Cost of Ownership (TCO) between cloud and on-premise infrastructure solutions. Make informed infrastructure decisions with detailed cost breakdowns and breakeven analysis.
 
 # Video Demo
-<video controls width="600">
-  <source src="https://github.com/Sagyam/Infra-Wise/raw/refs/heads/master/public/demo.webm" type="video/webm">
-  Your browser does not support the video tag.
-</video>
-
 
 ## ✨ Features
 
