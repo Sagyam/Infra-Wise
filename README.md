@@ -3,6 +3,10 @@
 A financial modeling tool for comparing Total Cost of Ownership (TCO) between cloud and on-premise infrastructure solutions. Make informed infrastructure decisions with detailed cost breakdowns and breakeven analysis.
 
 # Video Demo
+[demo.webm](https://github.com/user-attachments/assets/71da08f1-70a2-46ec-bc1f-d6a5fd43b454)
+
+
+
 
 ## ✨ Features
 
