@@ -14,7 +14,7 @@ export function modelInflation({
   inflationRate: number
   analysisPeriod: number
 }): Promise<{ inflatedCost: number }> {
-  const inflatedCost = initialCost * Math.pow(1 + inflationRate, analysisPeriod)
+  const inflatedCost = initialCost * (1 + inflationRate) ** analysisPeriod
 
   return Promise.resolve({ inflatedCost })
 }

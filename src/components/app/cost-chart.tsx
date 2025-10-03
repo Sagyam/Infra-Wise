@@ -11,7 +11,7 @@ import {
   YAxis,
 } from 'recharts'
 import {
-  ChartConfig,
+  type ChartConfig,
   ChartContainer,
   ChartTooltipContent,
 } from '@/components/ui/chart'

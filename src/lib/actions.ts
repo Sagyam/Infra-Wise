@@ -96,7 +96,7 @@ export async function calculateCosts(
     const salvageValueAmount = onPremHardwareCost * (onPremSalvageValue / 100)
 
     const netHardwareCost = onPremHardwareCost - salvageValueAmount
-    const amortizedHardwareCost = netHardwareCost / analysisPeriod
+    const _amortizedHardwareCost = netHardwareCost / analysisPeriod
 
     for (let year = 1; year <= analysisPeriod; year++) {
       const onPremBreakdown: CostBreakdown = {}
@@ -166,19 +166,19 @@ export async function calculateCosts(
         salvageCredit = -inflatedSalvage
       }
 
-      let softwareCost = onPremYearlyLicensingCost
+      const softwareCost = onPremYearlyLicensingCost
 
-      let powerCost =
+      const powerCost =
         ((onPremPowerRating * (onPremLoadFactor / 100) * 24 * 365) / 1000) *
         onPremElectricityCost
 
-      let driveReplacementCost =
+      const driveReplacementCost =
         onPremTotalDrives *
         (onPremDriveFailureRate / 100) *
         onPremDriveReplacementCost
 
-      let bandwidthCost = currentOnPremBandwidthGb * onPremBandwidthCostPerGb
-      let cdnCost = useOnPremCdn
+      const bandwidthCost = currentOnPremBandwidthGb * onPremBandwidthCostPerGb
+      const cdnCost = useOnPremCdn
         ? currentOnPremCdnUsageGb * onPremCdnCostPerGb
         : 0
 
@@ -221,13 +221,13 @@ export async function calculateCosts(
         }
       }
 
-      onPremBreakdown['Hardware'] =
+      onPremBreakdown.Hardware =
         hardwareCost + inflatedRecurring.driveReplacementCost
-      onPremBreakdown['Software'] = inflatedRecurring.softwareCost
-      onPremBreakdown['Power'] = inflatedRecurring.powerCost
-      onPremBreakdown['Bandwidth'] = inflatedRecurring.bandwidthCost
-      onPremBreakdown['CDN'] = inflatedRecurring.cdnCost
-      onPremBreakdown['Backup'] = inflatedRecurring.backupCost
+      onPremBreakdown.Software = inflatedRecurring.softwareCost
+      onPremBreakdown.Power = inflatedRecurring.powerCost
+      onPremBreakdown.Bandwidth = inflatedRecurring.bandwidthCost
+      onPremBreakdown.CDN = inflatedRecurring.cdnCost
+      onPremBreakdown.Backup = inflatedRecurring.backupCost
       onPremBreakdown['Salvage Value'] = salvageCredit
 
       let totalAnnualOnPremCost =
@@ -245,7 +245,7 @@ export async function calculateCosts(
         replicatedCosts.push(hardwareCost)
       }
 
-      let replicationCost = 0
+      let _replicationCost = 0
       if (replicationFactor > 0) {
         // Base costs for one site
         const singleSiteRecurring =
@@ -260,18 +260,18 @@ export async function calculateCosts(
         if (calculationMode === 'amortized') singleSiteHardware = hardwareCost
 
         const singleSiteTotal = singleSiteRecurring + singleSiteHardware
-        replicationCost = singleSiteTotal * replicationFactor
+        _replicationCost = singleSiteTotal * replicationFactor
 
         // Add to breakdowns
-        onPremBreakdown['Hardware'] += singleSiteHardware * replicationFactor
-        onPremBreakdown['Software'] +=
+        onPremBreakdown.Hardware += singleSiteHardware * replicationFactor
+        onPremBreakdown.Software +=
           inflatedRecurring.softwareCost * replicationFactor
 
-        onPremBreakdown['Power'] +=
+        onPremBreakdown.Power +=
           inflatedRecurring.powerCost * replicationFactor
-        onPremBreakdown['Bandwidth'] +=
+        onPremBreakdown.Bandwidth +=
           inflatedRecurring.bandwidthCost * replicationFactor
-        onPremBreakdown['CDN'] += inflatedRecurring.cdnCost * replicationFactor
+        onPremBreakdown.CDN += inflatedRecurring.cdnCost * replicationFactor
       }
 
       totalAnnualOnPremCost = Object.values(onPremBreakdown).reduce(

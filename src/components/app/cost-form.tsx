@@ -571,15 +571,13 @@ export function CostForm({
                       )}
                     />
                     {useOnPremSoftware && (
-                      <>
-                        {renderInput(
+                      renderInput(
                           'onPremYearlyLicensingCost',
                           'Yearly Licensing Cost',
                           <FileText />,
                           '$/year',
                           'Annual recurring cost for software licenses (e.g., operating systems, databases, virtualization).',
-                        )}
-                      </>
+                        )
                     )}
                   </div>
 
