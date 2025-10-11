@@ -1,6 +1,7 @@
-import type { Metadata } from 'next'
-import { ThemeProvider } from '@/components/app/theme-provider'
-import { Toaster } from '@/components/ui/toaster'
+import {ThemeProvider} from '@/components/app/theme-provider'
+import {Toaster} from '@/components/ui/toaster'
+import {Analytics} from "@vercel/analytics/react";
+import type {Metadata} from 'next'
 
 import './globals.css'
 
@@ -75,6 +76,7 @@ export default function RootLayout({
           {children}
           <Toaster />
         </ThemeProvider>
+      <Analytics/>
       </body>
     </html>
   )
