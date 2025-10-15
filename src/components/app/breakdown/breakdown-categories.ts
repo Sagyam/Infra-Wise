@@ -1,16 +1,18 @@
 export const onPremCategories = [
-  'Hardware',
+  'Energy',
+  'Storage',
+  'Compute',
+  'GPU',
+  'Networking',
+  'Human',
   'Software',
-  'Power',
-  'Bandwidth',
-  'CDN',
-  'Backup',
-  'Salvage Value',
 ]
 
 export const cloudCategories = [
-  'Hot Storage',
-  'Standard Storage',
-  'Archive Storage',
-  'Bandwidth (Egress)',
+  'Storage',
+  'Compute',
+  'GPU',
+  'Networking',
+  'Human',
+  'Software',
 ]

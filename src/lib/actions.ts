@@ -36,248 +36,364 @@ export async function calculateCosts(
       return { success: false, error: `Invalid input. ${issues}` }
     }
 
-    const {
-      analysisPeriod,
-      dataUnit,
-      // On-prem
-      onPremHardwareCost,
-      onPremSalvageValue,
-      onPremYearlyLicensingCost,
-      onPremPowerRating,
-      onPremLoadFactor,
-      onPremElectricityCost,
-      onPremDriveFailureRate,
-      onPremDriveReplacementCost,
-      onPremTotalDrives,
-      onPremBandwidthUsage,
-      onPremBandwidthCostPerGb,
-      onPremAnnualTrafficGrowth,
-      useOnPremCdn,
-      onPremCdnUsage,
-      onPremCdnCostPerGb,
-      useOnPremBackup,
-      onPremBackupStorage,
-      onPremBackupCostPerUnit,
-      useOnPremReplication,
-      onPremReplicationFactor,
-      // Cloud
-      cloudStorageSize,
-      cloudGrowthRate,
-      cloudEgress,
-      cloudEgressGrowthRate,
-      cloudHotTier,
-      cloudStandardTier,
-      cloudArchiveTier,
-      cloudHotStorageCost,
-      cloudStandardStorageCost,
-      cloudArchiveStorageCost,
-      cloudEgressCostPerUnit,
-      // General
-      inflationRate,
-      calculationMode,
-    } = parsed.data
+    const data = parsed.data
+    const { analysisPeriod, dataUnit, inflationRate, calculationMode } = data
 
     const yearlyData: YearlyCost[] = []
     let cumulativeCloudCost = 0
     let cumulativeOnPremCost = 0
 
-    let currentCloudStorageUnits = cloudStorageSize
-    let currentCloudEgressUnits = cloudEgress
-    let currentOnPremBandwidthGb = onPremBandwidthUsage || 0
-    let currentOnPremCdnUsageGb = useOnPremCdn ? onPremCdnUsage || 0 : 0
+    let currentCloudStorageUnits = data.cloudStorageSize
+    let currentCloudEgressUnits = data.cloudEgress
+    let currentOnPremBandwidthGb = data.onPremBandwidthUsage || 0
 
-    const storageGrowthFactor = 1 + cloudGrowthRate / 100
-    const egressGrowthFactor = 1 + cloudEgressGrowthRate / 100
-    const onPremTrafficGrowthFactor = 1 + (onPremAnnualTrafficGrowth || 0) / 100
+    const storageGrowthFactor = 1 + data.cloudGrowthRate / 100
+    const egressGrowthFactor = 1 + data.cloudEgressGrowthRate / 100
+    const onPremTrafficGrowthFactor = 1 + (data.onPremAnnualTrafficGrowth || 0) / 100
     const inflationDecimal = inflationRate / 100
 
-    const salvageValueAmount = onPremHardwareCost * (onPremSalvageValue / 100)
+    // Calculate one-time hardware costs
+    const onPremComputeHardwareCost =
+      (data.useOnPremCpu ? (data.onPremCpuQuantity || 0) * (data.onPremCpuUnitCost || 0) : 0) +
+      (data.useOnPremMotherboard ? (data.onPremMotherboardQuantity || 0) * (data.onPremMotherboardUnitCost || 0) : 0) +
+      (data.useOnPremMemory ? (data.onPremMemoryCapacityGb || 0) * (data.onPremMemoryCostPerGb || 0) : 0) +
+      (data.useOnPremChassis ? (data.onPremChassisQuantity || 0) * (data.onPremChassisUnitCost || 0) : 0) +
+      (data.useOnPremRacks ? (data.onPremRacksQuantity || 0) * (data.onPremRacksUnitCost || 0) : 0)
 
-    const netHardwareCost = onPremHardwareCost - salvageValueAmount
-    const _amortizedHardwareCost = netHardwareCost / analysisPeriod
+    const onPremGpuHardwareCost =
+      (data.useOnPremTrainingGpu ? (data.onPremTrainingGpuQuantity || 0) * (data.onPremTrainingGpuUnitCost || 0) : 0) +
+      (data.useOnPremInferenceGpu ? (data.onPremInferenceGpuQuantity || 0) * (data.onPremInferenceGpuUnitCost || 0) : 0)
+
+    const onPremNetworkingHardwareCost =
+      (data.useOnPremCoreSwitch ? (data.onPremCoreSwitchQuantity || 0) * (data.onPremCoreSwitchUnitCost || 0) : 0) +
+      (data.useOnPremAggregationSwitch ? (data.onPremAggregationSwitchQuantity || 0) * (data.onPremAggregationSwitchUnitCost || 0) : 0) +
+      (data.useOnPremAccessSwitch ? (data.onPremAccessSwitchQuantity || 0) * (data.onPremAccessSwitchUnitCost || 0) : 0) +
+      (data.useOnPremCabling ? (data.onPremCablingLength || 0) * (data.onPremCablingUnitPrice || 0) : 0) +
+      (data.useOnPremQsfp ? (data.onPremQsfpQuantity || 0) * (data.onPremQsfpUnitCost || 0) : 0)
+
+    const onPremEnergyHardwareCost =
+      (data.useOnPremUps ? (data.onPremUpsQuantity || 0) * (data.onPremUpsUnitCost || 0) : 0) +
+      (data.useOnPremGenerator ? (data.onPremGeneratorQuantity || 0) * (data.onPremGeneratorUnitCost || 0) : 0) +
+      (data.useOnPremHvac ? (data.onPremHvacQuantity || 0) * (data.onPremHvacUnitCost || 0) : 0)
+
+    const totalOnPremHardwareCost = onPremComputeHardwareCost + onPremGpuHardwareCost + onPremNetworkingHardwareCost + onPremEnergyHardwareCost
+
+    // Average salvage value
+    const avgSalvagePercent = 10 // Simplified for now
+    const salvageValueAmount = totalOnPremHardwareCost * (avgSalvagePercent / 100)
 
     for (let year = 1; year <= analysisPeriod; year++) {
-      const onPremBreakdown: CostBreakdown = {}
-      const cloudBreakdown: CostBreakdown = {}
-
-      // --- Cloud Costs ---
-      const currentCloudStorageGb = unitToGb(currentCloudStorageUnits, dataUnit)
-      const currentCloudEgressGb =
-        unitToGb(currentCloudEgressUnits, 'TB') * 1024 // Egress cost is per GB
-
-      const hotStorageGb = currentCloudStorageGb * (cloudHotTier / 100)
-      const standardStorageGb =
-        currentCloudStorageGb * (cloudStandardTier / 100)
-      const archiveStorageGb = currentCloudStorageGb * (cloudArchiveTier / 100)
-
-      const hotCost = hotStorageGb * cloudHotStorageCost * 12
-      const standardCost = standardStorageGb * cloudStandardStorageCost * 12
-      const archiveCost = archiveStorageGb * cloudArchiveStorageCost * 12
-
-      const baseCloudStorageCost = hotCost + standardCost + archiveCost
-      const baseCloudEgressCost = currentCloudEgressGb * cloudEgressCostPerUnit
-
-      let totalAnnualCloudCost = 0
-
-      const [inflatedStorage, inflatedEgress] = await Promise.all([
-        modelInflation({
-          initialCost: baseCloudStorageCost,
-          inflationRate: inflationDecimal,
-          analysisPeriod: year - 1,
-        }),
-        modelInflation({
-          initialCost: baseCloudEgressCost,
-          inflationRate: inflationDecimal,
-          analysisPeriod: year - 1,
-        }),
-      ])
-      totalAnnualCloudCost =
-        inflatedStorage.inflatedCost + inflatedEgress.inflatedCost
-      cloudBreakdown['Hot Storage'] =
-        inflatedStorage.inflatedCost * (hotCost / baseCloudStorageCost)
-      cloudBreakdown['Standard Storage'] =
-        inflatedStorage.inflatedCost * (standardCost / baseCloudStorageCost)
-      cloudBreakdown['Archive Storage'] =
-        inflatedStorage.inflatedCost * (archiveCost / baseCloudStorageCost)
-      cloudBreakdown['Bandwidth (Egress)'] = inflatedEgress.inflatedCost
-
-      // --- On-Prem Costs ---
-      let hardwareCost = 0
-      let salvageCredit = 0
-
-      if (calculationMode === 'tco') {
-        if (year === 1) hardwareCost = onPremHardwareCost
-        if (year === analysisPeriod) salvageCredit = -salvageValueAmount
-      } else {
-        // Amortized
-        const { inflatedCost } = await modelInflation({
-          initialCost: onPremHardwareCost / analysisPeriod,
-          inflationRate: inflationDecimal,
-          analysisPeriod: year - 1,
-        })
-        hardwareCost = inflatedCost
-        const { inflatedCost: inflatedSalvage } = await modelInflation({
-          initialCost: salvageValueAmount / analysisPeriod,
-          inflationRate: inflationDecimal,
-          analysisPeriod: year - 1,
-        })
-        salvageCredit = -inflatedSalvage
+      const onPremBreakdown: CostBreakdown = {
+        Energy: 0,
+        Storage: 0,
+        Compute: 0,
+        GPU: 0,
+        Networking: 0,
+        Human: 0,
+        Software: 0,
+      }
+      const cloudBreakdown: CostBreakdown = {
+        Storage: 0,
+        Compute: 0,
+        GPU: 0,
+        Networking: 0,
+        Human: 0,
+        Software: 0,
       }
 
-      const softwareCost = onPremYearlyLicensingCost
+      // ===== ON-PREM COSTS =====
 
-      const powerCost =
-        ((onPremPowerRating * (onPremLoadFactor / 100) * 24 * 365) / 1000) *
-        onPremElectricityCost
+      // 1. ENERGY COSTS (On-Prem Only)
+      let energyCost = 0
 
-      const driveReplacementCost =
-        onPremTotalDrives *
-        (onPremDriveFailureRate / 100) *
-        onPremDriveReplacementCost
-
-      const bandwidthCost = currentOnPremBandwidthGb * onPremBandwidthCostPerGb
-      const cdnCost = useOnPremCdn
-        ? currentOnPremCdnUsageGb * onPremCdnCostPerGb
-        : 0
-
-      let backupCost = 0
-      if (useOnPremBackup && onPremBackupStorage && onPremBackupCostPerUnit) {
-        const backupCostPerUnitInGb =
-          onPremBackupCostPerUnit /
-          { GB: 1, TB: 1024, PB: 1024 * 1024 }[dataUnit]
-        const backupStorageInGb = unitToGb(onPremBackupStorage, dataUnit)
-        backupCost = backupStorageInGb * backupCostPerUnitInGb
+      // Power consumption
+      if (data.useOnPremPowerConsumption) {
+        const powerKwh = ((data.onPremPowerRating || 0) * ((data.onPremLoadFactor || 0) / 100) * 24 * 365) / 1000
+        energyCost += powerKwh * (data.onPremElectricityCost || 0)
       }
 
-      const replicationFactor =
-        useOnPremReplication && onPremReplicationFactor
-          ? onPremReplicationFactor
-          : 0
-
-      // Inflate all recurring costs
-      const recurringCosts = {
-        softwareCost,
-        powerCost,
-        driveReplacementCost,
-        bandwidthCost,
-        cdnCost,
-        backupCost,
-      }
-      const inflatedRecurring: { [key: string]: number } = {}
-
-      for (const key in recurringCosts) {
-        const cost = recurringCosts[key as keyof typeof recurringCosts]
-        if (cost > 0) {
-          const { inflatedCost } = await modelInflation({
-            initialCost: cost,
-            inflationRate: inflationDecimal,
-            analysisPeriod: year - 1,
-          })
-          inflatedRecurring[key] = inflatedCost
-        } else {
-          inflatedRecurring[key] = 0
-        }
+      // UPS battery replacement
+      if (data.useOnPremUps) {
+        energyCost += (data.onPremUpsQuantity || 0) * ((data.onPremUpsBatteryFailureRate || 0) / 100) * (data.onPremUpsBatteryReplacementCost || 0)
       }
 
-      onPremBreakdown.Hardware =
-        hardwareCost + inflatedRecurring.driveReplacementCost
-      onPremBreakdown.Software = inflatedRecurring.softwareCost
-      onPremBreakdown.Power = inflatedRecurring.powerCost
-      onPremBreakdown.Bandwidth = inflatedRecurring.bandwidthCost
-      onPremBreakdown.CDN = inflatedRecurring.cdnCost
-      onPremBreakdown.Backup = inflatedRecurring.backupCost
-      onPremBreakdown['Salvage Value'] = salvageCredit
+      // Generator fuel
+      if (data.useOnPremGenerator) {
+        energyCost += (data.onPremGeneratorFuelConsumptionRate || 0) * (data.onPremGeneratorFuelUnitCost || 0) * (data.onPremGeneratorAnnualUsageHours || 0)
+      }
 
-      let totalAnnualOnPremCost =
-        hardwareCost + salvageCredit + inflatedRecurring.driveReplacementCost
+      // HVAC power + maintenance
+      if (data.useOnPremHvac) {
+        const hvacPowerKwh = ((data.onPremHvacPowerConsumption || 0) * ((data.onPremHvacLoadFactor || 0) / 100) * 24 * 365) / 1000
+        energyCost += hvacPowerKwh * (data.onPremElectricityCost || 0)
+        energyCost += (data.onPremHvacTechnicianHourlyRate || 0) * (data.onPremHvacHoursWorked || 0)
+      }
 
-      const replicatedCosts = [
-        inflatedRecurring.softwareCost,
-        inflatedRecurring.powerCost,
-        inflatedRecurring.bandwidthCost,
-        inflatedRecurring.cdnCost,
-      ]
+      // Colocation
+      if (data.useOnPremColocation) {
+        const coloMonthly = data.onPremColocationMonthlyCost || 0
+        const coloGrowthRate = (data.onPremColocationAnnualIncrease || 0) / 100
+        const coloYearlyCost = coloMonthly * 12 * Math.pow(1 + coloGrowthRate, year - 1)
+        energyCost += coloYearlyCost
+      }
+
+      // Energy hardware (one-time in year 1 or amortized)
       if (calculationMode === 'tco' && year === 1) {
-        replicatedCosts.push(onPremHardwareCost)
+        energyCost += onPremEnergyHardwareCost
       } else if (calculationMode === 'amortized') {
-        replicatedCosts.push(hardwareCost)
+        energyCost += onPremEnergyHardwareCost / analysisPeriod
       }
 
-      let _replicationCost = 0
-      if (replicationFactor > 0) {
-        // Base costs for one site
-        const singleSiteRecurring =
-          inflatedRecurring.softwareCost +
-          inflatedRecurring.powerCost +
-          inflatedRecurring.bandwidthCost +
-          inflatedRecurring.cdnCost +
-          inflatedRecurring.driveReplacementCost
-        let singleSiteHardware = 0
-        if (calculationMode === 'tco' && year === 1)
-          singleSiteHardware = onPremHardwareCost
-        if (calculationMode === 'amortized') singleSiteHardware = hardwareCost
+      const { inflatedCost: inflatedEnergy } = await modelInflation({
+        initialCost: energyCost,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+      onPremBreakdown.Energy = inflatedEnergy
 
-        const singleSiteTotal = singleSiteRecurring + singleSiteHardware
-        _replicationCost = singleSiteTotal * replicationFactor
+      // 2. STORAGE COSTS
+      let onPremStorageCost = 0
+      const driveReplacementCost = (data.onPremTotalDrives || 0) * ((data.onPremDriveFailureRate || 0) / 100) * (data.onPremDriveReplacementCost || 0)
+      onPremStorageCost += driveReplacementCost
 
-        // Add to breakdowns
-        onPremBreakdown.Hardware += singleSiteHardware * replicationFactor
-        onPremBreakdown.Software +=
-          inflatedRecurring.softwareCost * replicationFactor
-
-        onPremBreakdown.Power += inflatedRecurring.powerCost * replicationFactor
-        onPremBreakdown.Bandwidth +=
-          inflatedRecurring.bandwidthCost * replicationFactor
-        onPremBreakdown.CDN += inflatedRecurring.cdnCost * replicationFactor
+      if (data.useOnPremBackup && data.onPremBackupStorage && data.onPremBackupCostPerUnit) {
+        const backupCostPerUnitInGb = data.onPremBackupCostPerUnit / { GB: 1, TB: 1024, PB: 1024 * 1024 }[dataUnit]
+        const backupStorageInGb = unitToGb(data.onPremBackupStorage, dataUnit)
+        onPremStorageCost += backupStorageInGb * backupCostPerUnitInGb
       }
 
-      totalAnnualOnPremCost = Object.values(onPremBreakdown).reduce(
-        (sum, val) => sum + (val || 0),
-        0,
-      )
+      const { inflatedCost: inflatedOnPremStorage } = await modelInflation({
+        initialCost: onPremStorageCost,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+      onPremBreakdown.Storage = inflatedOnPremStorage
 
-      cumulativeCloudCost += totalAnnualCloudCost
+      // Cloud Storage
+      const currentCloudStorageGb = unitToGb(currentCloudStorageUnits, dataUnit)
+      const hotStorageGb = currentCloudStorageGb * (data.cloudHotTier / 100)
+      const standardStorageGb = currentCloudStorageGb * (data.cloudStandardTier / 100)
+      const archiveStorageGb = currentCloudStorageGb * (data.cloudArchiveTier / 100)
+
+      const cloudStorageCost =
+        (hotStorageGb * data.cloudHotStorageCost * 12) +
+        (standardStorageGb * data.cloudStandardStorageCost * 12) +
+        (archiveStorageGb * data.cloudArchiveStorageCost * 12)
+
+      const { inflatedCost: inflatedCloudStorage } = await modelInflation({
+        initialCost: cloudStorageCost,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+      cloudBreakdown.Storage = inflatedCloudStorage
+
+      // 3. COMPUTE COSTS
+      let onPremComputeCost = 0
+      if (calculationMode === 'tco' && year === 1) {
+        onPremComputeCost = onPremComputeHardwareCost
+      } else if (calculationMode === 'amortized') {
+        onPremComputeCost = onPremComputeHardwareCost / analysisPeriod
+      }
+
+      // Subtract salvage value in final year for TCO mode
+      if (calculationMode === 'tco' && year === analysisPeriod) {
+        const computeSalvage = onPremComputeHardwareCost * (avgSalvagePercent / 100)
+        onPremComputeCost -= computeSalvage
+      }
+
+      const { inflatedCost: inflatedOnPremCompute } = await modelInflation({
+        initialCost: onPremComputeCost,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+      onPremBreakdown.Compute = inflatedOnPremCompute
+
+      // Cloud Compute (VMs)
+      let cloudComputeCost = 0
+      if (data.useCloudGeneralVm) {
+        cloudComputeCost += (data.cloudGeneralVmCount || 0) * (data.cloudGeneralVmHourlyRate || 0) * (data.cloudGeneralVmHoursPerMonth || 0) * 12
+      }
+      if (data.useCloudComputeVm) {
+        cloudComputeCost += (data.cloudComputeVmCount || 0) * (data.cloudComputeVmHourlyRate || 0) * (data.cloudComputeVmHoursPerMonth || 0) * 12
+      }
+      if (data.useCloudMemoryVm) {
+        cloudComputeCost += (data.cloudMemoryVmCount || 0) * (data.cloudMemoryVmHourlyRate || 0) * (data.cloudMemoryVmHoursPerMonth || 0) * 12
+      }
+      if (data.useCloudStorageVm) {
+        cloudComputeCost += (data.cloudStorageVmCount || 0) * (data.cloudStorageVmHourlyRate || 0) * (data.cloudStorageVmHoursPerMonth || 0) * 12
+      }
+
+      const { inflatedCost: inflatedCloudCompute } = await modelInflation({
+        initialCost: cloudComputeCost,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+      cloudBreakdown.Compute = inflatedCloudCompute
+
+      // 4. GPU COSTS
+      let onPremGpuCost = 0
+      if (calculationMode === 'tco' && year === 1) {
+        onPremGpuCost = onPremGpuHardwareCost
+      } else if (calculationMode === 'amortized') {
+        onPremGpuCost = onPremGpuHardwareCost / analysisPeriod
+      }
+
+      if (calculationMode === 'tco' && year === analysisPeriod) {
+        const gpuSalvage = onPremGpuHardwareCost * (avgSalvagePercent / 100)
+        onPremGpuCost -= gpuSalvage
+      }
+
+      const { inflatedCost: inflatedOnPremGpu } = await modelInflation({
+        initialCost: onPremGpuCost,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+      onPremBreakdown.GPU = inflatedOnPremGpu
+
+      // Cloud GPU
+      let cloudGpuCost = 0
+      if (data.useCloudTrainingGpu) {
+        cloudGpuCost += (data.cloudTrainingGpuCount || 0) * (data.cloudTrainingGpuHourlyRate || 0) * (data.cloudTrainingGpuHoursPerMonth || 0) * 12
+      }
+      if (data.useCloudInferenceGpu) {
+        cloudGpuCost += (data.cloudInferenceGpuCount || 0) * (data.cloudInferenceGpuHourlyRate || 0) * (data.cloudInferenceGpuHoursPerMonth || 0) * 12
+      }
+
+      const { inflatedCost: inflatedCloudGpu } = await modelInflation({
+        initialCost: cloudGpuCost,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+      cloudBreakdown.GPU = inflatedCloudGpu
+
+      // 5. NETWORKING COSTS
+      let onPremNetworkingCost = 0
+
+      // Hardware (one-time or amortized)
+      if (calculationMode === 'tco' && year === 1) {
+        onPremNetworkingCost = onPremNetworkingHardwareCost
+      } else if (calculationMode === 'amortized') {
+        onPremNetworkingCost = onPremNetworkingHardwareCost / analysisPeriod
+      }
+
+      if (calculationMode === 'tco' && year === analysisPeriod) {
+        const networkSalvage = onPremNetworkingHardwareCost * (avgSalvagePercent / 100)
+        onPremNetworkingCost -= networkSalvage
+      }
+
+      // Bandwidth costs
+      if (data.useOnPremBandwidth) {
+        onPremNetworkingCost += currentOnPremBandwidthGb * (data.onPremBandwidthCostPerGb || 0)
+      }
+
+      // CDN costs
+      if (data.useOnPremCdn) {
+        onPremNetworkingCost += (data.onPremCdnUsage || 0) * (data.onPremCdnCostPerGb || 0) * Math.pow(onPremTrafficGrowthFactor, year - 1)
+      }
+
+      const { inflatedCost: inflatedOnPremNetworking } = await modelInflation({
+        initialCost: onPremNetworkingCost,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+      onPremBreakdown.Networking = inflatedOnPremNetworking
+
+      // Cloud Networking (Egress)
+      const currentCloudEgressGb = unitToGb(currentCloudEgressUnits, 'TB') * 1024
+      const cloudNetworkingCost = currentCloudEgressGb * data.cloudEgressCostPerUnit
+
+      const { inflatedCost: inflatedCloudNetworking } = await modelInflation({
+        initialCost: cloudNetworkingCost,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+      cloudBreakdown.Networking = inflatedCloudNetworking
+
+      // 6. HUMAN COSTS
+      const calculateSalaryCost = (count: number, salary: number, increment: number) => {
+        return count * salary * Math.pow(1 + increment / 100, year - 1)
+      }
+
+      let onPremHumanCost = 0
+      onPremHumanCost += calculateSalaryCost(data.onPremSysAdminCount || 0, data.onPremSysAdminSalary || 0, data.onPremSysAdminSalaryIncrement || 0)
+      onPremHumanCost += calculateSalaryCost(data.onPremNetworkEngineerCount || 0, data.onPremNetworkEngineerSalary || 0, data.onPremNetworkEngineerSalaryIncrement || 0)
+      onPremHumanCost += calculateSalaryCost(data.onPremStorageAdminCount || 0, data.onPremStorageAdminSalary || 0, data.onPremStorageAdminSalaryIncrement || 0)
+      onPremHumanCost += calculateSalaryCost(data.onPremSecurityEngineerCount || 0, data.onPremSecurityEngineerSalary || 0, data.onPremSecurityEngineerSalaryIncrement || 0)
+      onPremHumanCost += calculateSalaryCost(data.onPremDatabaseAdminCount || 0, data.onPremDatabaseAdminSalary || 0, data.onPremDatabaseAdminSalaryIncrement || 0)
+      onPremHumanCost += calculateSalaryCost(data.onPremDataCenterTechCount || 0, data.onPremDataCenterTechSalary || 0, data.onPremDataCenterTechSalaryIncrement || 0)
+
+      onPremBreakdown.Human = onPremHumanCost
+
+      let cloudHumanCost = 0
+      cloudHumanCost += calculateSalaryCost(data.cloudDevOpsEngineerCount || 0, data.cloudDevOpsEngineerSalary || 0, data.cloudDevOpsEngineerSalaryIncrement || 0)
+      cloudHumanCost += calculateSalaryCost(data.cloudCloudArchitectCount || 0, data.cloudCloudArchitectSalary || 0, data.cloudCloudArchitectSalaryIncrement || 0)
+      cloudHumanCost += calculateSalaryCost(data.cloudSiteReliabilityEngineerCount || 0, data.cloudSiteReliabilityEngineerSalary || 0, data.cloudSiteReliabilityEngineerSalaryIncrement || 0)
+      cloudHumanCost += calculateSalaryCost(data.cloudCloudSecurityEngineerCount || 0, data.cloudCloudSecurityEngineerSalary || 0, data.cloudCloudSecurityEngineerSalaryIncrement || 0)
+      cloudHumanCost += calculateSalaryCost(data.cloudCloudDatabaseAdminCount || 0, data.cloudCloudDatabaseAdminSalary || 0, data.cloudCloudDatabaseAdminSalaryIncrement || 0)
+
+      cloudBreakdown.Human = cloudHumanCost
+
+      // 7. SOFTWARE COSTS
+      let onPremSoftwareCost = 0
+      if (data.useOnPremVirtualization) {
+        onPremSoftwareCost += (data.onPremVirtualizationUnitCost || 0) * (data.onPremVirtualizationLicenses || 0)
+      }
+      if (data.useOnPremOperatingSystem) {
+        onPremSoftwareCost += (data.onPremOperatingSystemUnitCost || 0) * (data.onPremOperatingSystemLicenses || 0)
+      }
+      if (data.useOnPremStorage) {
+        onPremSoftwareCost += (data.onPremStorageUnitCost || 0) * (data.onPremStorageLicenses || 0)
+      }
+      if (data.useOnPremBackupSoftware) {
+        onPremSoftwareCost += (data.onPremBackupSoftwareUnitCost || 0) * (data.onPremBackupSoftwareLicenses || 0)
+      }
+      if (data.useOnPremMonitoring) {
+        onPremSoftwareCost += (data.onPremMonitoringUnitCost || 0) * (data.onPremMonitoringLicenses || 0)
+      }
+      if (data.useOnPremSecurity) {
+        onPremSoftwareCost += (data.onPremSecurityUnitCost || 0) * (data.onPremSecurityLicenses || 0)
+      }
+
+      const { inflatedCost: inflatedOnPremSoftware } = await modelInflation({
+        initialCost: onPremSoftwareCost,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+      onPremBreakdown.Software = inflatedOnPremSoftware
+
+      let cloudSoftwareCost = 0
+      if (data.useCloudDatabase) {
+        cloudSoftwareCost += (data.cloudDatabaseMonthlyCost || 0) * 12
+      }
+      if (data.useCloudOperatingSystem) {
+        cloudSoftwareCost += (data.cloudOperatingSystemMonthlyCost || 0) * 12
+      }
+      if (data.useCloudAnalytics) {
+        cloudSoftwareCost += (data.cloudAnalyticsMonthlyCost || 0) * 12
+      }
+      if (data.useCloudTelemetry) {
+        cloudSoftwareCost += (data.cloudTelemetryMonthlyCost || 0) * 12
+      }
+      if (data.useCloudMonitoring) {
+        cloudSoftwareCost += (data.cloudMonitoringMonthlyCost || 0) * 12
+      }
+      if (data.useCloudSecurity) {
+        cloudSoftwareCost += (data.cloudSecurityMonthlyCost || 0) * 12
+      }
+
+      const { inflatedCost: inflatedCloudSoftware } = await modelInflation({
+        initialCost: cloudSoftwareCost,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+      cloudBreakdown.Software = inflatedCloudSoftware
+
+      // Calculate totals
+      const totalAnnualOnPremCost = Object.values(onPremBreakdown).reduce((sum, val) => sum + (val || 0), 0)
+      const totalAnnualCloudCost = Object.values(cloudBreakdown).reduce((sum, val) => sum + (val || 0), 0)
+
       cumulativeOnPremCost += totalAnnualOnPremCost
+      cumulativeCloudCost += totalAnnualCloudCost
 
       yearlyData.push({
         year: year,
@@ -293,69 +409,37 @@ export async function calculateCosts(
       currentCloudStorageUnits *= storageGrowthFactor
       currentCloudEgressUnits *= egressGrowthFactor
       currentOnPremBandwidthGb *= onPremTrafficGrowthFactor
-      if (useOnPremCdn) {
-        currentOnPremCdnUsageGb *= onPremTrafficGrowthFactor
-      }
     }
 
+    const savings = cumulativeOnPremCost - cumulativeCloudCost
+
+    // Calculate breakeven point
     let breakevenPoint: string | null = null
-
-    // Check if a crossover happens
-    const initialOnPremIsCheaper =
-      yearlyData[0].cumulativeOnPrem < yearlyData[0].cumulativeCloud
-    const finalOnPremIsCheaper = cumulativeOnPremCost < cumulativeCloudCost
-
-    if (initialOnPremIsCheaper !== finalOnPremIsCheaper) {
-      for (let i = 0; i < yearlyData.length; i++) {
-        const currentYearData = yearlyData[i]
-        const prevYearData =
-          i > 0
-            ? yearlyData[i - 1]
-            : { cumulativeOnPrem: 0, cumulativeCloud: 0 }
-
-        const prevOnPremWasCheaper =
-          prevYearData.cumulativeOnPrem < prevYearData.cumulativeCloud
-        const currentOnPremIsCheaper =
-          currentYearData.cumulativeOnPrem < currentYearData.cumulativeCloud
-
-        if (prevOnPremWasCheaper !== currentOnPremIsCheaper) {
-          const costDiffAtStartOfYear =
-            prevYearData.cumulativeOnPrem - prevYearData.cumulativeCloud
-          const costDiffAtEndOfYear =
-            currentYearData.cumulativeOnPrem - currentYearData.cumulativeCloud
-          const totalChangeInDiff = costDiffAtEndOfYear - costDiffAtStartOfYear
-
-          if (totalChangeInDiff !== 0) {
-            const crossoverFraction = -costDiffAtStartOfYear / totalChangeInDiff
-            const months = Math.ceil(crossoverFraction * 12)
-            if (months > 0 && months <= 12) {
-              breakevenPoint = `Year ${currentYearData.year}, Month ${months}`
-            } else {
-              breakevenPoint = `Year ${currentYearData.year}`
-            }
-          } else {
-            breakevenPoint = `Year ${currentYearData.year}`
-          }
-          break
-        }
+    let breakevenYear = 0
+    for (let i = 0; i < yearlyData.length; i++) {
+      if (yearlyData[i].cumulativeOnPrem < yearlyData[i].cumulativeCloud && breakevenYear === 0) {
+        breakevenYear = yearlyData[i].year
+        breakevenPoint = `Year ${breakevenYear}`
+        break
       }
     }
 
-    const result: CalculationResult = {
-      yearlyCosts: yearlyData,
-      onPremTCO: cumulativeOnPremCost,
-      cloudTCO: cumulativeCloudCost,
-      savings: cumulativeOnPremCost - cumulativeCloudCost,
-      breakevenPoint: breakevenPoint,
-      calculationMode,
-      analysisPeriod,
+    return {
+      success: true,
+      data: {
+        yearlyCosts: yearlyData,
+        onPremTCO: cumulativeOnPremCost,
+        cloudTCO: cumulativeCloudCost,
+        savings,
+        breakevenPoint,
+        calculationMode,
+        analysisPeriod,
+      },
     }
-
-    return { success: true, data: result }
-  } catch (e) {
-    console.error('Calculation failed:', e)
-    const errorMessage =
-      e instanceof Error ? e.message : 'An unexpected error occurred.'
-    return { success: false, error: `Calculation failed: ${errorMessage}` }
+  } catch (error) {
+    return {
+      success: false,
+      error: `Calculation error: ${error instanceof Error ? error.message : 'Unknown error'}`,
+    }
   }
 }

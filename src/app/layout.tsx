@@ -1,12 +1,12 @@
-import { ThemeProvider } from '@/components/app/theme-provider'
-import { Toaster } from '@/components/ui/toaster'
-import { Analytics } from '@vercel/analytics/react'
-import type { Metadata } from 'next'
+import {ThemeProvider} from '@/components/app/theme-provider'
+import {Toaster} from '@/components/ui/toaster'
+import {Analytics} from '@vercel/analytics/react'
+import type {Metadata} from 'next'
 
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'InfraWise - Cloud vs. On-Prem TCO Analysis',
+  title: 'InfraWise - Cloud vs. On-Prem Analysis',
   description:
     'InfraWise is an financial modeling tool to compare the Total Cost of Ownership (TCO) between cloud and on-premise infrastructure. Make informed decisions with detailed cost breakdowns and breakeven analysis.',
   icons: {
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     'AI',
   ],
   openGraph: {
-    title: 'InfraWise - Cloud vs. On-Prem TCO Analysis',
+    title: 'InfraWise - Cloud vs. On-Prem Cost Analysis',
     description:
       'Compare cloud and on-premise infrastructure costs with this calculator.',
     url: 'https://infrawise.sagyamthapa.com.np',
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'InfraWise - Cloud vs. On-Prem TCO Analysis',
+    title: 'InfraWise - Cloud vs. On-Prem Cost Analysis',
     description:
       'Make informed infrastructure decisions. Compare cloud vs. on-premise TCO with this tool.',
     // creator: '@sagyam21',

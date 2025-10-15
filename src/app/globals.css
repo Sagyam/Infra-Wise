@@ -29,7 +29,7 @@ body {
     --ring: 231 48% 48%;
     --chart-1: 231 48% 48%; /* Blue */
     --chart-2: 174 100% 29%; /* Teal */
-    --chart-3: 197 37% 24%; /* Dark Cyan */
+    --chart-3: 0 72% 51%; /* Crimson/Red */
     --chart-4: 43 74% 66%; /* Yellow */
     --chart-5: 27 87% 67%; /* Orange */
     --chart-6: 142 76% 36%; /* Green */
@@ -67,7 +67,7 @@ body {
     --ring: 231 48% 48%;
     --chart-1: 217 91% 60%; /* Light Blue */
     --chart-2: 174 72% 56%; /* Light Teal */
-    --chart-3: 158 64% 52%; /* Light Cyan */
+    --chart-3: 0 84% 60%; /* Light Red/Coral */
     --chart-4: 48 96% 53%; /* Light Yellow */
     --chart-5: 25 95% 53%; /* Light Orange */
     --chart-6: 142 71% 45%; /* Light Green */
