@@ -94,6 +94,17 @@ export default function Home() {
     form.setValue('calculationMode', calculationMode)
   }, [calculationMode, form])
 
+  // Calculate with default values on mount
+  React.useEffect(() => {
+    const calculateDefaultResults = async () => {
+      const result = await calculateCosts(defaultValues)
+      if (result.success) {
+        setResults(result.data)
+      }
+    }
+    calculateDefaultResults()
+  }, [])
+
   const onSubmit = async (values: CostFormValues) => {
     setIsLoading(true)
     setError(null)

@@ -17,7 +17,7 @@ import { SummaryCards } from './results/summary-cards'
 import { ResultsTable } from './results-table'
 
 interface ResultsDisplayProps {
-  results: CalculationResult
+  results: CalculationResult | null
   calculationMode: CostFormValues['calculationMode']
 }
 
@@ -25,6 +25,19 @@ export function ResultsDisplay({
   results,
   calculationMode,
 }: ResultsDisplayProps) {
+  if (!results) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-headline">No Results Yet</CardTitle>
+          <CardDescription>
+            Please fill in the form and click Calculate to see results.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    )
+  }
+
   const {
     onPremTCO,
     cloudTCO,
