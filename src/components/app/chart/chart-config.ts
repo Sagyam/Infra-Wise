@@ -1,36 +1,33 @@
 import type { ChartConfig } from '@/components/ui/chart'
 
 export const onPremCategories = [
-  'Hardware',
+  'Energy',
+  'Storage',
+  'Compute',
+  'GPU',
+  'Networking',
+  'Human',
   'Software',
-  'Power',
-  'Bandwidth',
-  'CDN',
-  'Backup',
-  'Salvage Value',
 ]
 
 export const cloudCategories = [
-  'Hot Storage',
-  'Standard Storage',
-  'Archive Storage',
-  'Bandwidth (Egress)',
+  'Storage',
+  'Compute',
+  'GPU',
+  'Networking',
+  'Human',
+  'Software',
 ]
 
 export const chartConfig = {
-  // On-Prem
-  Hardware: { label: 'HW', color: 'hsl(var(--chart-1))' },
-  Software: { label: 'SW', color: 'hsl(var(--chart-2))' },
-  Power: { label: 'Power', color: 'hsl(var(--chart-3))' },
-  Bandwidth: { label: 'Network', color: 'hsl(var(--chart-4))' },
-  CDN: { label: 'CDN', color: 'hsl(var(--chart-5))' },
-  Backup: { label: 'Backup', color: 'hsl(var(--muted))' },
-  'Salvage Value': { label: 'Salvage', color: 'hsl(120 80% 60%)' },
-  // Cloud
-  'Hot Storage': { label: 'Hot', color: 'hsl(var(--chart-1))' },
-  'Standard Storage': { label: 'Standard', color: 'hsl(var(--chart-2))' },
-  'Archive Storage': { label: 'Archive', color: 'hsl(var(--chart-3))' },
-  'Bandwidth (Egress)': { label: 'Egress', color: 'hsl(var(--chart-4))' },
+  // On-Prem (7 categories)
+  Energy: { label: 'Energy', color: 'hsl(var(--chart-1))' },
+  Storage: { label: 'Storage', color: 'hsl(var(--chart-2))' },
+  Compute: { label: 'Compute', color: 'hsl(var(--chart-3))' },
+  GPU: { label: 'GPU', color: 'hsl(var(--chart-4))' },
+  Networking: { label: 'Networking', color: 'hsl(var(--chart-5))' },
+  Human: { label: 'Human', color: 'hsl(var(--chart-6))' },
+  Software: { label: 'Software', color: 'hsl(var(--chart-7))' },
 } satisfies ChartConfig
 
 export const formatCurrency = (value: number) => {
