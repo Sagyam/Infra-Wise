@@ -25,27 +25,12 @@ export function ResultsDisplay({
   results,
   calculationMode,
 }: ResultsDisplayProps) {
-  if (!results) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="font-headline">No Results Yet</CardTitle>
-          <CardDescription>
-            Please fill in the form and click Calculate to see results.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    )
-  }
-
-  const {
-    onPremTCO,
-    cloudTCO,
-    savings,
-    yearlyCosts,
-    analysisPeriod,
-    breakevenPoint,
-  } = results
+  const onPremTCO = results?.onPremTCO ?? 0
+  const cloudTCO = results?.cloudTCO ?? 0
+  const savings = results?.savings ?? 0
+  const yearlyCosts = results?.yearlyCosts ?? []
+  const analysisPeriod = results?.analysisPeriod ?? 1
+  const breakevenPoint = results?.breakevenPoint ?? null
 
   const winningOption = useMemo(
     () => (savings > 0 ? 'Cloud' : 'On-Premise'),
@@ -73,6 +58,19 @@ export function ResultsDisplay({
         : winningSavings,
     [calculationMode, winningSavings, analysisPeriod],
   )
+
+  if (!results) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-headline">No Results Yet</CardTitle>
+          <CardDescription>
+            Please fill in the form and click Calculate to see results.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    )
+  }
 
   const displayTitle =
     calculationMode === 'amortized'

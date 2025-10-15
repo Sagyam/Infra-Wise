@@ -32,6 +32,21 @@ const defaultValues: CostFormValues = {
   onPremPowerRating: 600,
   onPremLoadFactor: 65,
   onPremElectricityCost: 0.14,
+  onPremUpsUnitCost: 0,
+  onPremUpsQuantity: 0,
+  onPremUpsBatteryFailureRate: 0,
+  onPremUpsBatteryReplacementCost: 0,
+  onPremGeneratorUnitCost: 0,
+  onPremGeneratorQuantity: 0,
+  onPremGeneratorFuelConsumptionRate: 0,
+  onPremGeneratorFuelUnitCost: 0,
+  onPremGeneratorAnnualUsageHours: 0,
+  onPremHvacUnitCost: 0,
+  onPremHvacQuantity: 0,
+  onPremHvacPowerConsumption: 0,
+  onPremHvacLoadFactor: 0,
+  onPremHvacTechnicianHourlyRate: 0,
+  onPremHvacHoursWorked: 0,
   onPremDriveFailureRate: 2,
   onPremDriveReplacementCost: 250,
   onPremTotalDrives: 24,
@@ -45,11 +60,63 @@ const defaultValues: CostFormValues = {
   useOnPremCdn: false,
   onPremCdnUsage: 0,
   onPremCdnCostPerGb: 0.04,
+  useOnPremCoreSwitch: false,
+  onPremCoreSwitchQuantity: 0,
+  onPremCoreSwitchUnitCost: 0,
+  useOnPremAggregationSwitch: false,
+  onPremAggregationSwitchQuantity: 0,
+  onPremAggregationSwitchUnitCost: 0,
+  useOnPremAccessSwitch: false,
+  onPremAccessSwitchQuantity: 0,
+  onPremAccessSwitchUnitCost: 0,
+  useOnPremCabling: false,
+  onPremCablingLength: 0,
+  onPremCablingUnitPrice: 0,
+  useOnPremQsfp: false,
+  onPremQsfpQuantity: 0,
+  onPremQsfpUnitCost: 0,
   useOnPremBackup: true,
   onPremBackupStorage: 153.6,
   onPremBackupCostPerUnit: 15,
   useOnPremReplication: false,
   onPremReplicationFactor: 0,
+
+  // Human Costs - On-Premise
+  onPremSysAdminCount: 0,
+  onPremSysAdminSalary: 0,
+  onPremSysAdminSalaryIncrement: 0,
+  onPremNetworkEngineerCount: 0,
+  onPremNetworkEngineerSalary: 0,
+  onPremNetworkEngineerSalaryIncrement: 0,
+  onPremStorageAdminCount: 0,
+  onPremStorageAdminSalary: 0,
+  onPremStorageAdminSalaryIncrement: 0,
+  onPremSecurityEngineerCount: 0,
+  onPremSecurityEngineerSalary: 0,
+  onPremSecurityEngineerSalaryIncrement: 0,
+  onPremDatabaseAdminCount: 0,
+  onPremDatabaseAdminSalary: 0,
+  onPremDatabaseAdminSalaryIncrement: 0,
+  onPremDataCenterTechCount: 0,
+  onPremDataCenterTechSalary: 0,
+  onPremDataCenterTechSalaryIncrement: 0,
+
+  // Human Costs - Cloud
+  cloudDevOpsEngineerCount: 0,
+  cloudDevOpsEngineerSalary: 0,
+  cloudDevOpsEngineerSalaryIncrement: 0,
+  cloudCloudArchitectCount: 0,
+  cloudCloudArchitectSalary: 0,
+  cloudCloudArchitectSalaryIncrement: 0,
+  cloudSiteReliabilityEngineerCount: 0,
+  cloudSiteReliabilityEngineerSalary: 0,
+  cloudSiteReliabilityEngineerSalaryIncrement: 0,
+  cloudCloudSecurityEngineerCount: 0,
+  cloudCloudSecurityEngineerSalary: 0,
+  cloudCloudSecurityEngineerSalaryIncrement: 0,
+  cloudCloudDatabaseAdminCount: 0,
+  cloudCloudDatabaseAdminSalary: 0,
+  cloudCloudDatabaseAdminSalaryIncrement: 0,
 
   // Cloud
   cloudStorageSize: 150,
@@ -176,6 +243,26 @@ export default function Home() {
     control: form.control,
     name: 'useOnPremCdn',
   })
+  const useOnPremCoreSwitch = useWatch({
+    control: form.control,
+    name: 'useOnPremCoreSwitch',
+  })
+  const useOnPremAggregationSwitch = useWatch({
+    control: form.control,
+    name: 'useOnPremAggregationSwitch',
+  })
+  const useOnPremAccessSwitch = useWatch({
+    control: form.control,
+    name: 'useOnPremAccessSwitch',
+  })
+  const useOnPremCabling = useWatch({
+    control: form.control,
+    name: 'useOnPremCabling',
+  })
+  const useOnPremQsfp = useWatch({
+    control: form.control,
+    name: 'useOnPremQsfp',
+  })
   const useOnPremBackup = useWatch({
     control: form.control,
     name: 'useOnPremBackup',
@@ -218,6 +305,11 @@ export default function Home() {
             control={form.control}
             useOnPremBandwidth={useOnPremBandwidth}
             useOnPremCdn={useOnPremCdn}
+            useOnPremCoreSwitch={useOnPremCoreSwitch}
+            useOnPremAggregationSwitch={useOnPremAggregationSwitch}
+            useOnPremAccessSwitch={useOnPremAccessSwitch}
+            useOnPremCabling={useOnPremCabling}
+            useOnPremQsfp={useOnPremQsfp}
           />
         )
       case 'human-cost':

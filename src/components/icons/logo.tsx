@@ -9,8 +9,10 @@ export const Logo = (props: React.SVGProps<SVGSVGElement>) => (
     strokeWidth="2"
     strokeLinecap="round"
     strokeLinejoin="round"
+    aria-label="InfraWise Logo"
     {...props}
   >
+    <title>InfraWise Logo</title>
     <path d="M20 20h-4V4h4v16zM12 20h-4V12h4v8zM4 20H2v-4a2 2 0 012-2h2v6z" />
     <path d="M2 10h12" />
     <path d="M18 8h2" />

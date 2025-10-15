@@ -1,13 +1,6 @@
 'use client'
 
-import type { Control } from 'react-hook-form'
-import type { CostFormValues } from '@/lib/types'
-
-interface GpuSectionProps {
-  control: Control<CostFormValues>
-}
-
-export function GpuSection({ control }: GpuSectionProps) {
+export function GpuSection() {
   return (
     <div className="space-y-6">
       <div>

@@ -6,6 +6,6 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function jsonToCSV(jsonData: any[]): string {
+export function jsonToCSV(jsonData: Record<string, unknown>[]): string {
   return Papa.unparse(jsonData)
 }

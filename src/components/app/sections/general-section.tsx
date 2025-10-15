@@ -1,9 +1,9 @@
 'use client'
 
-import type { Control } from 'react-hook-form'
-import type { CostFormValues } from '@/lib/types'
-import { FormInput } from '@/components/app/form/form-input'
-import { CalculationModeToggle } from '@/components/app/form/calculation-mode-toggle'
+import {CalculationModeToggle} from '@/components/app/form/calculation-mode-toggle'
+import {FormInput} from '@/components/app/form/form-input'
+import type {CostFormValues} from '@/lib/types'
+import type {Control} from 'react-hook-form'
 
 interface GeneralSectionProps {
   control: Control<CostFormValues>

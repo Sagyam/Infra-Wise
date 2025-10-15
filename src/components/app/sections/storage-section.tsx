@@ -1,5 +1,6 @@
 'use client'
 
+import { useId } from 'react'
 import type { Control, UseFormSetValue } from 'react-hook-form'
 import type { CostFormValues } from '@/lib/types'
 import { FormInput } from '@/components/app/form/form-input'
@@ -26,13 +27,16 @@ interface StorageSectionProps {
 
 export function StorageSection({
   control,
-  setValue,
   dataUnit,
   handleHotChange,
   handleStandardChange,
   useOnPremBackup,
   useOnPremReplication,
 }: StorageSectionProps) {
+  const gbId = useId()
+  const tbId = useId()
+  const pbId = useId()
+
   return (
     <div className="space-y-6">
       <div>
@@ -55,20 +59,20 @@ export function StorageSection({
                 className="flex gap-4"
               >
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="GB" id="gb" />
-                  <label htmlFor="gb" className="cursor-pointer">
+                  <RadioGroupItem value="GB" id={gbId} />
+                  <label htmlFor={gbId} className="cursor-pointer">
                     GB
                   </label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="TB" id="tb" />
-                  <label htmlFor="tb" className="cursor-pointer">
+                  <RadioGroupItem value="TB" id={tbId} />
+                  <label htmlFor={tbId} className="cursor-pointer">
                     TB
                   </label>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="PB" id="pb" />
-                  <label htmlFor="pb" className="cursor-pointer">
+                  <RadioGroupItem value="PB" id={pbId} />
+                  <label htmlFor={pbId} className="cursor-pointer">
                     PB
                   </label>
                 </div>

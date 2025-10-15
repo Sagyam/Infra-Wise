@@ -1,8 +1,8 @@
 'use client'
 
-import type { Control } from 'react-hook-form'
-import type { CostFormValues } from '@/lib/types'
-import { FormInput } from '@/components/app/form/form-input'
+import {FormInput} from '@/components/app/form/form-input'
+import type {CostFormValues} from '@/lib/types'
+import type {Control} from 'react-hook-form'
 
 interface SoftwareSectionProps {
   control: Control<CostFormValues>

@@ -49,8 +49,6 @@ export async function calculateCosts(
       onPremDriveFailureRate,
       onPremDriveReplacementCost,
       onPremTotalDrives,
-      onPremStoragePerDrive,
-      onPremRaidFactor,
       onPremBandwidthUsage,
       onPremBandwidthCostPerGb,
       onPremAnnualTrafficGrowth,

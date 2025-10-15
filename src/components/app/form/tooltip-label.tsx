@@ -1,5 +1,5 @@
 import { Info } from 'lucide-react'
-import React from 'react'
+import type React from 'react'
 import {
   Tooltip,
   TooltipContent,
