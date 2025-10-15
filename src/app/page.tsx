@@ -2,18 +2,20 @@
 
 import {AppSidebar} from '@/components/app/app-sidebar'
 import {Header} from '@/components/app/header'
-import {ResultsDisplay} from '@/components/app/results-display'
 import {ComputeSection} from '@/components/app/sections/compute-section'
 import {EnergySection} from '@/components/app/sections/energy-section'
 import {GeneralSection} from '@/components/app/sections/general-section'
 import {GpuSection} from '@/components/app/sections/gpu-section'
 import {HumanCostSection} from '@/components/app/sections/human-cost-section'
 import {NetworkingSection} from '@/components/app/sections/networking-section'
+import {ResultsBreakdownSection} from '@/components/app/sections/results-breakdown-section'
+import {ResultsChartsSection} from '@/components/app/sections/results-charts-section'
+import {ResultsCumulativeSection} from '@/components/app/sections/results-cumulative-section'
 import {SoftwareSection} from '@/components/app/sections/software-section'
 import {StorageSection} from '@/components/app/sections/storage-section'
 import {Button} from '@/components/ui/button'
 import {Form} from '@/components/ui/form'
-import {SidebarInset, SidebarProvider, SidebarTrigger,} from '@/components/ui/sidebar'
+import {SidebarInset, SidebarProvider} from '@/components/ui/sidebar'
 import {calculateCosts} from '@/lib/actions'
 import {type CalculationResult, CostFormSchema, type CostFormValues,} from '@/lib/types'
 import {zodResolver} from '@hookform/resolvers/zod'
@@ -26,65 +28,65 @@ const defaultValues: CostFormValues = {
   dataUnit: 'TB',
 
   // On-prem Compute Hardware
-  useOnPremCpu: false,
-  onPremCpuQuantity: 0,
-  onPremCpuUnitCost: 0,
+  useOnPremCpu: true,
+  onPremCpuQuantity: 4,
+  onPremCpuUnitCost: 2500,
   onPremCpuSalvageValue: 10,
-  useOnPremMotherboard: false,
-  onPremMotherboardQuantity: 0,
-  onPremMotherboardUnitCost: 0,
+  useOnPremMotherboard: true,
+  onPremMotherboardQuantity: 4,
+  onPremMotherboardUnitCost: 800,
   onPremMotherboardSalvageValue: 10,
-  useOnPremMemory: false,
-  onPremMemoryCapacityGb: 0,
-  onPremMemoryCostPerGb: 0,
+  useOnPremMemory: true,
+  onPremMemoryCapacityGb: 512,
+  onPremMemoryCostPerGb: 8,
   onPremMemorySalvageValue: 10,
-  useOnPremChassis: false,
-  onPremChassisQuantity: 0,
-  onPremChassisUnitCost: 0,
+  useOnPremChassis: true,
+  onPremChassisQuantity: 2,
+  onPremChassisUnitCost: 3000,
   onPremChassisSalvageValue: 10,
-  useOnPremRacks: false,
-  onPremRacksQuantity: 0,
-  onPremRacksUnitCost: 0,
+  useOnPremRacks: true,
+  onPremRacksQuantity: 1,
+  onPremRacksUnitCost: 2000,
   onPremRacksSalvageValue: 10,
 
   // Software - On-Premise
-  useOnPremVirtualization: false,
-  onPremVirtualizationUnitCost: 0,
-  onPremVirtualizationLicenses: 0,
-  useOnPremOperatingSystem: false,
-  onPremOperatingSystemUnitCost: 0,
-  onPremOperatingSystemLicenses: 0,
+  useOnPremVirtualization: true,
+  onPremVirtualizationUnitCost: 500,
+  onPremVirtualizationLicenses: 4,
+  useOnPremOperatingSystem: true,
+  onPremOperatingSystemUnitCost: 150,
+  onPremOperatingSystemLicenses: 8,
   useOnPremStorage: false,
   onPremStorageUnitCost: 0,
   onPremStorageLicenses: 0,
-  useOnPremBackupSoftware: false,
-  onPremBackupSoftwareUnitCost: 0,
-  onPremBackupSoftwareLicenses: 0,
-  useOnPremMonitoring: false,
-  onPremMonitoringUnitCost: 0,
-  onPremMonitoringLicenses: 0,
-  useOnPremSecurity: false,
-  onPremSecurityUnitCost: 0,
-  onPremSecurityLicenses: 0,
+  useOnPremBackupSoftware: true,
+  onPremBackupSoftwareUnitCost: 300,
+  onPremBackupSoftwareLicenses: 4,
+  useOnPremMonitoring: true,
+  onPremMonitoringUnitCost: 200,
+  onPremMonitoringLicenses: 4,
+  useOnPremSecurity: true,
+  onPremSecurityUnitCost: 400,
+  onPremSecurityLicenses: 4,
 
   // Software - Cloud
-  useCloudDatabase: false,
-  cloudDatabaseMonthlyCost: 0,
+  useCloudDatabase: true,
+  cloudDatabaseMonthlyCost: 500,
   useCloudOperatingSystem: false,
   cloudOperatingSystemMonthlyCost: 0,
-  useCloudAnalytics: false,
-  cloudAnalyticsMonthlyCost: 0,
-  useCloudTelemetry: false,
-  cloudTelemetryMonthlyCost: 0,
-  useCloudMonitoring: false,
-  cloudMonitoringMonthlyCost: 0,
-  useCloudSecurity: false,
-  cloudSecurityMonthlyCost: 0,
+  useCloudAnalytics: true,
+  cloudAnalyticsMonthlyCost: 300,
+  useCloudTelemetry: true,
+  cloudTelemetryMonthlyCost: 200,
+  useCloudMonitoring: true,
+  cloudMonitoringMonthlyCost: 250,
+  useCloudSecurity: true,
+  cloudSecurityMonthlyCost: 400,
 
   // Energy
   useOnPremPowerConsumption: true,
-  onPremPowerRating: 600,
-  onPremLoadFactor: 65,
+  onPremPowerRating: 2400,
+  onPremLoadFactor: 70,
   onPremElectricityCost: 0.14,
   useOnPremUps: false,
   onPremUpsUnitCost: 0,
@@ -104,9 +106,9 @@ const defaultValues: CostFormValues = {
   onPremHvacLoadFactor: 0,
   onPremHvacTechnicianHourlyRate: 0,
   onPremHvacHoursWorked: 0,
-  useOnPremColocation: false,
-  onPremColocationMonthlyCost: 0,
-  onPremColocationAnnualIncrease: 0,
+  useOnPremColocation: true,
+  onPremColocationMonthlyCost: 1500,
+  onPremColocationAnnualIncrease: 3,
   onPremDriveFailureRate: 2,
   onPremDriveReplacementCost: 250,
   onPremTotalDrives: 24,
@@ -120,25 +122,25 @@ const defaultValues: CostFormValues = {
   useOnPremCdn: false,
   onPremCdnUsage: 0,
   onPremCdnCostPerGb: 0.04,
-  useOnPremCoreSwitch: false,
-  onPremCoreSwitchQuantity: 0,
-  onPremCoreSwitchUnitCost: 0,
+  useOnPremCoreSwitch: true,
+  onPremCoreSwitchQuantity: 2,
+  onPremCoreSwitchUnitCost: 8000,
   onPremCoreSwitchSalvageValue: 10,
-  useOnPremAggregationSwitch: false,
-  onPremAggregationSwitchQuantity: 0,
-  onPremAggregationSwitchUnitCost: 0,
+  useOnPremAggregationSwitch: true,
+  onPremAggregationSwitchQuantity: 4,
+  onPremAggregationSwitchUnitCost: 3000,
   onPremAggregationSwitchSalvageValue: 10,
-  useOnPremAccessSwitch: false,
-  onPremAccessSwitchQuantity: 0,
-  onPremAccessSwitchUnitCost: 0,
+  useOnPremAccessSwitch: true,
+  onPremAccessSwitchQuantity: 8,
+  onPremAccessSwitchUnitCost: 800,
   onPremAccessSwitchSalvageValue: 10,
-  useOnPremCabling: false,
-  onPremCablingLength: 0,
-  onPremCablingUnitPrice: 0,
+  useOnPremCabling: true,
+  onPremCablingLength: 500,
+  onPremCablingUnitPrice: 2,
   onPremCablingSalvageValue: 10,
-  useOnPremQsfp: false,
-  onPremQsfpQuantity: 0,
-  onPremQsfpUnitCost: 0,
+  useOnPremQsfp: true,
+  onPremQsfpQuantity: 24,
+  onPremQsfpUnitCost: 150,
   onPremQsfpSalvageValue: 10,
   useOnPremBackup: true,
   onPremBackupStorage: 153.6,
@@ -146,76 +148,76 @@ const defaultValues: CostFormValues = {
   useOnPremReplication: false,
   onPremReplicationFactor: 0,
 
-  // Human Costs - On-Premise
-  onPremSysAdminCount: 0,
-  onPremSysAdminSalary: 0,
-  onPremSysAdminSalaryIncrement: 0,
-  onPremNetworkEngineerCount: 0,
-  onPremNetworkEngineerSalary: 0,
-  onPremNetworkEngineerSalaryIncrement: 0,
-  onPremStorageAdminCount: 0,
-  onPremStorageAdminSalary: 0,
-  onPremStorageAdminSalaryIncrement: 0,
-  onPremSecurityEngineerCount: 0,
-  onPremSecurityEngineerSalary: 0,
-  onPremSecurityEngineerSalaryIncrement: 0,
-  onPremDatabaseAdminCount: 0,
-  onPremDatabaseAdminSalary: 0,
-  onPremDatabaseAdminSalaryIncrement: 0,
-  onPremDataCenterTechCount: 0,
-  onPremDataCenterTechSalary: 0,
-  onPremDataCenterTechSalaryIncrement: 0,
+  // Human Costs - On-Premise (California salaries)
+  onPremSysAdminCount: 2,
+  onPremSysAdminSalary: 125000,
+  onPremSysAdminSalaryIncrement: 4,
+  onPremNetworkEngineerCount: 1,
+  onPremNetworkEngineerSalary: 135000,
+  onPremNetworkEngineerSalaryIncrement: 4,
+  onPremStorageAdminCount: 1,
+  onPremStorageAdminSalary: 120000,
+  onPremStorageAdminSalaryIncrement: 4,
+  onPremSecurityEngineerCount: 1,
+  onPremSecurityEngineerSalary: 145000,
+  onPremSecurityEngineerSalaryIncrement: 4,
+  onPremDatabaseAdminCount: 1,
+  onPremDatabaseAdminSalary: 130000,
+  onPremDatabaseAdminSalaryIncrement: 4,
+  onPremDataCenterTechCount: 1,
+  onPremDataCenterTechSalary: 85000,
+  onPremDataCenterTechSalaryIncrement: 4,
 
-  // Human Costs - Cloud
-  cloudDevOpsEngineerCount: 0,
-  cloudDevOpsEngineerSalary: 0,
-  cloudDevOpsEngineerSalaryIncrement: 0,
-  cloudCloudArchitectCount: 0,
-  cloudCloudArchitectSalary: 0,
-  cloudCloudArchitectSalaryIncrement: 0,
-  cloudSiteReliabilityEngineerCount: 0,
-  cloudSiteReliabilityEngineerSalary: 0,
-  cloudSiteReliabilityEngineerSalaryIncrement: 0,
-  cloudCloudSecurityEngineerCount: 0,
-  cloudCloudSecurityEngineerSalary: 0,
-  cloudCloudSecurityEngineerSalaryIncrement: 0,
+  // Human Costs - Cloud (California salaries)
+  cloudDevOpsEngineerCount: 2,
+  cloudDevOpsEngineerSalary: 155000,
+  cloudDevOpsEngineerSalaryIncrement: 4,
+  cloudCloudArchitectCount: 1,
+  cloudCloudArchitectSalary: 180000,
+  cloudCloudArchitectSalaryIncrement: 4,
+  cloudSiteReliabilityEngineerCount: 1,
+  cloudSiteReliabilityEngineerSalary: 165000,
+  cloudSiteReliabilityEngineerSalaryIncrement: 4,
+  cloudCloudSecurityEngineerCount: 1,
+  cloudCloudSecurityEngineerSalary: 160000,
+  cloudCloudSecurityEngineerSalaryIncrement: 4,
   cloudCloudDatabaseAdminCount: 0,
   cloudCloudDatabaseAdminSalary: 0,
   cloudCloudDatabaseAdminSalaryIncrement: 0,
 
   // Cloud Compute VMs
-  useCloudGeneralVm: false,
-  cloudGeneralVmCount: 0,
-  cloudGeneralVmHourlyRate: 0,
-  cloudGeneralVmHoursPerMonth: 0,
-  useCloudComputeVm: false,
-  cloudComputeVmCount: 0,
-  cloudComputeVmHourlyRate: 0,
-  cloudComputeVmHoursPerMonth: 0,
-  useCloudMemoryVm: false,
-  cloudMemoryVmCount: 0,
-  cloudMemoryVmHourlyRate: 0,
-  cloudMemoryVmHoursPerMonth: 0,
+  useCloudGeneralVm: true,
+  cloudGeneralVmCount: 8,
+  cloudGeneralVmHourlyRate: 0.15,
+  cloudGeneralVmHoursPerMonth: 730,
+  useCloudComputeVm: true,
+  cloudComputeVmCount: 4,
+  cloudComputeVmHourlyRate: 0.25,
+  cloudComputeVmHoursPerMonth: 730,
+  useCloudMemoryVm: true,
+  cloudMemoryVmCount: 2,
+  cloudMemoryVmHourlyRate: 0.35,
+  cloudMemoryVmHoursPerMonth: 730,
   useCloudStorageVm: false,
   cloudStorageVmCount: 0,
   cloudStorageVmHourlyRate: 0,
   cloudStorageVmHoursPerMonth: 0,
 
-  // GPU
-  useOnPremTrainingGpu: false,
-  onPremTrainingGpuQuantity: 0,
-  onPremTrainingGpuUnitCost: 0,
-  useOnPremInferenceGpu: false,
-  onPremInferenceGpuQuantity: 0,
-  onPremInferenceGpuUnitCost: 0,
-  useCloudTrainingGpu: false,
-  cloudTrainingGpuCount: 0,
-  cloudTrainingGpuHourlyRate: 0,
-  cloudTrainingGpuHoursPerMonth: 0,
-  useCloudInferenceGpu: false,
-  cloudInferenceGpuCount: 0,
-  cloudInferenceGpuHourlyRate: 0,
-  cloudInferenceGpuHoursPerMonth: 0,
+  // GPU (Nvidia ballpark estimates)
+  useOnPremTrainingGpu: true,
+  onPremTrainingGpuQuantity: 4,
+  onPremTrainingGpuUnitCost: 15000, // A100 40GB ballpark
+  useOnPremInferenceGpu: true,
+  onPremInferenceGpuQuantity: 8,
+  onPremInferenceGpuUnitCost: 5000, // T4 ballpark
+  useCloudTrainingGpu: true,
+  cloudTrainingGpuCount: 4,
+  cloudTrainingGpuHourlyRate: 3.5, // A100 on major cloud providers
+  cloudTrainingGpuHoursPerMonth: 730,
+  useCloudInferenceGpu: true,
+  cloudInferenceGpuCount: 8,
+  cloudInferenceGpuHourlyRate: 0.65, // T4 on major cloud providers
+  cloudInferenceGpuHoursPerMonth: 730,
 
   // Cloud
   cloudStorageSize: 150,
@@ -270,7 +272,7 @@ export default function Home() {
     if (result.success) {
       setResults(result.data)
       setCalculationMode(result.data.calculationMode)
-      setActiveSection('results')
+      setActiveSection('results-charts')
     } else {
       setError(result.error)
     }
@@ -586,13 +588,17 @@ export default function Home() {
             useCloudSecurity={useCloudSecurity}
           />
         )
-      case 'results':
+      case 'results-charts':
+        return <ResultsChartsSection results={results} />
+      case 'results-cumulative':
         return (
-          <ResultsDisplay
+          <ResultsCumulativeSection
             results={results}
             calculationMode={calculationMode}
           />
         )
+      case 'results-breakdown':
+        return <ResultsBreakdownSection results={results} />
       default:
         return null
     }
@@ -609,12 +615,11 @@ export default function Home() {
           <Header />
           <main className="flex-1 p-6 flex flex-col items-center">
             <div className="w-full max-w-7xl">
-              <SidebarTrigger />
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)}>
                   <div>
                     {renderSection()}
-                    {activeSection !== 'results' && (
+                    {!activeSection.startsWith('results-') && (
                       <div className="mt-8 flex gap-4 justify-center">
                         <Button type="submit" disabled={isLoading}>
                           {isLoading ? 'Calculating...' : 'Calculate'}
