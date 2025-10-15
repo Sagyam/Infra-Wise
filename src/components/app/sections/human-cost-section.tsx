@@ -5,6 +5,7 @@ import type { CostFormValues } from '@/lib/types'
 import { FormInput } from '@/components/app/form/form-input'
 import { FormSwitch } from '@/components/app/form/form-switch'
 import { useWatch } from 'react-hook-form'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface HumanCostSectionProps {
   control: Control<CostFormValues>
@@ -25,15 +26,15 @@ export function HumanCostSection({ control }: HumanCostSectionProps) {
   const useCloudCloudDatabaseAdmin = useWatch({ control, name: 'useCloudCloudDatabaseAdmin' })
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-headline font-bold mb-2">Human Costs</h2>
-        <p className="text-sm text-muted-foreground">
+    <Card>
+      <CardHeader>
+        <CardTitle className="font-headline">Human Costs</CardTitle>
+        <CardDescription>
           Configure personnel and operational overhead costs.
-        </p>
-      </div>
-
-      <div className="flex flex-col md:flex-row justify-evenly gap-6">
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col md:flex-row justify-evenly gap-6">
         {/* On-Premise Column */}
         <div className="space-y-4 flex-1 max-w-xl">
           <h3 className="text-lg font-semibold">On-Premise Personnel</h3>
@@ -473,6 +474,7 @@ export function HumanCostSection({ control }: HumanCostSectionProps) {
           </div>
         </div>
       </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 }

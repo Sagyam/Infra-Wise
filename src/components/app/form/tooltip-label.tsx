@@ -9,11 +9,11 @@ import {
 
 interface TooltipLabelProps {
   label: string
-  tooltipText: string
-  icon: React.ReactNode
+  tooltip: string
+  icon?: React.ReactNode
 }
 
-export function TooltipLabel({ label, tooltipText, icon }: TooltipLabelProps) {
+export function TooltipLabel({ label, tooltip, icon }: TooltipLabelProps) {
   return (
     <TooltipProvider>
       <Tooltip>
@@ -23,7 +23,7 @@ export function TooltipLabel({ label, tooltipText, icon }: TooltipLabelProps) {
           </span>
         </TooltipTrigger>
         <TooltipContent>
-          <p className="max-w-xs">{tooltipText}</p>
+          <p className="max-w-xs">{tooltip}</p>
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

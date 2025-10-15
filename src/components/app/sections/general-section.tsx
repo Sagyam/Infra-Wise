@@ -4,6 +4,7 @@ import {CalculationModeToggle} from '@/components/app/form/calculation-mode-togg
 import {FormInput} from '@/components/app/form/form-input'
 import type {CostFormValues} from '@/lib/types'
 import type {Control} from 'react-hook-form'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface GeneralSectionProps {
   control: Control<CostFormValues>
@@ -15,15 +16,14 @@ export function GeneralSection({
   onCalculationModeChange,
 }: GeneralSectionProps) {
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-headline font-bold mb-2">General Settings</h2>
-        <p className="text-sm text-muted-foreground">
+    <Card>
+      <CardHeader>
+        <CardTitle className="font-headline">General Settings</CardTitle>
+        <CardDescription>
           Configure analysis parameters and calculation methodology.
-        </p>
-      </div>
-
-      <div className="space-y-4">
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
         <CalculationModeToggle
           control={control}
           onCalculationModeChange={onCalculationModeChange}
@@ -48,7 +48,7 @@ export function GeneralSection({
           type="number"
           step={0.1}
         />
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 }

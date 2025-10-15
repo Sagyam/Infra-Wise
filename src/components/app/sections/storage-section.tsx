@@ -14,6 +14,7 @@ import {
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Switch } from '@/components/ui/switch'
 import { TooltipLabel } from '@/components/app/form/tooltip-label'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface StorageSectionProps {
   control: Control<CostFormValues>
@@ -38,15 +39,15 @@ export function StorageSection({
   const pbId = useId()
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-headline font-bold mb-2">Storage Configuration</h2>
-        <p className="text-sm text-muted-foreground">
+    <Card>
+      <CardHeader>
+        <CardTitle className="font-headline">Storage Configuration</CardTitle>
+        <CardDescription>
           Configure storage capacity, growth rates, and tiering for both on-premise and cloud infrastructure.
-        </p>
-      </div>
-
-      <FormField
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-6">
+        <FormField
         control={control}
         name="dataUnit"
         render={({ field }) => (
@@ -297,6 +298,7 @@ export function StorageSection({
         </div>
         </div>
       </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 }

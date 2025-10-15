@@ -6,6 +6,7 @@ import {FormControl, FormField, FormItem,} from '@/components/ui/form'
 import {Switch} from '@/components/ui/switch'
 import type {CostFormValues} from '@/lib/types'
 import type {Control} from 'react-hook-form'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface NetworkingSectionProps {
   control: Control<CostFormValues>
@@ -29,15 +30,15 @@ export function NetworkingSection({
   useOnPremQsfp,
 }: NetworkingSectionProps) {
   return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-2xl font-headline font-bold mb-2">Networking</h2>
-        <p className="text-sm text-muted-foreground">
+    <Card>
+      <CardHeader>
+        <CardTitle className="font-headline">Networking</CardTitle>
+        <CardDescription>
           Configure bandwidth, CDN, and data transfer costs.
-        </p>
-      </div>
-
-      <div className="flex flex-col md:flex-row justify-evenly gap-6">
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col md:flex-row justify-evenly gap-6">
         {/* On-Premise Column */}
         <div className="space-y-4 flex-1 max-w-xl">
           <h3 className="text-lg font-semibold">On-Premise Networking</h3>
@@ -150,7 +151,7 @@ export function NetworkingSection({
         />
 
         {useOnPremCoreSwitch && (
-          <>
+          <div className="ml-4 space-y-4">
             <FormInput
               control={control}
               name="onPremCoreSwitchQuantity"
@@ -168,7 +169,18 @@ export function NetworkingSection({
               type="number"
               step={100}
             />
-          </>
+
+            <FormInput
+              control={control}
+              name="onPremCoreSwitchSalvageValue"
+              label="Salvage Value (%)"
+              tooltip="Percentage of core switch value recoverable at end of lifecycle"
+              type="number"
+              step={1}
+              min={0}
+              max={100}
+            />
+          </div>
         )}
 
         <FormField
@@ -190,7 +202,7 @@ export function NetworkingSection({
         />
 
         {useOnPremAggregationSwitch && (
-          <>
+          <div className="ml-4 space-y-4">
             <FormInput
               control={control}
               name="onPremAggregationSwitchQuantity"
@@ -208,7 +220,18 @@ export function NetworkingSection({
               type="number"
               step={100}
             />
-          </>
+
+            <FormInput
+              control={control}
+              name="onPremAggregationSwitchSalvageValue"
+              label="Salvage Value (%)"
+              tooltip="Percentage of aggregation switch value recoverable at end of lifecycle"
+              type="number"
+              step={1}
+              min={0}
+              max={100}
+            />
+          </div>
         )}
 
         <FormField
@@ -230,7 +253,7 @@ export function NetworkingSection({
         />
 
         {useOnPremAccessSwitch && (
-          <>
+          <div className="ml-4 space-y-4">
             <FormInput
               control={control}
               name="onPremAccessSwitchQuantity"
@@ -248,7 +271,18 @@ export function NetworkingSection({
               type="number"
               step={100}
             />
-          </>
+
+            <FormInput
+              control={control}
+              name="onPremAccessSwitchSalvageValue"
+              label="Salvage Value (%)"
+              tooltip="Percentage of access switch value recoverable at end of lifecycle"
+              type="number"
+              step={1}
+              min={0}
+              max={100}
+            />
+          </div>
         )}
 
         <FormField
@@ -270,7 +304,7 @@ export function NetworkingSection({
         />
 
         {useOnPremCabling && (
-          <>
+          <div className="ml-4 space-y-4">
             <FormInput
               control={control}
               name="onPremCablingLength"
@@ -288,7 +322,18 @@ export function NetworkingSection({
               type="number"
               step={0.5}
             />
-          </>
+
+            <FormInput
+              control={control}
+              name="onPremCablingSalvageValue"
+              label="Salvage Value (%)"
+              tooltip="Percentage of cabling value recoverable at end of lifecycle"
+              type="number"
+              step={1}
+              min={0}
+              max={100}
+            />
+          </div>
         )}
 
         <FormField
@@ -310,7 +355,7 @@ export function NetworkingSection({
         />
 
         {useOnPremQsfp && (
-          <>
+          <div className="ml-4 space-y-4">
             <FormInput
               control={control}
               name="onPremQsfpQuantity"
@@ -328,7 +373,18 @@ export function NetworkingSection({
               type="number"
               step={50}
             />
-          </>
+
+            <FormInput
+              control={control}
+              name="onPremQsfpSalvageValue"
+              label="Salvage Value (%)"
+              tooltip="Percentage of QSFP module value recoverable at end of lifecycle"
+              type="number"
+              step={1}
+              min={0}
+              max={100}
+            />
+          </div>
         )}
         </div>
 
@@ -364,6 +420,7 @@ export function NetworkingSection({
         />
         </div>
       </div>
-    </div>
+      </CardContent>
+    </Card>
   )
 }

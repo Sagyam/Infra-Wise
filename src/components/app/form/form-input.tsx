@@ -15,10 +15,13 @@ interface FormInputProps {
   control: Control<CostFormValues>
   name: keyof CostFormValues
   label: string
-  icon: React.ReactNode
+  icon?: React.ReactNode
   unit?: string
   tooltip?: string
   step?: string
+  type?: string
+  min?: number
+  max?: number
 }
 
 export function FormInput({
@@ -29,6 +32,9 @@ export function FormInput({
   unit,
   tooltip,
   step = '1',
+  type = 'number',
+  min,
+  max,
 }: FormInputProps) {
   return (
     <FormField
@@ -38,7 +44,7 @@ export function FormInput({
         <FormItem>
           <FormLabel>
             {tooltip ? (
-              <TooltipLabel label={label} tooltipText={tooltip} icon={icon} />
+              <TooltipLabel label={label} tooltip={tooltip} icon={icon} />
             ) : (
               <span className="flex items-center gap-2">
                 {icon} {label}
@@ -48,9 +54,11 @@ export function FormInput({
           <div className="flex items-center gap-2">
             <FormControl>
               <Input
-                type="number"
+                type={type}
                 placeholder="0"
                 step={step}
+                min={min}
+                max={max}
                 {...field}
                 onChange={(e) => field.onChange(e.target.valueAsNumber || 0)}
                 className="flex-1"
