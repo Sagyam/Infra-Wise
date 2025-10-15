@@ -21,7 +21,6 @@ interface ResultsDisplayProps {
   calculationMode: CostFormValues['calculationMode']
 }
 
-
 export function ResultsDisplay({
   results,
   calculationMode,

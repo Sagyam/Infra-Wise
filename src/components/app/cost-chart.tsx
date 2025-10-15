@@ -10,7 +10,11 @@ import {
   XAxis,
   YAxis,
 } from 'recharts'
-import { type ChartConfig, ChartContainer, ChartTooltipContent } from '@/components/ui/chart'
+import {
+  type ChartConfig,
+  ChartContainer,
+  ChartTooltipContent,
+} from '@/components/ui/chart'
 import type { YearlyCost } from '@/lib/types'
 import {
   chartConfig,
@@ -25,7 +29,6 @@ interface CostChartProps {
   data: YearlyCost[]
   type: 'onprem' | 'cloud'
 }
-
 
 export function CostChart({ data, type }: CostChartProps) {
   const chartData = useMemo(() => {

@@ -267,8 +267,7 @@ export async function calculateCosts(
         onPremBreakdown.Software +=
           inflatedRecurring.softwareCost * replicationFactor
 
-        onPremBreakdown.Power +=
-          inflatedRecurring.powerCost * replicationFactor
+        onPremBreakdown.Power += inflatedRecurring.powerCost * replicationFactor
         onPremBreakdown.Bandwidth +=
           inflatedRecurring.bandwidthCost * replicationFactor
         onPremBreakdown.CDN += inflatedRecurring.cdnCost * replicationFactor

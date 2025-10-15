@@ -10,7 +10,6 @@ interface BreakdownTableProps {
 }
 
 export function BreakdownTable({ data }: BreakdownTableProps) {
-
   return (
     <Tabs defaultValue="onprem">
       <TabsList className="grid w-full grid-cols-2">

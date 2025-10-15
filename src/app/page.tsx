@@ -1,13 +1,81 @@
 'use client'
 
-import { AlertTriangle, Lightbulb, Github } from 'lucide-react'
+import { Github } from 'lucide-react'
 import { useState } from 'react'
-import { CostForm } from '@/components/app/cost-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm, useWatch } from 'react-hook-form'
+import React from 'react'
+import { AppSidebar } from '@/components/app/app-sidebar'
 import { Header } from '@/components/app/header'
 import { ResultsDisplay } from '@/components/app/results-display'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Skeleton } from '@/components/ui/skeleton'
-import type { CalculationResult, CostFormValues } from '@/lib/types'
+import { GeneralSection } from '@/components/app/sections/general-section'
+import { EnergySection } from '@/components/app/sections/energy-section'
+import { StorageSection } from '@/components/app/sections/storage-section'
+import { ComputeSection } from '@/components/app/sections/compute-section'
+import { GpuSection } from '@/components/app/sections/gpu-section'
+import { NetworkingSection } from '@/components/app/sections/networking-section'
+import { HumanCostSection } from '@/components/app/sections/human-cost-section'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
+import {
+  SidebarProvider,
+  SidebarInset,
+  SidebarTrigger,
+} from '@/components/ui/sidebar'
+import { calculateCosts } from '@/lib/actions'
+import {
+  type CalculationResult,
+  CostFormSchema,
+  type CostFormValues,
+} from '@/lib/types'
+
+const defaultValues: CostFormValues = {
+  analysisPeriod: 5,
+  dataUnit: 'TB',
+
+  // On-prem
+  onPremHardwareCost: 25000,
+  onPremSalvageValue: 10,
+  onPremYearlyLicensingCost: 4000,
+  onPremPowerRating: 600,
+  onPremLoadFactor: 65,
+  onPremElectricityCost: 0.14,
+  onPremDriveFailureRate: 2,
+  onPremDriveReplacementCost: 250,
+  onPremTotalDrives: 24,
+  onPremStoragePerDrive: 8,
+  onPremRaidFactor: 20,
+  useOnPremSoftware: true,
+  useOnPremBandwidth: true,
+  onPremBandwidthUsage: 5000,
+  onPremBandwidthCostPerGb: 0.02,
+  onPremAnnualTrafficGrowth: 15,
+  useOnPremCdn: false,
+  onPremCdnUsage: 0,
+  onPremCdnCostPerGb: 0.04,
+  useOnPremBackup: true,
+  onPremBackupStorage: 153.6,
+  onPremBackupCostPerUnit: 15,
+  useOnPremReplication: false,
+  onPremReplicationFactor: 0,
+
+  // Cloud
+  cloudStorageSize: 150,
+  cloudGrowthRate: 20,
+  cloudEgress: 2,
+  cloudEgressGrowthRate: 15,
+  cloudHotTier: 60,
+  cloudStandardTier: 30,
+  cloudArchiveTier: 10,
+  cloudHotStorageCost: 0.021,
+  cloudStandardStorageCost: 0.0125,
+  cloudArchiveStorageCost: 0.0036,
+  cloudEgressCostPerUnit: 0.09,
+
+  // General
+  inflationRate: 3.0,
+  calculationMode: 'tco',
+}
 
 export default function Home() {
   const [results, setResults] = useState<CalculationResult | null>(null)
@@ -15,113 +83,215 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null)
   const [calculationMode, setCalculationMode] =
     useState<CostFormValues['calculationMode']>('tco')
+  const [activeSection, setActiveSection] = useState('general')
 
-  const handleCalculate = (
-    data: CalculationResult | null,
-    errorMsg: string | null,
-  ) => {
-    if (data) {
-      setResults(data)
-      setCalculationMode(data.calculationMode)
+  const form = useForm<CostFormValues>({
+    resolver: zodResolver(CostFormSchema),
+    defaultValues,
+  })
+
+  React.useEffect(() => {
+    form.setValue('calculationMode', calculationMode)
+  }, [calculationMode, form])
+
+  const onSubmit = async (values: CostFormValues) => {
+    setIsLoading(true)
+    setError(null)
+    const result = await calculateCosts(values)
+    if (result.success) {
+      setResults(result.data)
+      setCalculationMode(result.data.calculationMode)
+      setActiveSection('results')
+    } else {
+      setError(result.error)
     }
-    setError(errorMsg)
     setIsLoading(false)
   }
 
-  const handleLoading = () => {
-    setIsLoading(true)
-    setError(null)
+  const dataUnit = useWatch({ control: form.control, name: 'dataUnit' })
+  const onPremStoragePerDrive = useWatch({
+    control: form.control,
+    name: 'onPremStoragePerDrive',
+  })
+  const onPremTotalDrives = useWatch({
+    control: form.control,
+    name: 'onPremTotalDrives',
+  })
+  const onPremRaidFactor = useWatch({
+    control: form.control,
+    name: 'onPremRaidFactor',
+  })
+
+  React.useEffect(() => {
+    const onPremStoragePerDriveInUnit = onPremStoragePerDrive
+    const totalRawSize = onPremStoragePerDriveInUnit * onPremTotalDrives
+    const raidOverhead = totalRawSize * (onPremRaidFactor / 100)
+    const usableSize = totalRawSize - raidOverhead
+
+    const conversionFactor = { GB: 1024, TB: 1, PB: 1 / 1024 }[dataUnit] || 1
+    const usableSizeInDataUnit = usableSize * conversionFactor
+
+    form.setValue('onPremBackupStorage', Math.max(0, usableSizeInDataUnit))
+  }, [
+    onPremStoragePerDrive,
+    onPremTotalDrives,
+    onPremRaidFactor,
+    dataUnit,
+    form,
+  ])
+
+  const cloudHotTier = useWatch({
+    control: form.control,
+    name: 'cloudHotTier',
+  })
+  const cloudStandardTier = useWatch({
+    control: form.control,
+    name: 'cloudStandardTier',
+  })
+
+  const handleHotChange = (value: number) => {
+    const archiveTier = 100 - value - cloudStandardTier
+    if (archiveTier >= 0) {
+      form.setValue('cloudHotTier', value)
+      form.setValue('cloudArchiveTier', archiveTier)
+    }
+  }
+
+  const handleStandardChange = (value: number) => {
+    const archiveTier = 100 - cloudHotTier - value
+    if (archiveTier >= 0) {
+      form.setValue('cloudStandardTier', value)
+      form.setValue('cloudArchiveTier', archiveTier)
+    }
+  }
+
+  const useOnPremBandwidth = useWatch({
+    control: form.control,
+    name: 'useOnPremBandwidth',
+  })
+  const useOnPremCdn = useWatch({
+    control: form.control,
+    name: 'useOnPremCdn',
+  })
+  const useOnPremBackup = useWatch({
+    control: form.control,
+    name: 'useOnPremBackup',
+  })
+  const useOnPremReplication = useWatch({
+    control: form.control,
+    name: 'useOnPremReplication',
+  })
+
+  const renderSection = () => {
+    switch (activeSection) {
+      case 'general':
+        return (
+          <GeneralSection
+            control={form.control}
+            onCalculationModeChange={setCalculationMode}
+            useOnPremBackup={useOnPremBackup}
+            useOnPremReplication={useOnPremReplication}
+            dataUnit={dataUnit}
+          />
+        )
+      case 'energy':
+        return <EnergySection control={form.control} />
+      case 'storage':
+        return (
+          <StorageSection
+            control={form.control}
+            setValue={form.setValue}
+            dataUnit={dataUnit}
+            handleHotChange={handleHotChange}
+            handleStandardChange={handleStandardChange}
+          />
+        )
+      case 'compute':
+        return <ComputeSection control={form.control} />
+      case 'gpu':
+        return <GpuSection control={form.control} />
+      case 'networking':
+        return (
+          <NetworkingSection
+            control={form.control}
+            useOnPremBandwidth={useOnPremBandwidth}
+            useOnPremCdn={useOnPremCdn}
+          />
+        )
+      case 'human-cost':
+        return <HumanCostSection control={form.control} />
+      case 'results':
+        return (
+          <ResultsDisplay
+            results={results}
+            calculationMode={calculationMode}
+          />
+        )
+      default:
+        return null
+    }
   }
 
   return (
-    <div className="flex flex-col min-h-screen bg-background">
-      <Header />
-      <main className="flex-1 container mx-auto p-4 sm:p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
-          <div className="lg:col-span-2">
-            <CostForm
-              onCalculate={handleCalculate}
-              onLoading={handleLoading}
-              isLoading={isLoading}
-              calculationMode={calculationMode}
-              onCalculationModeChange={setCalculationMode}
-            />
-          </div>
-          <div className="lg:col-span-3 flex flex-col">
-            {isLoading ? (
-              <Card className="flex-1 min-h-[600px]">
-                <CardHeader>
-                  <Skeleton className="h-8 w-3/5" />
-                </CardHeader>
-                <CardContent className="space-y-6">
-                  <div className="grid grid-cols-3 gap-4">
-                    <Skeleton className="h-24" />
-                    <Skeleton className="h-24" />
-                    <Skeleton className="h-24" />
-                  </div>
-                  <Skeleton className="h-80" />
-                </CardContent>
-              </Card>
-            ) : error ? (
-              <Card className="flex-1 border-destructive bg-destructive/10 min-h-[600px]">
-                <CardHeader>
-                  <CardTitle className="text-destructive flex items-center gap-2">
-                    <AlertTriangle />
-                    Calculation Failed
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col items-center justify-center h-full text-center">
-                  <p className="text-destructive font-medium">{error}</p>
-                  <p className="text-muted-foreground mt-2">
-                    Please review your inputs and try again.
-                  </p>
-                </CardContent>
-              </Card>
-            ) : results ? (
-              <ResultsDisplay
-                results={results}
-                calculationMode={calculationMode}
-              />
-            ) : (
-              <Card className="flex-1">
-                <CardHeader>
-                  <CardTitle className="font-headline">
-                    Awaiting Your Data
-                  </CardTitle>
-                </CardHeader>
-                <CardContent className="flex flex-col items-center justify-center h-full min-h-[600px] text-center">
-                  <div className="p-4 bg-accent/10 rounded-full mb-4">
-                    <Lightbulb className="w-12 h-12 text-accent" />
-                  </div>
-                  <h3 className="text-xl font-semibold font-headline">
-                    Ready to Crunch the Numbers?
-                  </h3>
-                  <p className="mt-2 text-muted-foreground max-w-sm">
-                    Fill out the form to compare the Total Cost of Ownership
-                    (TCO) between cloud and on-premise infrastructure.
-                  </p>
-                </CardContent>
-              </Card>
-            )}
-          </div>
-        </div>
-      </main>
-      <footer className="py-6 text-center text-muted-foreground text-sm border-t">
-        <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div>
-            © {new Date().getFullYear()} InfraWise. A financial modeling tool.
-          </div>
-          <a
-            href="https://github.com/Sagyam/Infra-Wise"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 hover:text-foreground transition-colors"
-          >
-            <Github className="h-4 w-4" />
-            View on GitHub
-          </a>
-        </div>
-      </footer>
-    </div>
+    <SidebarProvider>
+      <div className="flex min-h-screen w-full bg-background">
+        <AppSidebar
+          activeSection={activeSection}
+          onSectionChange={setActiveSection}
+        />
+        <SidebarInset className="flex flex-col">
+          <Header />
+          <main className="flex-1 p-6">
+            <div className="flex items-center gap-2 mb-6">
+              <SidebarTrigger />
+              <h1 className="text-2xl font-headline font-bold">
+                {activeSection === 'results'
+                  ? 'Results'
+                  : activeSection
+                      .split('-')
+                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+                      .join(' ')}
+              </h1>
+            </div>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)}>
+                <div className="max-w-4xl">
+                  {renderSection()}
+                  {activeSection !== 'results' && (
+                    <div className="mt-8 flex gap-4">
+                      <Button type="submit" disabled={isLoading}>
+                        {isLoading ? 'Calculating...' : 'Calculate'}
+                      </Button>
+                      {error && (
+                        <p className="text-sm text-destructive flex items-center">
+                          {error}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </form>
+            </Form>
+          </main>
+          <footer className="py-6 text-center text-muted-foreground text-sm border-t">
+            <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 px-6">
+              <div>
+                © {new Date().getFullYear()} InfraWise. A financial modeling
+                tool.
+              </div>
+              <a
+                href="https://github.com/Sagyam/Infra-Wise"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 hover:text-foreground transition-colors"
+              >
+                <Github className="h-4 w-4" />
+                View on GitHub
+              </a>
+            </div>
+          </footer>
+        </SidebarInset>
+      </div>
+    </SidebarProvider>
   )
 }

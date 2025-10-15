@@ -1,5 +1,11 @@
 import React from 'react'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
 import { Slider } from '@/components/ui/slider'
 import type { CostFormValues } from '@/lib/types'
 import type { Control } from 'react-hook-form'
@@ -62,7 +68,8 @@ export function FormSlider({
               />
             </FormControl>
             <span className="text-sm font-medium w-20 text-right">
-              {field.value.toFixed(step === 0.01 || step === 0.1 ? 2 : 0)} {unit}
+              {field.value.toFixed(step === 0.01 || step === 0.1 ? 2 : 0)}{' '}
+              {unit}
             </span>
           </div>
           <FormMessage />

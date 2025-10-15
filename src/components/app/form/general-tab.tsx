@@ -1,6 +1,18 @@
 import { Calendar, Container, TrendingUp } from 'lucide-react'
-import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@/components/ui/form'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { TabsContent } from '@/components/ui/tabs'
 import type { CostFormValues } from '@/lib/types'
 import type { Control } from 'react-hook-form'
@@ -13,7 +25,10 @@ interface GeneralTabProps {
   onCalculationModeChange: (mode: CostFormValues['calculationMode']) => void
 }
 
-export function GeneralTab({ control, onCalculationModeChange }: GeneralTabProps) {
+export function GeneralTab({
+  control,
+  onCalculationModeChange,
+}: GeneralTabProps) {
   return (
     <TabsContent value="general" className="mt-0 space-y-6">
       <FormInput
@@ -58,7 +73,10 @@ export function GeneralTab({ control, onCalculationModeChange }: GeneralTabProps
         tooltip="The expected annual rate of inflation, used for amortization."
         step={0.1}
       />
-      <CalculationModeToggle control={control} onCalculationModeChange={onCalculationModeChange} />
+      <CalculationModeToggle
+        control={control}
+        onCalculationModeChange={onCalculationModeChange}
+      />
     </TabsContent>
   )
 }

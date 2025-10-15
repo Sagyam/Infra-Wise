@@ -18,7 +18,12 @@ import {
   TrendingUp,
   Zap,
 } from 'lucide-react'
-import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form'
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from '@/components/ui/form'
 import { Switch } from '@/components/ui/switch'
 import { TabsContent } from '@/components/ui/tabs'
 import type { CostFormValues } from '@/lib/types'
@@ -148,7 +153,10 @@ export function OnPremTab({
             <FormItem className="flex flex-row items-center justify-between">
               <FormLabel>Include Software Costs</FormLabel>
               <FormControl>
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -174,7 +182,10 @@ export function OnPremTab({
             <FormItem className="flex flex-row items-center justify-between">
               <FormLabel>Include Bandwidth Costs</FormLabel>
               <FormControl>
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -219,7 +230,10 @@ export function OnPremTab({
             <FormItem className="flex flex-row items-center justify-between">
               <FormLabel>Use External CDN</FormLabel>
               <FormControl>
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
               </FormControl>
             </FormItem>
           )}
@@ -256,7 +270,10 @@ export function OnPremTab({
             <FormItem className="flex flex-row items-center justify-between">
               <FormLabel>Off site Backup</FormLabel>
               <FormControl>
-                <Switch checked={field.value} onCheckedChange={field.onChange} />
+                <Switch
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
               </FormControl>
             </FormItem>
           )}

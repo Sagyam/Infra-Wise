@@ -80,7 +80,6 @@ const defaultValues: CostFormValues = {
   calculationMode: 'tco',
 }
 
-
 export function CostForm({
   onCalculate,
   onLoading,

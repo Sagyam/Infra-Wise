@@ -1,4 +1,10 @@
-import { ArrowRightLeft, Container, DollarSign, Percent, TrendingUp } from 'lucide-react'
+import {
+  ArrowRightLeft,
+  Container,
+  DollarSign,
+  Percent,
+  TrendingUp,
+} from 'lucide-react'
 import { TabsContent } from '@/components/ui/tabs'
 import type { CostFormValues } from '@/lib/types'
 import type { Control } from 'react-hook-form'

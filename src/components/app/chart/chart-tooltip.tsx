@@ -32,10 +32,7 @@ export function payloadCreator(
   payload: Array<{ name: string; value: unknown }> | undefined,
 ) {
   if (!payload || !payload.length) return []
-  const total = payload.reduce(
-    (acc, entry) => acc + (entry.value as number),
-    0,
-  )
+  const total = payload.reduce((acc, entry) => acc + (entry.value as number), 0)
   return [
     ...payload,
     {

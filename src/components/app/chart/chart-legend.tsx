@@ -20,7 +20,10 @@ export function ChartLegend({
           activeChartConfig[category as keyof typeof activeChartConfig]
         if (!config) return null
         return (
-          <div key={`item-${entry.value}`} className="flex items-center gap-1.5">
+          <div
+            key={`item-${entry.value}`}
+            className="flex items-center gap-1.5"
+          >
             <div
               className="w-2.5 h-2.5 rounded-full"
               style={{ backgroundColor: entry.color }}
