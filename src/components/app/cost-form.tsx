@@ -1,28 +1,17 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
+import {Button} from '@/components/ui/button'
+import {Card, CardContent, CardDescription as CardDesc, CardFooter, CardHeader, CardTitle,} from '@/components/ui/card'
+import {Form} from '@/components/ui/form'
+import {Tabs, TabsList, TabsTrigger} from '@/components/ui/tabs'
+import {calculateCosts} from '@/lib/actions'
+import {type CalculationResult, CostFormSchema, type CostFormValues,} from '@/lib/types'
+import {zodResolver} from '@hookform/resolvers/zod'
 import React from 'react'
-import { useForm, useWatch } from 'react-hook-form'
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardContent,
-  CardDescription as CardDesc,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
-import { Form } from '@/components/ui/form'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { calculateCosts } from '@/lib/actions'
-import {
-  type CalculationResult,
-  CostFormSchema,
-  type CostFormValues,
-} from '@/lib/types'
-import { CloudTab } from './form/cloud-tab'
-import { GeneralTab } from './form/general-tab'
-import { OnPremTab } from './form/on-prem-tab'
+import {useForm, useWatch} from 'react-hook-form'
+import {CloudTab} from './form/cloud-tab'
+import {GeneralTab} from './form/general-tab'
+import {OnPremTab} from './form/on-prem-tab'
 
 interface CostFormProps {
   onCalculate: (data: CalculationResult | null, error: string | null) => void
@@ -121,8 +110,8 @@ export function CostForm({
   })
 
   React.useEffect(() => {
-    const onPremStoragePerDriveInUnit = onPremStoragePerDrive // always TB
-    const totalRawSize = onPremStoragePerDriveInUnit * onPremTotalDrives
+     // always TB
+    const totalRawSize = onPremStoragePerDrive * onPremTotalDrives
     const raidOverhead = totalRawSize * (onPremRaidFactor / 100)
     const usableSize = totalRawSize - raidOverhead
 

@@ -1,12 +1,14 @@
 'use client'
 
 import {FormInput} from '@/components/app/form/form-input'
+import {FormSwitch} from '@/components/app/form/form-switch'
 import {TooltipLabel} from '@/components/app/form/tooltip-label'
+import {Card, CardContent, CardDescription, CardHeader, CardTitle} from '@/components/ui/card'
 import {FormControl, FormField, FormItem,} from '@/components/ui/form'
 import {Switch} from '@/components/ui/switch'
 import type {CostFormValues} from '@/lib/types'
 import type {Control} from 'react-hook-form'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {useWatch} from 'react-hook-form'
 
 interface NetworkingSectionProps {
   control: Control<CostFormValues>
@@ -29,6 +31,9 @@ export function NetworkingSection({
   useOnPremCabling,
   useOnPremQsfp,
 }: NetworkingSectionProps) {
+  const useCloudEgress = useWatch({ control, name: 'useCloudEgress' })
+  const useCloudIngress = useWatch({ control, name: 'useCloudIngress' })
+
   return (
     <Card>
       <CardHeader>
@@ -392,32 +397,89 @@ export function NetworkingSection({
         <div className="space-y-4 flex-1 max-w-xl">
           <h3 className="text-lg font-semibold">Cloud Networking</h3>
 
-        <FormInput
-          control={control}
-          name="cloudEgress"
-          label="Egress (TB/month)"
-          tooltip="Monthly outbound data transfer from cloud"
-          type="number"
-          step={0.1}
-        />
+          {/* Egress Section */}
+          <div className="space-y-4 p-4 border rounded-lg">
+            <div className="flex items-center justify-between">
+              <h4 className="font-semibold text-sm">Egress Configuration</h4>
+              <FormSwitch
+                control={control}
+                name="useCloudEgress"
+                label=""
+              />
+            </div>
+            {useCloudEgress && (
+              <>
+                <FormInput
+                  control={control}
+                  name="cloudEgress"
+                  label="Egress (TB/month)"
+                  tooltip="Monthly outbound data transfer from cloud"
+                  type="number"
+                  step={0.1}
+                />
 
-        <FormInput
-          control={control}
-          name="cloudEgressGrowthRate"
-          label="Egress Growth Rate (%)"
-          tooltip="Annual increase in egress traffic"
-          type="number"
-          step={1}
-        />
+                <FormInput
+                  control={control}
+                  name="cloudEgressGrowthRate"
+                  label="Egress Growth Rate (%)"
+                  tooltip="Annual increase in egress traffic"
+                  type="number"
+                  step={1}
+                />
 
-        <FormInput
-          control={control}
-          name="cloudEgressCostPerUnit"
-          label="Egress Cost ($/GB)"
-          tooltip="Cost per GB of outbound data transfer"
-          type="number"
-          step={0.01}
-        />
+                <FormInput
+                  control={control}
+                  name="cloudEgressCostPerUnit"
+                  label="Egress Cost ($/GB)"
+                  tooltip="Cost per GB of outbound data transfer"
+                  type="number"
+                  step={0.01}
+                />
+              </>
+            )}
+          </div>
+
+          {/* Ingress Section */}
+          <div className="space-y-4 p-4 border rounded-lg">
+            <div className="flex items-center justify-between">
+              <h4 className="font-semibold text-sm">Ingress Configuration</h4>
+              <FormSwitch
+                control={control}
+                name="useCloudIngress"
+                label=""
+              />
+            </div>
+            {useCloudIngress && (
+              <>
+                <FormInput
+                  control={control}
+                  name="cloudIngress"
+                  label="Ingress (TB/month)"
+                  tooltip="Monthly inbound data transfer to cloud"
+                  type="number"
+                  step={0.1}
+                />
+
+                <FormInput
+                  control={control}
+                  name="cloudIngressGrowthRate"
+                  label="Ingress Growth Rate (%)"
+                  tooltip="Annual increase in ingress traffic"
+                  type="number"
+                  step={1}
+                />
+
+                <FormInput
+                  control={control}
+                  name="cloudIngressCostPerUnit"
+                  label="Ingress Cost ($/GB)"
+                  tooltip="Cost per GB of inbound data transfer"
+                  type="number"
+                  step={0.01}
+                />
+              </>
+            )}
+          </div>
         </div>
       </div>
       </CardContent>

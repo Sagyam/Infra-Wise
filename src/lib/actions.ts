@@ -9,18 +9,7 @@ import {
   type YearlyCost,
 } from '@/lib/types'
 
-const unitToGb = (value: number, unit: 'GB' | 'TB' | 'PB') => {
-  switch (unit) {
-    case 'GB':
-      return value
-    case 'TB':
-      return value * 1024
-    case 'PB':
-      return value * 1024 * 1024
-    default:
-      return value
-  }
-}
+const tbToGb = (tb: number) => tb * 1024
 
 export async function calculateCosts(
   values: CostFormValues,
@@ -37,7 +26,7 @@ export async function calculateCosts(
     }
 
     const data = parsed.data
-    const { analysisPeriod, dataUnit, inflationRate, calculationMode } = data
+    const { analysisPeriod, inflationRate, calculationMode } = data
 
     const yearlyData: YearlyCost[] = []
     let cumulativeCloudCost = 0
@@ -76,7 +65,11 @@ export async function calculateCosts(
       (data.useOnPremGenerator ? (data.onPremGeneratorQuantity || 0) * (data.onPremGeneratorUnitCost || 0) : 0) +
       (data.useOnPremHvac ? (data.onPremHvacQuantity || 0) * (data.onPremHvacUnitCost || 0) : 0)
 
-    const totalOnPremHardwareCost = onPremComputeHardwareCost + onPremGpuHardwareCost + onPremNetworkingHardwareCost + onPremEnergyHardwareCost
+    const onPremStorageHardwareCost =
+      (data.useOnPremHdd ? (data.onPremHddCount || 0) * (data.onPremHddUnitCost || 0) : 0) +
+      (data.useOnPremSsd ? (data.onPremSsdCount || 0) * (data.onPremSsdUnitCost || 0) : 0)
+
+    const totalOnPremHardwareCost = onPremComputeHardwareCost + onPremGpuHardwareCost + onPremNetworkingHardwareCost + onPremEnergyHardwareCost + onPremStorageHardwareCost
 
     // Average salvage value
     const avgSalvagePercent = 10 // Simplified for now
@@ -153,13 +146,35 @@ export async function calculateCosts(
 
       // 2. STORAGE COSTS
       let onPremStorageCost = 0
-      const driveReplacementCost = (data.onPremTotalDrives || 0) * ((data.onPremDriveFailureRate || 0) / 100) * (data.onPremDriveReplacementCost || 0)
-      onPremStorageCost += driveReplacementCost
 
+      // Initial disk hardware cost (one-time or amortized)
+      if (calculationMode === 'tco' && year === 1) {
+        onPremStorageCost += onPremStorageHardwareCost
+      } else if (calculationMode === 'amortized') {
+        onPremStorageCost += onPremStorageHardwareCost / analysisPeriod
+      }
+
+      // Subtract salvage value in final year for TCO mode
+      if (calculationMode === 'tco' && year === analysisPeriod) {
+        const storageSalvage = onPremStorageHardwareCost * (avgSalvagePercent / 100)
+        onPremStorageCost -= storageSalvage
+      }
+
+      // HDD replacement costs (annual)
+      if (data.useOnPremHdd) {
+        const hddReplacementCost = (data.onPremHddCount || 0) * ((data.onPremHddFailureRate || 0) / 100) * (data.onPremHddUnitCost || 0)
+        onPremStorageCost += hddReplacementCost
+      }
+
+      // SSD replacement costs (annual)
+      if (data.useOnPremSsd) {
+        const ssdReplacementCost = (data.onPremSsdCount || 0) * ((data.onPremSsdFailureRate || 0) / 100) * (data.onPremSsdUnitCost || 0)
+        onPremStorageCost += ssdReplacementCost
+      }
+
+      // Backup costs (storage is in TB, cost is per TB/year)
       if (data.useOnPremBackup && data.onPremBackupStorage && data.onPremBackupCostPerUnit) {
-        const backupCostPerUnitInGb = data.onPremBackupCostPerUnit / { GB: 1, TB: 1024, PB: 1024 * 1024 }[dataUnit]
-        const backupStorageInGb = unitToGb(data.onPremBackupStorage, dataUnit)
-        onPremStorageCost += backupStorageInGb * backupCostPerUnitInGb
+        onPremStorageCost += (data.onPremBackupStorage || 0) * (data.onPremBackupCostPerUnit || 0)
       }
 
       const { inflatedCost: inflatedOnPremStorage } = await modelInflation({
@@ -169,8 +184,8 @@ export async function calculateCosts(
       })
       onPremBreakdown.Storage = inflatedOnPremStorage
 
-      // Cloud Storage
-      const currentCloudStorageGb = unitToGb(currentCloudStorageUnits, dataUnit)
+      // Cloud Storage (cloudStorageSize is in TB, costs are per GB/month)
+      const currentCloudStorageGb = tbToGb(currentCloudStorageUnits)
       const hotStorageGb = currentCloudStorageGb * (data.cloudHotTier / 100)
       const standardStorageGb = currentCloudStorageGb * (data.cloudStandardTier / 100)
       const archiveStorageGb = currentCloudStorageGb * (data.cloudArchiveTier / 100)
@@ -298,8 +313,8 @@ export async function calculateCosts(
       })
       onPremBreakdown.Networking = inflatedOnPremNetworking
 
-      // Cloud Networking (Egress)
-      const currentCloudEgressGb = unitToGb(currentCloudEgressUnits, 'TB') * 1024
+      // Cloud Networking (Egress - cloudEgress is in TB)
+      const currentCloudEgressGb = tbToGb(currentCloudEgressUnits)
       const cloudNetworkingCost = currentCloudEgressGb * data.cloudEgressCostPerUnit
 
       const { inflatedCost: inflatedCloudNetworking } = await modelInflation({

@@ -6,9 +6,6 @@ export const CostFormSchema = z
       .number({ required_error: 'Analysis period is required.' })
       .min(1, 'Must be at least 1 year.')
       .max(30, 'Cannot exceed 30 years.'),
-    dataUnit: z.enum(['GB', 'TB', 'PB'], {
-      required_error: 'Data unit is required.',
-    }),
 
     // On-premise Compute Hardware
     useOnPremCpu: z.boolean().optional(),
@@ -168,24 +165,21 @@ export const CostFormSchema = z
       .max(100, 'Rate cannot exceed 100%.')
       .optional(),
 
-    onPremDriveFailureRate: z
-      .number({ required_error: 'Drive failure rate is required.' })
-      .min(0, 'Rate must be a positive number.')
-      .max(100, 'Rate cannot exceed 100%.'),
-    onPremDriveReplacementCost: z
-      .number({ required_error: 'Drive replacement cost is required.' })
-      .min(0, 'Cost must be a positive number.'),
-    onPremTotalDrives: z
-      .number({ required_error: 'Total drives is required.' })
-      .int('Must be a whole number.')
-      .min(1, 'There must be at least one drive.'),
-    onPremStoragePerDrive: z
-      .number({ required_error: 'Storage per drive is required.' })
-      .min(0, 'Storage must be a positive number.'),
-    onPremRaidFactor: z
-      .number()
-      .min(0)
-      .max(50, 'RAID capacity loss cannot exceed 50%.'),
+    // HDD Configuration
+    useOnPremHdd: z.boolean().optional(),
+    onPremHddCount: z.number().int().min(0).optional(),
+    onPremHddSizeTb: z.number().min(0).optional(),
+    onPremHddRaidFactor: z.number().min(0).max(50).optional(),
+    onPremHddFailureRate: z.number().min(0).max(100).optional(),
+    onPremHddUnitCost: z.number().min(0).optional(),
+
+    // SSD Configuration
+    useOnPremSsd: z.boolean().optional(),
+    onPremSsdCount: z.number().int().min(0).optional(),
+    onPremSsdSizeTb: z.number().min(0).optional(),
+    onPremSsdRaidFactor: z.number().min(0).max(50).optional(),
+    onPremSsdFailureRate: z.number().min(0).max(100).optional(),
+    onPremSsdUnitCost: z.number().min(0).optional(),
     useOnPremSoftware: z.boolean().optional(),
     useOnPremBandwidth: z.boolean().optional(),
     onPremBandwidthUsage: z.number().min(0).optional(),
@@ -364,10 +358,30 @@ export const CostFormSchema = z
       .number({ required_error: 'Growth rate is required.' })
       .min(0, 'Growth rate must be between 0 and 100.')
       .max(100),
+    // Cloud - Egress
+    useCloudEgress: z.boolean().optional(),
     cloudEgress: z
       .number({ required_error: 'Egress is required.' })
-      .min(0, 'Egress must be a positive number.'),
-    cloudEgressGrowthRate: z.number().min(0).max(100),
+      .min(0, 'Egress must be a positive number.')
+      .optional(),
+    cloudEgressGrowthRate: z.number().min(0).max(100).optional(),
+    cloudEgressCostPerUnit: z
+      .number({ required_error: 'Egress cost is required.' })
+      .min(0, 'Cost must be a positive number.')
+      .optional(),
+
+    // Cloud - Ingress
+    useCloudIngress: z.boolean().optional(),
+    cloudIngress: z
+      .number({ required_error: 'Ingress is required.' })
+      .min(0, 'Ingress must be a positive number.')
+      .optional(),
+    cloudIngressGrowthRate: z.number().min(0).max(100).optional(),
+    cloudIngressCostPerUnit: z
+      .number({ required_error: 'Ingress cost is required.' })
+      .min(0, 'Cost must be a positive number.')
+      .optional(),
+
     cloudHotTier: z.number().min(0).max(100),
     cloudStandardTier: z.number().min(0).max(100),
     cloudArchiveTier: z.number().min(0).max(100),
@@ -379,9 +393,6 @@ export const CostFormSchema = z
       .min(0, 'Cost must be a positive number.'),
     cloudArchiveStorageCost: z
       .number({ required_error: 'Archive storage cost is required.' })
-      .min(0, 'Cost must be a positive number.'),
-    cloudEgressCostPerUnit: z
-      .number({ required_error: 'Egress cost is required.' })
       .min(0, 'Cost must be a positive number.'),
 
     // General

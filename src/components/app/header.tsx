@@ -1,4 +1,3 @@
-import {SidebarTrigger} from '@/components/ui/sidebar'
 import {Github} from 'lucide-react'
 import {ThemeToggle} from './theme-toggle'
 
@@ -7,7 +6,6 @@ export function Header() {
     <header className="p-4 sm:p-6 border-b bg-card">
       <div className="container mx-auto flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
-          <SidebarTrigger />
           <div>
             <h1 className="text-2xl font-bold font-headline text-primary">
               InfraWise

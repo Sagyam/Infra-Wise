@@ -10,6 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarTrigger,
 } from '@/components/ui/sidebar'
 import {BarChart3, Boxes, Code, Cpu, HardDrive, ListTree, Network, PieChart, Settings, Users, Zap} from 'lucide-react'
 
@@ -45,8 +46,9 @@ interface AppSidebarProps {
 export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b px-6 py-4 flex items-center justify-center">
-       
+      <SidebarHeader className="border-b px-6 py-4 flex flex-row items-center justify-between">
+
+        <SidebarTrigger />
       </SidebarHeader>
       <SidebarContent>
         {sections.map((section) => (

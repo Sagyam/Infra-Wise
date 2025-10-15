@@ -25,7 +25,6 @@ import {useForm, useWatch} from 'react-hook-form'
 
 const defaultValues: CostFormValues = {
   analysisPeriod: 5,
-  dataUnit: 'TB',
 
   // On-prem Compute Hardware
   useOnPremCpu: true,
@@ -109,11 +108,23 @@ const defaultValues: CostFormValues = {
   useOnPremColocation: true,
   onPremColocationMonthlyCost: 1500,
   onPremColocationAnnualIncrease: 3,
-  onPremDriveFailureRate: 2,
-  onPremDriveReplacementCost: 250,
-  onPremTotalDrives: 24,
-  onPremStoragePerDrive: 8,
-  onPremRaidFactor: 20,
+
+  // HDD Configuration
+  useOnPremHdd: true,
+  onPremHddCount: 24,
+  onPremHddSizeTb: 8,
+  onPremHddRaidFactor: 20,
+  onPremHddFailureRate: 2,
+  onPremHddUnitCost: 250,
+
+  // SSD Configuration
+  useOnPremSsd: true,
+  onPremSsdCount: 8,
+  onPremSsdSizeTb: 4,
+  onPremSsdRaidFactor: 20,
+  onPremSsdFailureRate: 1,
+  onPremSsdUnitCost: 800,
+
   useOnPremSoftware: true,
   useOnPremBandwidth: true,
   onPremBandwidthUsage: 5000,
@@ -233,15 +244,25 @@ const defaultValues: CostFormValues = {
   // Cloud
   cloudStorageSize: 150,
   cloudGrowthRate: 20,
+
+  // Cloud - Egress
+  useCloudEgress: true,
   cloudEgress: 2,
   cloudEgressGrowthRate: 15,
+  cloudEgressCostPerUnit: 0.09,
+
+  // Cloud - Ingress
+  useCloudIngress: false,
+  cloudIngress: 1,
+  cloudIngressGrowthRate: 10,
+  cloudIngressCostPerUnit: 0.05,
+
   cloudHotTier: 60,
   cloudStandardTier: 30,
   cloudArchiveTier: 10,
   cloudHotStorageCost: 0.021,
   cloudStandardStorageCost: 0.0125,
   cloudArchiveStorageCost: 0.0036,
-  cloudEgressCostPerUnit: 0.09,
 
   // General
   inflationRate: 3.0,
@@ -290,35 +311,43 @@ export default function Home() {
     setIsLoading(false)
   }
 
-  const dataUnit = useWatch({ control: form.control, name: 'dataUnit' })
-  const onPremStoragePerDrive = useWatch({
-    control: form.control,
-    name: 'onPremStoragePerDrive',
-  })
-  const onPremTotalDrives = useWatch({
-    control: form.control,
-    name: 'onPremTotalDrives',
-  })
-  const onPremRaidFactor = useWatch({
-    control: form.control,
-    name: 'onPremRaidFactor',
-  })
+  const useOnPremHdd = useWatch({ control: form.control, name: 'useOnPremHdd' })
+  const onPremHddCount = useWatch({ control: form.control, name: 'onPremHddCount' })
+  const onPremHddSizeTb = useWatch({ control: form.control, name: 'onPremHddSizeTb' })
+  const onPremHddRaidFactor = useWatch({ control: form.control, name: 'onPremHddRaidFactor' })
+
+  const useOnPremSsd = useWatch({ control: form.control, name: 'useOnPremSsd' })
+  const onPremSsdCount = useWatch({ control: form.control, name: 'onPremSsdCount' })
+  const onPremSsdSizeTb = useWatch({ control: form.control, name: 'onPremSsdSizeTb' })
+  const onPremSsdRaidFactor = useWatch({ control: form.control, name: 'onPremSsdRaidFactor' })
 
   React.useEffect(() => {
-    const onPremStoragePerDriveInUnit = onPremStoragePerDrive
-    const totalRawSize = onPremStoragePerDriveInUnit * onPremTotalDrives
-    const raidOverhead = totalRawSize * (onPremRaidFactor / 100)
-    const usableSize = totalRawSize - raidOverhead
+    let totalUsableStorage = 0
 
-    const conversionFactor = { GB: 1024, TB: 1, PB: 1 / 1024 }[dataUnit] || 1
-    const usableSizeInDataUnit = usableSize * conversionFactor
+    // Calculate HDD usable storage
+    if (useOnPremHdd) {
+      const hddRawSize = (onPremHddSizeTb || 0) * (onPremHddCount || 0)
+      const hddRaidOverhead = hddRawSize * ((onPremHddRaidFactor || 0) / 100)
+      totalUsableStorage += hddRawSize - hddRaidOverhead
+    }
 
-    form.setValue('onPremBackupStorage', Math.max(0, usableSizeInDataUnit))
+    // Calculate SSD usable storage
+    if (useOnPremSsd) {
+      const ssdRawSize = (onPremSsdSizeTb || 0) * (onPremSsdCount || 0)
+      const ssdRaidOverhead = ssdRawSize * ((onPremSsdRaidFactor || 0) / 100)
+      totalUsableStorage += ssdRawSize - ssdRaidOverhead
+    }
+
+    form.setValue('onPremBackupStorage', Math.max(0, totalUsableStorage))
   }, [
-    onPremStoragePerDrive,
-    onPremTotalDrives,
-    onPremRaidFactor,
-    dataUnit,
+    useOnPremHdd,
+    onPremHddCount,
+    onPremHddSizeTb,
+    onPremHddRaidFactor,
+    useOnPremSsd,
+    onPremSsdCount,
+    onPremSsdSizeTb,
+    onPremSsdRaidFactor,
     form,
   ])
 
@@ -332,19 +361,23 @@ export default function Home() {
   })
 
   const handleHotChange = (value: number) => {
-    const archiveTier = 100 - value - cloudStandardTier
-    if (archiveTier >= 0) {
-      form.setValue('cloudHotTier', value)
-      form.setValue('cloudArchiveTier', archiveTier)
-    }
+    // Clamp hot tier so hot + standard never exceeds 100
+    const maxHot = 100 - cloudStandardTier
+    const clampedHot = Math.min(value, maxHot)
+    const archiveTier = 100 - clampedHot - cloudStandardTier
+
+    form.setValue('cloudHotTier', clampedHot)
+    form.setValue('cloudArchiveTier', archiveTier)
   }
 
   const handleStandardChange = (value: number) => {
-    const archiveTier = 100 - cloudHotTier - value
-    if (archiveTier >= 0) {
-      form.setValue('cloudStandardTier', value)
-      form.setValue('cloudArchiveTier', archiveTier)
-    }
+    // Clamp standard tier so hot + standard never exceeds 100
+    const maxStandard = 100 - cloudHotTier
+    const clampedStandard = Math.min(value, maxStandard)
+    const archiveTier = 100 - cloudHotTier - clampedStandard
+
+    form.setValue('cloudStandardTier', clampedStandard)
+    form.setValue('cloudArchiveTier', archiveTier)
   }
 
   const useOnPremBandwidth = useWatch({
@@ -534,7 +567,6 @@ export default function Home() {
           <StorageSection
             control={form.control}
             setValue={form.setValue}
-            dataUnit={dataUnit}
             handleHotChange={handleHotChange}
             handleStandardChange={handleStandardChange}
             useOnPremBackup={useOnPremBackup}
