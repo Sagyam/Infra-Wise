@@ -17,11 +17,25 @@ export function HumanCostSection({ control }: HumanCostSectionProps) {
         </p>
       </div>
 
-      <div className="space-y-4">
-        <div className="p-4 bg-muted rounded-lg">
-          <p className="text-sm text-muted-foreground">
-            Human cost configuration will be available in a future update. This section is reserved for operational personnel costs including system administrators, network engineers, and other staff required to maintain on-premise infrastructure.
-          </p>
+      <div className="flex flex-col md:flex-row justify-evenly gap-6">
+        {/* On-Premise Column */}
+        <div className="space-y-4 flex-1 max-w-xl">
+          <h3 className="text-lg font-semibold">On-Premise Personnel</h3>
+          <div className="p-4 bg-muted rounded-lg">
+            <p className="text-sm text-muted-foreground">
+              On-premise human cost configuration will be available in a future update. This includes operational personnel costs such as system administrators, network engineers, and other staff required to maintain infrastructure.
+            </p>
+          </div>
+        </div>
+
+        {/* Cloud Column */}
+        <div className="space-y-4 flex-1 max-w-xl">
+          <h3 className="text-lg font-semibold">Cloud Personnel</h3>
+          <div className="p-4 bg-muted rounded-lg">
+            <p className="text-sm text-muted-foreground">
+              Cloud human cost configuration will be available in a future update. This includes cloud operations personnel, DevOps engineers, and cloud architects required to manage cloud infrastructure.
+            </p>
+          </div>
         </div>
       </div>
     </div>

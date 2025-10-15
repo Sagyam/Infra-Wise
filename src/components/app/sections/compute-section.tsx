@@ -18,37 +18,39 @@ export function ComputeSection({ control }: ComputeSectionProps) {
         </p>
       </div>
 
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">On-Premise Hardware</h3>
+      <div className="flex flex-col md:flex-row justify-evenly gap-6">
+        {/* On-Premise Column */}
+        <div className="space-y-4 flex-1 max-w-xl">
+          <h3 className="text-lg font-semibold">On-Premise Hardware</h3>
 
-        <FormInput
-          control={control}
-          name="onPremHardwareCost"
-          label="Hardware Cost ($)"
-          tooltip="Initial hardware acquisition cost (servers, storage, networking)"
-          type="number"
-          step={100}
-        />
+          <FormInput
+            control={control}
+            name="onPremHardwareCost"
+            label="Hardware Cost ($)"
+            tooltip="Initial hardware acquisition cost (servers, storage, networking)"
+            type="number"
+            step={100}
+          />
 
-        <FormInput
-          control={control}
-          name="onPremSalvageValue"
-          label="Salvage Value (%)"
-          tooltip="Percentage of hardware value recoverable at end of analysis period"
-          type="number"
-          step={1}
-          min={0}
-          max={100}
-        />
+          <FormInput
+            control={control}
+            name="onPremSalvageValue"
+            label="Salvage Value (%)"
+            tooltip="Percentage of hardware value recoverable at end of analysis period"
+            type="number"
+            step={1}
+            min={0}
+            max={100}
+          />
+        </div>
 
-        <FormInput
-          control={control}
-          name="onPremYearlyLicensingCost"
-          label="Yearly Licensing Cost ($)"
-          tooltip="Annual software/OS licensing fees"
-          type="number"
-          step={100}
-        />
+        {/* Cloud Column */}
+        <div className="space-y-4 flex-1 max-w-xl">
+          <h3 className="text-lg font-semibold">Cloud Compute</h3>
+          <p className="text-sm text-muted-foreground">
+            Cloud compute costs are calculated based on usage and instance types.
+          </p>
+        </div>
       </div>
     </div>
   )

@@ -17,11 +17,25 @@ export function GpuSection({ control }: GpuSectionProps) {
         </p>
       </div>
 
-      <div className="space-y-4">
-        <div className="p-4 bg-muted rounded-lg">
-          <p className="text-sm text-muted-foreground">
-            GPU configuration options will be available in a future update. This section is reserved for GPU-specific costs including dedicated GPUs for AI/ML workloads, rendering, and other compute-intensive tasks.
-          </p>
+      <div className="flex flex-col md:flex-row justify-evenly gap-6">
+        {/* On-Premise Column */}
+        <div className="space-y-4 flex-1 max-w-xl">
+          <h3 className="text-lg font-semibold">On-Premise GPU</h3>
+          <div className="p-4 bg-muted rounded-lg">
+            <p className="text-sm text-muted-foreground">
+              On-premise GPU configuration options will be available in a future update. This includes dedicated GPUs for AI/ML workloads, rendering, and other compute-intensive tasks.
+            </p>
+          </div>
+        </div>
+
+        {/* Cloud Column */}
+        <div className="space-y-4 flex-1 max-w-xl">
+          <h3 className="text-lg font-semibold">Cloud GPU</h3>
+          <div className="p-4 bg-muted rounded-lg">
+            <p className="text-sm text-muted-foreground">
+              Cloud GPU configuration options will be available in a future update. This includes GPU instances for AI/ML, rendering, and compute-intensive workloads.
+            </p>
+          </div>
         </div>
       </div>
     </div>

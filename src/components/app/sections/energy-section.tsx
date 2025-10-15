@@ -19,6 +19,8 @@ export function EnergySection({ control }: EnergySectionProps) {
       </div>
 
       <div className="space-y-4">
+        <h3 className="text-lg font-semibold">Power Consumption</h3>
+
         <FormInput
           control={control}
           name="onPremPowerRating"
@@ -47,6 +49,42 @@ export function EnergySection({ control }: EnergySectionProps) {
           type="number"
           step={0.01}
         />
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">UPS (Uninterruptible Power Supply)</h3>
+        <div className="p-4 bg-muted rounded-lg">
+          <p className="text-sm text-muted-foreground">
+            UPS configuration will be available in a future update. This includes battery backup systems, power redundancy, and UPS maintenance costs.
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">Generators</h3>
+        <div className="p-4 bg-muted rounded-lg">
+          <p className="text-sm text-muted-foreground">
+            Generator configuration will be available in a future update. This includes backup generators, fuel costs, and maintenance expenses.
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">HVAC (Heating, Ventilation, Air Conditioning)</h3>
+        <div className="p-4 bg-muted rounded-lg">
+          <p className="text-sm text-muted-foreground">
+            HVAC configuration will be available in a future update. This includes cooling capacity, BTU requirements, and HVAC system efficiency ratings.
+          </p>
+        </div>
+      </div>
+
+      <div className="space-y-4">
+        <h3 className="text-lg font-semibold">HVAC Electricity Consumption</h3>
+        <div className="p-4 bg-muted rounded-lg">
+          <p className="text-sm text-muted-foreground">
+            HVAC electricity consumption tracking will be available in a future update. This includes PUE (Power Usage Effectiveness) calculations and cooling power costs.
+          </p>
+        </div>
       </div>
     </div>
   )

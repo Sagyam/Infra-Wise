@@ -11,7 +11,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import {BarChart3, Boxes, Cpu, HardDrive, Network, Settings, Users, Zap,} from 'lucide-react'
+import {BarChart3, Boxes, Code, Cpu, HardDrive, Network, Settings, Users, Zap} from 'lucide-react'
+import {Logo} from '@/components/icons/logo'
 
 const sections = [
   {
@@ -24,6 +25,7 @@ const sections = [
       { title: 'GPU', icon: Boxes, id: 'gpu' },
       { title: 'Networking', icon: Network, id: 'networking' },
       { title: 'Human Cost', icon: Users, id: 'human-cost' },
+      { title: 'Software', icon: Code, id: 'software' },
     ],
   },
   {
@@ -40,9 +42,8 @@ interface AppSidebarProps {
 export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) {
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b px-6 py-4">
-        <h2 className="text-lg font-headline font-bold">InfraWise</h2>
-        <p className="text-xs text-muted-foreground">TCO Calculator</p>
+      <SidebarHeader className="border-b px-6 py-4 flex items-center justify-center">
+        <Logo className="h-8 w-8" />
       </SidebarHeader>
       <SidebarContent>
         {sections.map((section) => (

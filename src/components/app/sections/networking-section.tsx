@@ -32,8 +32,10 @@ export function NetworkingSection({
         </p>
       </div>
 
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">On-Premise Networking</h3>
+      <div className="flex flex-col md:flex-row justify-evenly gap-6">
+        {/* On-Premise Column */}
+        <div className="space-y-4 flex-1 max-w-xl">
+          <h3 className="text-lg font-semibold">On-Premise Networking</h3>
 
         <FormField
           control={control}
@@ -123,10 +125,11 @@ export function NetworkingSection({
             />
           </>
         )}
-      </div>
+        </div>
 
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Cloud Networking</h3>
+        {/* Cloud Column */}
+        <div className="space-y-4 flex-1 max-w-xl">
+          <h3 className="text-lg font-semibold">Cloud Networking</h3>
 
         <FormInput
           control={control}
@@ -154,6 +157,7 @@ export function NetworkingSection({
           type="number"
           step={0.01}
         />
+        </div>
       </div>
     </div>
   )

@@ -1,33 +1,25 @@
 'use client'
 
-import { Github } from 'lucide-react'
-import { useState } from 'react'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm, useWatch } from 'react-hook-form'
-import React from 'react'
-import { AppSidebar } from '@/components/app/app-sidebar'
-import { Header } from '@/components/app/header'
-import { ResultsDisplay } from '@/components/app/results-display'
-import { GeneralSection } from '@/components/app/sections/general-section'
-import { EnergySection } from '@/components/app/sections/energy-section'
-import { StorageSection } from '@/components/app/sections/storage-section'
-import { ComputeSection } from '@/components/app/sections/compute-section'
-import { GpuSection } from '@/components/app/sections/gpu-section'
-import { NetworkingSection } from '@/components/app/sections/networking-section'
-import { HumanCostSection } from '@/components/app/sections/human-cost-section'
-import { Button } from '@/components/ui/button'
-import { Form } from '@/components/ui/form'
-import {
-  SidebarProvider,
-  SidebarInset,
-  SidebarTrigger,
-} from '@/components/ui/sidebar'
-import { calculateCosts } from '@/lib/actions'
-import {
-  type CalculationResult,
-  CostFormSchema,
-  type CostFormValues,
-} from '@/lib/types'
+import {AppSidebar} from '@/components/app/app-sidebar'
+import {Header} from '@/components/app/header'
+import {ResultsDisplay} from '@/components/app/results-display'
+import {ComputeSection} from '@/components/app/sections/compute-section'
+import {EnergySection} from '@/components/app/sections/energy-section'
+import {GeneralSection} from '@/components/app/sections/general-section'
+import {GpuSection} from '@/components/app/sections/gpu-section'
+import {HumanCostSection} from '@/components/app/sections/human-cost-section'
+import {NetworkingSection} from '@/components/app/sections/networking-section'
+import {SoftwareSection} from '@/components/app/sections/software-section'
+import {StorageSection} from '@/components/app/sections/storage-section'
+import {Button} from '@/components/ui/button'
+import {Form} from '@/components/ui/form'
+import {SidebarInset, SidebarProvider, SidebarTrigger,} from '@/components/ui/sidebar'
+import {calculateCosts} from '@/lib/actions'
+import {type CalculationResult, CostFormSchema, type CostFormValues,} from '@/lib/types'
+import {zodResolver} from '@hookform/resolvers/zod'
+import {Github} from 'lucide-react'
+import React, {useState} from 'react'
+import {useForm, useWatch} from 'react-hook-form'
 
 const defaultValues: CostFormValues = {
   analysisPeriod: 5,
@@ -200,9 +192,6 @@ export default function Home() {
           <GeneralSection
             control={form.control}
             onCalculationModeChange={setCalculationMode}
-            useOnPremBackup={useOnPremBackup}
-            useOnPremReplication={useOnPremReplication}
-            dataUnit={dataUnit}
           />
         )
       case 'energy':
@@ -215,6 +204,8 @@ export default function Home() {
             dataUnit={dataUnit}
             handleHotChange={handleHotChange}
             handleStandardChange={handleStandardChange}
+            useOnPremBackup={useOnPremBackup}
+            useOnPremReplication={useOnPremReplication}
           />
         )
       case 'compute':
@@ -231,6 +222,8 @@ export default function Home() {
         )
       case 'human-cost':
         return <HumanCostSection control={form.control} />
+      case 'software':
+        return <SoftwareSection control={form.control} />
       case 'results':
         return (
           <ResultsDisplay
@@ -252,37 +245,29 @@ export default function Home() {
         />
         <SidebarInset className="flex flex-col">
           <Header />
-          <main className="flex-1 p-6">
-            <div className="flex items-center gap-2 mb-6">
+          <main className="flex-1 p-6 flex flex-col items-center">
+            <div className="w-full max-w-7xl">
               <SidebarTrigger />
-              <h1 className="text-2xl font-headline font-bold">
-                {activeSection === 'results'
-                  ? 'Results'
-                  : activeSection
-                      .split('-')
-                      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-                      .join(' ')}
-              </h1>
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)}>
+                  <div>
+                    {renderSection()}
+                    {activeSection !== 'results' && (
+                      <div className="mt-8 flex gap-4 justify-center">
+                        <Button type="submit" disabled={isLoading}>
+                          {isLoading ? 'Calculating...' : 'Calculate'}
+                        </Button>
+                        {error && (
+                          <p className="text-sm text-destructive flex items-center">
+                            {error}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </form>
+              </Form>
             </div>
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)}>
-                <div className="max-w-4xl">
-                  {renderSection()}
-                  {activeSection !== 'results' && (
-                    <div className="mt-8 flex gap-4">
-                      <Button type="submit" disabled={isLoading}>
-                        {isLoading ? 'Calculating...' : 'Calculate'}
-                      </Button>
-                      {error && (
-                        <p className="text-sm text-destructive flex items-center">
-                          {error}
-                        </p>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </form>
-            </Form>
           </main>
           <footer className="py-6 text-center text-muted-foreground text-sm border-t">
             <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 px-6">

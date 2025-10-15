@@ -11,6 +11,7 @@ import {
   FormLabel,
 } from '@/components/ui/form'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
+import { Switch } from '@/components/ui/switch'
 import { TooltipLabel } from '@/components/app/form/tooltip-label'
 
 interface StorageSectionProps {
@@ -19,6 +20,8 @@ interface StorageSectionProps {
   dataUnit: 'GB' | 'TB' | 'PB'
   handleHotChange: (value: number) => void
   handleStandardChange: (value: number) => void
+  useOnPremBackup: boolean
+  useOnPremReplication: boolean
 }
 
 export function StorageSection({
@@ -27,6 +30,8 @@ export function StorageSection({
   dataUnit,
   handleHotChange,
   handleStandardChange,
+  useOnPremBackup,
+  useOnPremReplication,
 }: StorageSectionProps) {
   return (
     <div className="space-y-6">
@@ -73,8 +78,10 @@ export function StorageSection({
         )}
       />
 
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">On-Premise Storage</h3>
+      <div className="flex flex-col md:flex-row justify-evenly gap-6">
+        {/* On-Premise Column */}
+        <div className="space-y-4 flex-1 max-w-xl">
+          <h3 className="text-lg font-semibold">On-Premise Storage</h3>
 
         <FormInput
           control={control}
@@ -122,10 +129,81 @@ export function StorageSection({
           type="number"
           step={1}
         />
-      </div>
 
-      <div className="space-y-4">
-        <h3 className="text-lg font-semibold">Cloud Storage</h3>
+        <FormField
+          control={control}
+          name="useOnPremBackup"
+          render={({ field }) => (
+            <FormItem className="flex items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <TooltipLabel
+                  label="Include Backup Costs"
+                  tooltip="Toggle to include backup storage costs"
+                />
+              </div>
+              <FormControl>
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        {useOnPremBackup && (
+          <>
+            <FormInput
+              control={control}
+              name="onPremBackupStorage"
+              label={`Backup Storage (${dataUnit})`}
+              tooltip="Amount of backup storage required"
+              type="number"
+              step={1}
+            />
+
+            <FormInput
+              control={control}
+              name="onPremBackupCostPerUnit"
+              label={`Backup Cost ($/${dataUnit}/year)`}
+              tooltip="Annual cost per unit of backup storage"
+              type="number"
+              step={1}
+            />
+          </>
+        )}
+
+        <FormField
+          control={control}
+          name="useOnPremReplication"
+          render={({ field }) => (
+            <FormItem className="flex items-center justify-between rounded-lg border p-4">
+              <div className="space-y-0.5">
+                <TooltipLabel
+                  label="Include Replication"
+                  tooltip="Toggle to include costs for redundant sites"
+                />
+              </div>
+              <FormControl>
+                <Switch checked={field.value} onCheckedChange={field.onChange} />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+
+        {useOnPremReplication && (
+          <FormInput
+            control={control}
+            name="onPremReplicationFactor"
+            label="Replication Factor"
+            tooltip="Number of additional sites (0 = no replication, 1 = one additional site, etc.)"
+            type="number"
+            step={1}
+            min={0}
+          />
+        )}
+        </div>
+
+        {/* Cloud Column */}
+        <div className="space-y-4 flex-1 max-w-xl">
+          <h3 className="text-lg font-semibold">Cloud Storage</h3>
 
         <FormInput
           control={control}
@@ -212,6 +290,7 @@ export function StorageSection({
             type="number"
             step={0.001}
           />
+        </div>
         </div>
       </div>
     </div>
