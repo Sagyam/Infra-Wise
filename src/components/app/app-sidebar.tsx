@@ -11,8 +11,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import {BarChart3, Boxes, Code, Cpu, HardDrive, Network, Settings, Users, Zap} from 'lucide-react'
-import {Logo} from '@/components/icons/logo'
+import {BarChart3, Boxes, Code, Cpu, HardDrive, ListTree, Network, PieChart, Settings, Users, Zap} from 'lucide-react'
 
 const sections = [
   {
@@ -30,7 +29,11 @@ const sections = [
   },
   {
     title: 'Analysis',
-    items: [{ title: 'Results', icon: BarChart3, id: 'results' }],
+    items: [
+      { title: 'Charts', icon: PieChart, id: 'results-charts' },
+      { title: 'Cumulative', icon: BarChart3, id: 'results-cumulative' },
+      { title: 'Breakdown', icon: ListTree, id: 'results-breakdown' },
+    ],
   },
 ]
 
@@ -43,7 +46,7 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b px-6 py-4 flex items-center justify-center">
-        <Logo className="h-8 w-8" />
+       
       </SidebarHeader>
       <SidebarContent>
         {sections.map((section) => (
