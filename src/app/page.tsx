@@ -687,8 +687,7 @@ export default function Home() {
           <footer className="py-6 text-center text-muted-foreground text-sm border-t">
             <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 px-6">
               <div>
-                © {new Date().getFullYear()} InfraWise. A financial modeling
-                tool.
+                Made with 💙 for  infrastructure decision-makers!
               </div>
               <a
                 href="https://github.com/Sagyam/Infra-Wise"

@@ -283,4 +283,4 @@ Built with:
 
 ---
 
-**Made with 💙 for infrastructure teams making data-driven decisions**
+**Made with 💙 for  infrastructure decision-makers!**
