@@ -1,5 +1,6 @@
 'use client'
 
+import { useMemo } from 'react'
 import {
   Card,
   CardContent,
@@ -7,12 +8,10 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card'
-import type { CalculationResult } from '@/lib/types'
-import { ResultsTable } from '../results-table'
+import type { CalculationResult, CostFormValues } from '@/lib/types'
 import { ExportButton } from '../results/export-button'
 import { SummaryCards } from '../results/summary-cards'
-import { useMemo } from 'react'
-import type { CostFormValues } from '@/lib/types'
+import { ResultsTable } from '../results-table'
 
 interface ResultsCumulativeSectionProps {
   results: CalculationResult | null

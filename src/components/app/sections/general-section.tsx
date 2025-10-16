@@ -1,10 +1,16 @@
 'use client'
 
-import {CalculationModeToggle} from '@/components/app/form/calculation-mode-toggle'
-import {FormInput} from '@/components/app/form/form-input'
-import type {CostFormValues} from '@/lib/types'
-import type {Control} from 'react-hook-form'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import type { Control } from 'react-hook-form'
+import { CalculationModeToggle } from '@/components/app/form/calculation-mode-toggle'
+import { FormInput } from '@/components/app/form/form-input'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card'
+import type { CostFormValues } from '@/lib/types'
 
 interface GeneralSectionProps {
   control: Control<CostFormValues>

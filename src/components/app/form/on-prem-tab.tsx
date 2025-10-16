@@ -18,6 +18,7 @@ import {
   TrendingUp,
   Zap,
 } from 'lucide-react'
+import type { Control, UseFormSetValue } from 'react-hook-form'
 import {
   FormControl,
   FormField,
@@ -27,7 +28,6 @@ import {
 import { Switch } from '@/components/ui/switch'
 import { TabsContent } from '@/components/ui/tabs'
 import type { CostFormValues } from '@/lib/types'
-import type { Control, UseFormSetValue } from 'react-hook-form'
 import { FormInput } from './form-input'
 import { FormSlider } from './form-slider'
 

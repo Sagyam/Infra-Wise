@@ -1,27 +1,33 @@
 'use client'
 
-import {AppSidebar} from '@/components/app/app-sidebar'
-import {Header} from '@/components/app/header'
-import {ComputeSection} from '@/components/app/sections/compute-section'
-import {EnergySection} from '@/components/app/sections/energy-section'
-import {GeneralSection} from '@/components/app/sections/general-section'
-import {GpuSection} from '@/components/app/sections/gpu-section'
-import {HumanCostSection} from '@/components/app/sections/human-cost-section'
-import {NetworkingSection} from '@/components/app/sections/networking-section'
-import {ResultsBreakdownSection} from '@/components/app/sections/results-breakdown-section'
-import {ResultsChartsSection} from '@/components/app/sections/results-charts-section'
-import {ResultsCumulativeSection} from '@/components/app/sections/results-cumulative-section'
-import {SoftwareSection} from '@/components/app/sections/software-section'
-import {StorageSection} from '@/components/app/sections/storage-section'
-import {Button} from '@/components/ui/button'
-import {Form} from '@/components/ui/form'
-import {SidebarInset, SidebarProvider} from '@/components/ui/sidebar'
-import {calculateCosts} from '@/lib/actions'
-import {type CalculationResult, CostFormSchema, type CostFormValues,} from '@/lib/types'
-import {zodResolver} from '@hookform/resolvers/zod'
-import {Github} from 'lucide-react'
-import React, {useState} from 'react'
-import {useForm, useWatch} from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Github } from 'lucide-react'
+import React, { useState } from 'react'
+import { useForm, useWatch } from 'react-hook-form'
+import { AppSidebar } from '@/components/app/app-sidebar'
+import { FormFieldSearch } from '@/components/app/form/form-field-search'
+import { Header } from '@/components/app/header'
+import { ComputeSection } from '@/components/app/sections/compute-section'
+import { EnergySection } from '@/components/app/sections/energy-section'
+import { GeneralSection } from '@/components/app/sections/general-section'
+import { GpuSection } from '@/components/app/sections/gpu-section'
+import { HumanCostSection } from '@/components/app/sections/human-cost-section'
+import { NetworkingSection } from '@/components/app/sections/networking-section'
+import { ResultsBreakdownSection } from '@/components/app/sections/results-breakdown-section'
+import { ResultsChartsSection } from '@/components/app/sections/results-charts-section'
+import { ResultsCumulativeSection } from '@/components/app/sections/results-cumulative-section'
+import { SoftwareSection } from '@/components/app/sections/software-section'
+import { StorageSection } from '@/components/app/sections/storage-section'
+import { Button } from '@/components/ui/button'
+import { Form } from '@/components/ui/form'
+import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { calculateCosts } from '@/lib/actions'
+import { formFields } from '@/lib/form-fields'
+import {
+  type CalculationResult,
+  CostFormSchema,
+  type CostFormValues,
+} from '@/lib/types'
 
 const defaultValues: CostFormValues = {
   analysisPeriod: 5,
@@ -276,6 +282,7 @@ export default function Home() {
   const [calculationMode, setCalculationMode] =
     useState<CostFormValues['calculationMode']>('tco')
   const [activeSection, setActiveSection] = useState('general')
+  const [searchOpen, setSearchOpen] = useState(false)
 
   const form = useForm<CostFormValues>({
     resolver: zodResolver(CostFormSchema),
@@ -312,14 +319,32 @@ export default function Home() {
   }
 
   const useOnPremHdd = useWatch({ control: form.control, name: 'useOnPremHdd' })
-  const onPremHddCount = useWatch({ control: form.control, name: 'onPremHddCount' })
-  const onPremHddSizeTb = useWatch({ control: form.control, name: 'onPremHddSizeTb' })
-  const onPremHddRaidFactor = useWatch({ control: form.control, name: 'onPremHddRaidFactor' })
+  const onPremHddCount = useWatch({
+    control: form.control,
+    name: 'onPremHddCount',
+  })
+  const onPremHddSizeTb = useWatch({
+    control: form.control,
+    name: 'onPremHddSizeTb',
+  })
+  const onPremHddRaidFactor = useWatch({
+    control: form.control,
+    name: 'onPremHddRaidFactor',
+  })
 
   const useOnPremSsd = useWatch({ control: form.control, name: 'useOnPremSsd' })
-  const onPremSsdCount = useWatch({ control: form.control, name: 'onPremSsdCount' })
-  const onPremSsdSizeTb = useWatch({ control: form.control, name: 'onPremSsdSizeTb' })
-  const onPremSsdRaidFactor = useWatch({ control: form.control, name: 'onPremSsdRaidFactor' })
+  const onPremSsdCount = useWatch({
+    control: form.control,
+    name: 'onPremSsdCount',
+  })
+  const onPremSsdSizeTb = useWatch({
+    control: form.control,
+    name: 'onPremSsdSizeTb',
+  })
+  const onPremSsdRaidFactor = useWatch({
+    control: form.control,
+    name: 'onPremSsdRaidFactor',
+  })
 
   React.useEffect(() => {
     let totalUsableStorage = 0
@@ -649,13 +674,18 @@ export default function Home() {
 
   return (
     <SidebarProvider>
+      <FormFieldSearch
+        fields={formFields}
+        open={searchOpen}
+        onOpenChange={setSearchOpen}
+      />
       <div className="flex min-h-screen w-full bg-background">
         <AppSidebar
           activeSection={activeSection}
           onSectionChange={setActiveSection}
         />
         <SidebarInset className="flex flex-col">
-          <Header />
+          <Header onSearchClick={() => setSearchOpen(true)} />
           <main className="flex-1 p-6 flex flex-col items-center">
             <div className="w-full max-w-7xl">
               <Form {...form}>
@@ -686,9 +716,7 @@ export default function Home() {
           </main>
           <footer className="py-6 text-center text-muted-foreground text-sm border-t">
             <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 px-6">
-              <div>
-                Made with 💙 for  infrastructure decision-makers!
-              </div>
+              <div>Made with 💙 for infrastructure decision-makers!</div>
               <a
                 href="https://github.com/Sagyam/Infra-Wise"
                 target="_blank"

@@ -1,3 +1,4 @@
+import type { Control } from 'react-hook-form'
 import {
   FormControl,
   FormDescription,
@@ -7,7 +8,6 @@ import {
   FormMessage,
 } from '@/components/ui/form'
 import type { CostFormValues } from '@/lib/types'
-import type { Control } from 'react-hook-form'
 
 interface CalculationModeToggleProps {
   control: Control<CostFormValues>

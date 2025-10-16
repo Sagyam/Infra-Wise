@@ -1,4 +1,5 @@
 import { Calendar, Container, TrendingUp } from 'lucide-react'
+import type { Control } from 'react-hook-form'
 import {
   FormControl,
   FormField,
@@ -15,7 +16,6 @@ import {
 } from '@/components/ui/select'
 import { TabsContent } from '@/components/ui/tabs'
 import type { CostFormValues } from '@/lib/types'
-import type { Control } from 'react-hook-form'
 import { CalculationModeToggle } from './calculation-mode-toggle'
 import { FormInput } from './form-input'
 import { FormSlider } from './form-slider'
@@ -43,7 +43,7 @@ export function GeneralTab({
         control={control}
         name="dataUnit"
         render={({ field }) => (
-          <FormItem>
+          <FormItem id="dataUnit">
             <FormLabel className="flex items-center gap-2">
               <Container />
               Data Unit

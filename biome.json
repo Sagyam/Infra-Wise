@@ -8,7 +8,15 @@
     "enabled": true,
     "rules": {
       "recommended": true
-    }
+    },
+    "includes": [
+      "src/app/**/*.tsx",
+      "src/components/app/**/*.tsx",
+      "src/components/icons/**/*.tsx",
+      "src/icons/**/*",
+      "src/hooks/**/*",
+      "src/lib/**/*"
+    ]
   },
   "formatter": {
     "enabled": true,

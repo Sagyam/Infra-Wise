@@ -5,9 +5,9 @@ import {
   Percent,
   TrendingUp,
 } from 'lucide-react'
+import type { Control } from 'react-hook-form'
 import { TabsContent } from '@/components/ui/tabs'
 import type { CostFormValues } from '@/lib/types'
-import type { Control } from 'react-hook-form'
 import { FormInput } from './form-input'
 import { FormSlider } from './form-slider'
 

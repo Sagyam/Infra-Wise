@@ -1,3 +1,4 @@
+import type { Control } from 'react-hook-form'
 import {
   FormControl,
   FormField,
@@ -6,7 +7,6 @@ import {
 } from '@/components/ui/form'
 import { Switch } from '@/components/ui/switch'
 import type { CostFormValues } from '@/lib/types'
-import type { Control } from 'react-hook-form'
 
 interface FormSwitchProps {
   control: Control<CostFormValues>
@@ -14,11 +14,7 @@ interface FormSwitchProps {
   label: string
 }
 
-export function FormSwitch({
-  control,
-  name,
-  label,
-}: FormSwitchProps) {
+export function FormSwitch({ control, name, label }: FormSwitchProps) {
   return (
     <FormField
       control={control}

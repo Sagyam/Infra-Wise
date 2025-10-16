@@ -1,6 +1,19 @@
 'use client'
 
 import {
+  BarChart3,
+  Boxes,
+  Code,
+  Cpu,
+  HardDrive,
+  ListTree,
+  Network,
+  PieChart,
+  Settings,
+  Users,
+  Zap,
+} from 'lucide-react'
+import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
@@ -12,7 +25,6 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from '@/components/ui/sidebar'
-import {BarChart3, Boxes, Code, Cpu, HardDrive, ListTree, Network, PieChart, Settings, Users, Zap} from 'lucide-react'
 
 const sections = [
   {
@@ -43,7 +55,10 @@ interface AppSidebarProps {
   onSectionChange: (section: string) => void
 }
 
-export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) {
+export function AppSidebar({
+  activeSection,
+  onSectionChange,
+}: AppSidebarProps) {
   const { isMobile, setOpenMobile } = useSidebar()
 
   const handleSectionChange = (section: string) => {

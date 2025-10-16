@@ -1,4 +1,5 @@
 import type React from 'react'
+import type { Control } from 'react-hook-form'
 import {
   FormControl,
   FormField,
@@ -8,7 +9,6 @@ import {
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import type { CostFormValues } from '@/lib/types'
-import type { Control } from 'react-hook-form'
 import { TooltipLabel } from './tooltip-label'
 
 interface FormInputProps {
@@ -41,7 +41,7 @@ export function FormInput({
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem>
+        <FormItem id={name}>
           <FormLabel>
             {tooltip ? (
               <TooltipLabel label={label} tooltip={tooltip} icon={icon} />

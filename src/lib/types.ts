@@ -1,4 +1,4 @@
-import {z} from 'zod'
+import { z } from 'zod'
 
 export const CostFormSchema = z
   .object({
@@ -96,7 +96,9 @@ export const CostFormSchema = z
       .max(100, 'Rate cannot exceed 100%.')
       .optional(),
     onPremUpsBatteryReplacementCost: z
-      .number({ invalid_type_error: 'Battery replacement cost must be a number.' })
+      .number({
+        invalid_type_error: 'Battery replacement cost must be a number.',
+      })
       .min(0, 'Cost must be a positive number.')
       .optional(),
 
@@ -136,7 +138,9 @@ export const CostFormSchema = z
       .min(0, 'Quantity must be a positive number.')
       .optional(),
     onPremHvacPowerConsumption: z
-      .number({ invalid_type_error: 'HVAC power consumption must be a number.' })
+      .number({
+        invalid_type_error: 'HVAC power consumption must be a number.',
+      })
       .min(0, 'Power consumption must be a positive number.')
       .optional(),
     onPremHvacLoadFactor: z
@@ -145,7 +149,9 @@ export const CostFormSchema = z
       .max(100, 'Load factor must be between 0 and 100.')
       .optional(),
     onPremHvacTechnicianHourlyRate: z
-      .number({ invalid_type_error: 'Technician hourly rate must be a number.' })
+      .number({
+        invalid_type_error: 'Technician hourly rate must be a number.',
+      })
       .min(0, 'Rate must be a positive number.')
       .optional(),
     onPremHvacHoursWorked: z
@@ -156,7 +162,9 @@ export const CostFormSchema = z
     // Energy - Colocation
     useOnPremColocation: z.boolean().optional(),
     onPremColocationMonthlyCost: z
-      .number({ invalid_type_error: 'Colocation monthly cost must be a number.' })
+      .number({
+        invalid_type_error: 'Colocation monthly cost must be a number.',
+      })
       .min(0, 'Cost must be a positive number.')
       .optional(),
     onPremColocationAnnualIncrease: z
@@ -207,23 +215,31 @@ export const CostFormSchema = z
     onPremCoreSwitchSalvageValue: z.number().min(0).max(100).optional(),
     useOnPremAggregationSwitch: z.boolean().optional(),
     onPremAggregationSwitchQuantity: z
-      .number({ invalid_type_error: 'Aggregation switch quantity must be a number.' })
+      .number({
+        invalid_type_error: 'Aggregation switch quantity must be a number.',
+      })
       .int('Must be a whole number.')
       .min(0, 'Quantity must be a positive number.')
       .optional(),
     onPremAggregationSwitchUnitCost: z
-      .number({ invalid_type_error: 'Aggregation switch unit cost must be a number.' })
+      .number({
+        invalid_type_error: 'Aggregation switch unit cost must be a number.',
+      })
       .min(0, 'Cost must be a positive number.')
       .optional(),
     onPremAggregationSwitchSalvageValue: z.number().min(0).max(100).optional(),
     useOnPremAccessSwitch: z.boolean().optional(),
     onPremAccessSwitchQuantity: z
-      .number({ invalid_type_error: 'Access switch quantity must be a number.' })
+      .number({
+        invalid_type_error: 'Access switch quantity must be a number.',
+      })
       .int('Must be a whole number.')
       .min(0, 'Quantity must be a positive number.')
       .optional(),
     onPremAccessSwitchUnitCost: z
-      .number({ invalid_type_error: 'Access switch unit cost must be a number.' })
+      .number({
+        invalid_type_error: 'Access switch unit cost must be a number.',
+      })
       .min(0, 'Cost must be a positive number.')
       .optional(),
     onPremAccessSwitchSalvageValue: z.number().min(0).max(100).optional(),
@@ -276,7 +292,11 @@ export const CostFormSchema = z
     useOnPremSecurityEngineer: z.boolean().optional(),
     onPremSecurityEngineerCount: z.number().int().min(0).optional(),
     onPremSecurityEngineerSalary: z.number().min(0).optional(),
-    onPremSecurityEngineerSalaryIncrement: z.number().min(0).max(100).optional(),
+    onPremSecurityEngineerSalaryIncrement: z
+      .number()
+      .min(0)
+      .max(100)
+      .optional(),
     useOnPremDatabaseAdmin: z.boolean().optional(),
     onPremDatabaseAdminCount: z.number().int().min(0).optional(),
     onPremDatabaseAdminSalary: z.number().min(0).optional(),
@@ -298,15 +318,27 @@ export const CostFormSchema = z
     useCloudSiteReliabilityEngineer: z.boolean().optional(),
     cloudSiteReliabilityEngineerCount: z.number().int().min(0).optional(),
     cloudSiteReliabilityEngineerSalary: z.number().min(0).optional(),
-    cloudSiteReliabilityEngineerSalaryIncrement: z.number().min(0).max(100).optional(),
+    cloudSiteReliabilityEngineerSalaryIncrement: z
+      .number()
+      .min(0)
+      .max(100)
+      .optional(),
     useCloudCloudSecurityEngineer: z.boolean().optional(),
     cloudCloudSecurityEngineerCount: z.number().int().min(0).optional(),
     cloudCloudSecurityEngineerSalary: z.number().min(0).optional(),
-    cloudCloudSecurityEngineerSalaryIncrement: z.number().min(0).max(100).optional(),
+    cloudCloudSecurityEngineerSalaryIncrement: z
+      .number()
+      .min(0)
+      .max(100)
+      .optional(),
     useCloudCloudDatabaseAdmin: z.boolean().optional(),
     cloudCloudDatabaseAdminCount: z.number().int().min(0).optional(),
     cloudCloudDatabaseAdminSalary: z.number().min(0).optional(),
-    cloudCloudDatabaseAdminSalaryIncrement: z.number().min(0).max(100).optional(),
+    cloudCloudDatabaseAdminSalaryIncrement: z
+      .number()
+      .min(0)
+      .max(100)
+      .optional(),
 
     // Cloud Compute - General Purpose VMs
     useCloudGeneralVm: z.boolean().optional(),
@@ -413,7 +445,7 @@ export const CostFormSchema = z
     },
   )
 
-export type MakeCostFormValues = z.infer<typeof CostFormSchema>
+export type CostFormValues = z.infer<typeof CostFormSchema>
 
 export type CostBreakdown = {
   [key: string]: number | undefined
