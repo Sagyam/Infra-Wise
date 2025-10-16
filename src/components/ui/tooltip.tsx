@@ -4,11 +4,37 @@ import * as TooltipPrimitive from '@radix-ui/react-tooltip'
 import * as React from 'react'
 import { cn } from '@/lib/utils'
 
-const TooltipProvider = TooltipPrimitive.Provider
+const TooltipProvider = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Provider>,
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Provider>
+>((props, ref) => (
+  <TooltipPrimitive.Provider
+    delayDuration={0}
+    disableHoverableContent={false}
+    {...props}
+  />
+))
+TooltipProvider.displayName = 'TooltipProvider'
 
 const Tooltip = TooltipPrimitive.Root
 
-const TooltipTrigger = TooltipPrimitive.Trigger
+const TooltipTrigger = React.forwardRef<
+  React.ElementRef<typeof TooltipPrimitive.Trigger>,
+  React.ComponentPropsWithoutRef<typeof TooltipPrimitive.Trigger>
+>((props, ref) => (
+  <TooltipPrimitive.Trigger
+    ref={ref}
+    onClick={(e) => {
+      // On touch devices, prevent default to allow tooltip to show
+      if ('ontouchstart' in window) {
+        e.preventDefault()
+      }
+      props.onClick?.(e)
+    }}
+    {...props}
+  />
+))
+TooltipTrigger.displayName = 'TooltipTrigger'
 
 const TooltipContent = React.forwardRef<
   React.ElementRef<typeof TooltipPrimitive.Content>,
