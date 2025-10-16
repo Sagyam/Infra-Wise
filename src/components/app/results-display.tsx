@@ -1,18 +1,14 @@
 'use client'
 
-import { useMemo, useState } from 'react'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { useState } from 'react'
+import { Card, CardContent } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { useResultsCalculations } from '@/hooks/use-results-calculations'
 import type { CalculationResult, CostFormValues } from '@/lib/types'
 import { BreakdownTable } from './breakdown-table'
 import { CostChart } from './cost-chart'
-import { ExportButton } from './results/export-button'
+import { ResultsCardHeader } from './results/results-card-header'
+import { ResultsEmptyState } from './results/results-empty-state'
 import { SummaryCards } from './results/summary-cards'
 import { ResultsTable } from './results-table'
 
@@ -28,74 +24,28 @@ export function ResultsDisplay({
   const [activeMainTab, setActiveMainTab] = useState('chart')
   const [activeChartTab, setActiveChartTab] = useState('onprem-chart')
 
-  const onPremTCO = results?.onPremTCO ?? 0
-  const cloudTCO = results?.cloudTCO ?? 0
-  const savings = results?.savings ?? 0
-  const yearlyCosts = results?.yearlyCosts ?? []
-  const analysisPeriod = results?.analysisPeriod ?? 1
-  const breakevenPoint = results?.breakevenPoint ?? null
-
-  const winningOption = useMemo(
-    () => (savings > 0 ? 'Cloud' : 'On-Premise'),
-    [savings],
-  )
-  const winningSavings = useMemo(
-    () => (savings > 0 ? savings : -savings),
-    [savings],
-  )
-
-  const onPremDisplay = useMemo(
-    () =>
-      calculationMode === 'amortized' ? onPremTCO / analysisPeriod : onPremTCO,
-    [calculationMode, onPremTCO, analysisPeriod],
-  )
-  const cloudDisplay = useMemo(
-    () =>
-      calculationMode === 'amortized' ? cloudTCO / analysisPeriod : cloudTCO,
-    [calculationMode, cloudTCO, analysisPeriod],
-  )
-  const savingsDisplay = useMemo(
-    () =>
-      calculationMode === 'amortized'
-        ? winningSavings / analysisPeriod
-        : winningSavings,
-    [calculationMode, winningSavings, analysisPeriod],
-  )
+  const {
+    yearlyCosts,
+    breakevenPoint,
+    onPremDisplay,
+    cloudDisplay,
+    savingsDisplay,
+    winningOption,
+    displayTitle,
+  } = useResultsCalculations(results, calculationMode)
 
   if (!results) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="font-headline">No Results Yet</CardTitle>
-          <CardDescription>
-            Please fill in the form and click Calculate to see results.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    )
+    return <ResultsEmptyState />
   }
-
-  const displayTitle =
-    calculationMode === 'amortized'
-      ? `Amortized Cost Per Year over ${analysisPeriod} years`
-      : `Total Cost of Ownership (TCO) over ${analysisPeriod} years`
 
   return (
     <Card>
-      <CardHeader>
-        <div className="flex justify-between items-start">
-          <div>
-            <CardTitle className="font-headline">Analysis Results</CardTitle>
-            <CardDescription>{displayTitle}</CardDescription>
-            {breakevenPoint && (
-              <p className="text-sm text-muted-foreground mt-2">
-                Breakeven Point: {breakevenPoint}
-              </p>
-            )}
-          </div>
-          <ExportButton yearlyCosts={yearlyCosts} />
-        </div>
-      </CardHeader>
+      <ResultsCardHeader
+        title="Analysis Results"
+        displayTitle={displayTitle}
+        breakevenPoint={breakevenPoint}
+        yearlyCosts={yearlyCosts}
+      />
       <CardContent className="space-y-6">
         <SummaryCards
           onPremDisplay={onPremDisplay}
