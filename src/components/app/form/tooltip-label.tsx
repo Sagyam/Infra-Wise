@@ -19,7 +19,8 @@ export function TooltipLabel({ label, tooltip, icon }: TooltipLabelProps) {
       <Tooltip>
         <TooltipTrigger asChild>
           <span className="flex items-center gap-2 cursor-help">
-            {icon} {label} <Info className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
+            {icon} {label}{' '}
+            <Info className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
           </span>
         </TooltipTrigger>
         <TooltipContent>

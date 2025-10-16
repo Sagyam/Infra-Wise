@@ -22,8 +22,18 @@ export function BreakdownTable({ data }: BreakdownTableProps) {
             transform: `translateX(${activeTab === 'cloud' ? '100%' : '0%'})`,
           }}
         />
-        <TabsTrigger value="onprem" className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent">On-Premise</TabsTrigger>
-        <TabsTrigger value="cloud" className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent">Cloud</TabsTrigger>
+        <TabsTrigger
+          value="onprem"
+          className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent"
+        >
+          On-Premise
+        </TabsTrigger>
+        <TabsTrigger
+          value="cloud"
+          className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent"
+        >
+          Cloud
+        </TabsTrigger>
       </TabsList>
       <TabsContent value="onprem" className="pt-4">
         <OnPremBreakdown data={data} />

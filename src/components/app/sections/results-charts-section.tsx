@@ -51,8 +51,18 @@ export function ResultsChartsSection({ results }: ResultsChartsSectionProps) {
                 transform: `translateX(${activeTab === 'cloud-chart' ? '100%' : '0%'})`,
               }}
             />
-            <TabsTrigger value="onprem-chart" className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent">On-Premise</TabsTrigger>
-            <TabsTrigger value="cloud-chart" className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent">Cloud</TabsTrigger>
+            <TabsTrigger
+              value="onprem-chart"
+              className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent"
+            >
+              On-Premise
+            </TabsTrigger>
+            <TabsTrigger
+              value="cloud-chart"
+              className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent"
+            >
+              Cloud
+            </TabsTrigger>
           </TabsList>
           <TabsContent value="onprem-chart" className="pt-4">
             <CostChart data={yearlyCosts} type="onprem" />

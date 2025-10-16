@@ -22,19 +22,6 @@ export function ResultsCumulativeSection({
   results,
   calculationMode,
 }: ResultsCumulativeSectionProps) {
-  if (!results) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="font-headline">No Results Yet</CardTitle>
-          <CardDescription>
-            Please fill in the form and click Calculate to see results.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    )
-  }
-
   const onPremTCO = results?.onPremTCO ?? 0
   const cloudTCO = results?.cloudTCO ?? 0
   const savings = results?.savings ?? 0
@@ -68,6 +55,19 @@ export function ResultsCumulativeSection({
         : winningSavings,
     [calculationMode, winningSavings, analysisPeriod],
   )
+
+  if (!results) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="font-headline">No Results Yet</CardTitle>
+          <CardDescription>
+            Please fill in the form and click Calculate to see results.
+          </CardDescription>
+        </CardHeader>
+      </Card>
+    )
+  }
 
   const displayTitle =
     calculationMode === 'amortized'

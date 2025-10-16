@@ -43,7 +43,7 @@ export function GeneralTab({
         control={control}
         name="dataUnit"
         render={({ field }) => (
-          <FormItem id="dataUnit">
+          <FormItem>
             <FormLabel className="flex items-center gap-2">
               <Container />
               Data Unit
