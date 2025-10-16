@@ -48,9 +48,9 @@ body {
   .dark {
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
-    --card: 222.2 84% 4.9%;
+    --card: 220 20% 12%;
     --card-foreground: 210 40% 98%;
-    --popover: 222.2 84% 4.9%;
+    --popover: 220 20% 12%;
     --popover-foreground: 210 40% 98%;
     --primary: 231 48% 48%;
     --primary-foreground: 0 0% 100%;
@@ -73,13 +73,13 @@ body {
     --chart-6: 142 71% 45%; /* Light Green */
     --chart-7: 271 91% 65%; /* Light Purple */
     --chart-8: 340 82% 67%; /* Light Pink */
-    --sidebar-background: 222.2 84% 6%;
+    --sidebar-background: 222 35% 9%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 17%;
+    --sidebar-accent: 222 25% 14%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 17%;
+    --sidebar-border: 222 25% 14%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
