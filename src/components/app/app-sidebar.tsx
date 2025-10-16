@@ -10,7 +10,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarTrigger,
+  useSidebar,
 } from '@/components/ui/sidebar'
 import {BarChart3, Boxes, Code, Cpu, HardDrive, ListTree, Network, PieChart, Settings, Users, Zap} from 'lucide-react'
 
@@ -44,11 +44,20 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) {
-  return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b px-6 py-4 flex flex-row items-center justify-between">
+  const { isMobile, setOpenMobile } = useSidebar()
 
-        <SidebarTrigger />
+  const handleSectionChange = (section: string) => {
+    onSectionChange(section)
+    // Close the mobile sidebar after selecting an item
+    if (isMobile) {
+      setOpenMobile(false)
+    }
+  }
+
+  return (
+    <Sidebar collapsible="offcanvas">
+      <SidebarHeader className="border-b px-6 py-4">
+        <div className="font-semibold text-lg">Menu</div>
       </SidebarHeader>
       <SidebarContent>
         {sections.map((section) => (
@@ -60,7 +69,7 @@ export function AppSidebar({ activeSection, onSectionChange }: AppSidebarProps) 
                   <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton
                       isActive={activeSection === item.id}
-                      onClick={() => onSectionChange(item.id)}
+                      onClick={() => handleSectionChange(item.id)}
                       tooltip={item.title}
                     >
                       <item.icon />

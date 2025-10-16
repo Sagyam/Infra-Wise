@@ -663,8 +663,13 @@ export default function Home() {
                   <div>
                     {renderSection()}
                     {!activeSection.startsWith('results-') && (
-                      <div className="mt-8 flex gap-4 justify-center">
-                        <Button type="submit" disabled={isLoading}>
+                      <div className="mt-8 flex flex-col gap-4 items-center">
+                        <Button
+                          type="submit"
+                          disabled={isLoading}
+                          size="lg"
+                          className="w-full max-w-md text-lg py-6"
+                        >
                           {isLoading ? 'Calculating...' : 'Calculate'}
                         </Button>
                         {error && (
