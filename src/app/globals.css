@@ -8,24 +8,24 @@ body {
 
 @layer base {
   :root {
-    --background: 48 33% 97%; /* #faf9f5 */
-    --foreground: 222.2 84% 4.9%;
-    --card: 40 24% 92%; /* #f0eee6 */
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --background: 42 30% 96%; /* #f8f6f1 - softer cream */
+    --foreground: 30 8% 15%; /* #262320 - warm dark brown */
+    --card: 40 25% 94%; /* #f3f0e9 - slightly darker cream */
+    --card-foreground: 30 8% 15%;
+    --popover: 40 25% 94%;
+    --popover-foreground: 30 8% 15%;
     --primary: 231 48% 48%; /* #3F51B5 */
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 210 40% 9.8%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --secondary: 40 18% 88%; /* #e4e1d6 - warmer secondary */
+    --secondary-foreground: 30 8% 20%;
+    --muted: 40 18% 88%;
+    --muted-foreground: 30 6% 45%; /* #6f6b65 - warm gray */
     --accent: 174 100% 29%; /* #009688 */
     --accent-foreground: 0 0% 100%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
+    --border: 40 15% 85%; /* #dbd7cc - warm border */
+    --input: 40 15% 85%;
     --ring: 231 48% 48%;
     --chart-1: 231 48% 48%; /* Blue */
     --chart-2: 174 100% 29%; /* Teal */
@@ -36,14 +36,14 @@ body {
     --chart-7: 280 65% 60%; /* Purple */
     --chart-8: 340 82% 52%; /* Pink */
     --radius: 0.5rem;
-    --sidebar-background: 40 20% 95%; /* #f5f4ed */
-    --sidebar-foreground: 240 5.3% 26.1%;
-    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-background: 40 22% 93%; /* #f0ede3 - slightly darker sidebar */
+    --sidebar-foreground: 30 8% 25%;
+    --sidebar-primary: 30 8% 15%;
     --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 240 4.8% 96.5%;
-    --sidebar-accent-foreground: 240 5.9% 10%;
-    --sidebar-border: 220 13% 93%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --sidebar-accent: 40 18% 88%;
+    --sidebar-accent-foreground: 30 8% 15%;
+    --sidebar-border: 40 15% 87%;
+    --sidebar-ring: 231 48% 48%;
   }
   .dark {
     --background: 222.2 84% 4.9%;
