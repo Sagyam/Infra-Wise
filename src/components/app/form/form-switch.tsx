@@ -20,7 +20,7 @@ export function FormSwitch({ control, name, label }: FormSwitchProps) {
       control={control}
       name={name}
       render={({ field }) => (
-        <FormItem className="flex items-center gap-2">
+        <FormItem id={name} className="flex items-center gap-2">
           {label && <FormLabel className="mb-0">{label}</FormLabel>}
           <FormControl>
             <Switch

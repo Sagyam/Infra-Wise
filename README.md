@@ -106,6 +106,8 @@ InfraWise comes pre-configured with realistic default values for a mid-sized inf
    - **Charts**: Visual comparison of cost breakdowns
    - **Cumulative**: Year-over-year cost progression
    - **Breakdown**: Detailed line-item costs
+5. **Export Data**: Download the full analysis as a CSV file for further review or reporting
+6. **Full Text Search**: Use `Cmd+K` (Mac) or `Ctrl+K` (Windows) to quickly find and navigate to any section or input field
 
 ### Configuration Sections
 
@@ -131,7 +133,7 @@ InfraWise comes pre-configured with realistic default values for a mid-sized inf
 - **Cloud**: VM types (general, compute-optimized, memory-optimized, storage-optimized)
 
 #### GPU
-- **On-Premise**: Training GPUs (e.g., A100) and inference GPUs (e.g., T4) with one-time costs
+- **On-Premise**: Training GPUs (e.g., H100) and inference GPUs (e.g., L40) with one-time costs
 - **Cloud**: GPU instances with hourly rates and monthly usage hours
 
 #### Networking

@@ -284,6 +284,37 @@ export default function Home() {
   const [activeSection, setActiveSection] = useState('general')
   const [searchOpen, setSearchOpen] = useState(false)
 
+  // Map category names to section names
+  const categoryToSection: Record<string, string> = {
+    General: 'general',
+    Compute: 'compute',
+    Energy: 'energy',
+    GPU: 'gpu',
+    'Human Resources': 'human-cost',
+    Networking: 'networking',
+    Software: 'software',
+    Storage: 'storage',
+  }
+
+  const handleFieldNavigation = (category: string, fieldId: string) => {
+    const sectionName = categoryToSection[category]
+    if (sectionName) {
+      setActiveSection(sectionName)
+      // Wait for section to render, then scroll to field
+      setTimeout(() => {
+        const element = document.getElementById(fieldId)
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+          // Focus the input if it exists
+          const input = element.querySelector('input, textarea, select')
+          if (input instanceof HTMLElement) {
+            setTimeout(() => input.focus(), 100)
+          }
+        }
+      }, 100)
+    }
+  }
+
   const form = useForm<CostFormValues>({
     resolver: zodResolver(CostFormSchema),
     defaultValues,
@@ -678,6 +709,7 @@ export default function Home() {
         fields={formFields}
         open={searchOpen}
         onOpenChange={setSearchOpen}
+        onNavigate={handleFieldNavigation}
       />
       <div className="flex min-h-screen w-full bg-background">
         <AppSidebar
