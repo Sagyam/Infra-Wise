@@ -35,7 +35,7 @@ export function OnPremBreakdown({ data }: OnPremBreakdownProps) {
           On-Premise Cost Breakdown
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>

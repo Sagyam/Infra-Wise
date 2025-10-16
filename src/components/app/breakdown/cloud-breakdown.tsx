@@ -35,7 +35,7 @@ export function CloudBreakdown({ data }: CloudBreakdownProps) {
           Cloud Cost Breakdown
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow>

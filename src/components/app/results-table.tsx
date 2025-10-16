@@ -25,7 +25,7 @@ const formatCurrency = (value: number) => {
 
 export function ResultsTable({ data }: ResultsTableProps) {
   return (
-    <div className="border rounded-lg">
+    <div className="border rounded-lg overflow-x-auto">
       <Table>
         <TableHeader>
           <TableRow>

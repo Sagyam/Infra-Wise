@@ -86,6 +86,7 @@ export function AppSidebar({
                       isActive={activeSection === item.id}
                       onClick={() => handleSectionChange(item.id)}
                       tooltip={item.title}
+                      className="md:text-base text-lg"
                     >
                       <item.icon />
                       <span>{item.title}</span>

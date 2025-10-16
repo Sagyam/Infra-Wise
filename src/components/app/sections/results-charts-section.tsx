@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import {
   Card,
   CardContent,
@@ -16,6 +17,7 @@ interface ResultsChartsSectionProps {
 }
 
 export function ResultsChartsSection({ results }: ResultsChartsSectionProps) {
+  const [activeTab, setActiveTab] = useState('onprem-chart')
   if (!results) {
     return (
       <Card>
@@ -41,10 +43,16 @@ export function ResultsChartsSection({ results }: ResultsChartsSectionProps) {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="onprem-chart">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="onprem-chart">On-Premise</TabsTrigger>
-            <TabsTrigger value="cloud-chart">Cloud</TabsTrigger>
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
+          <TabsList className="relative grid w-full grid-cols-2 p-1 font-semibold">
+            <div
+              className="absolute top-1 left-1 h-[calc(100%-0.5rem)] w-[calc(50%-0.25rem)] bg-primary rounded-md transition-all duration-300"
+              style={{
+                transform: `translateX(${activeTab === 'cloud-chart' ? '100%' : '0%'})`,
+              }}
+            />
+            <TabsTrigger value="onprem-chart" className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent">On-Premise</TabsTrigger>
+            <TabsTrigger value="cloud-chart" className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent">Cloud</TabsTrigger>
           </TabsList>
           <TabsContent value="onprem-chart" className="pt-4">
             <CostChart data={yearlyCosts} type="onprem" />

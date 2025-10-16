@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import {
   Card,
   CardContent,
@@ -25,6 +25,9 @@ export function ResultsDisplay({
   results,
   calculationMode,
 }: ResultsDisplayProps) {
+  const [activeMainTab, setActiveMainTab] = useState('chart')
+  const [activeChartTab, setActiveChartTab] = useState('onprem-chart')
+
   const onPremTCO = results?.onPremTCO ?? 0
   const cloudTCO = results?.cloudTCO ?? 0
   const savings = results?.savings ?? 0
@@ -102,20 +105,34 @@ export function ResultsDisplay({
           calculationMode={calculationMode}
         />
 
-        <Tabs defaultValue="chart">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="chart">Chart</TabsTrigger>
-            <TabsTrigger value="table">Cumulative</TabsTrigger>
-            <TabsTrigger value="breakdown">Breakdown</TabsTrigger>
+        <Tabs value={activeMainTab} onValueChange={setActiveMainTab}>
+          <TabsList className="relative grid w-full grid-cols-3 p-1 font-semibold">
+            <div
+              className="absolute top-1 left-1 h-[calc(100%-0.5rem)] w-[calc(33.333%-0.333rem)] bg-primary rounded-md transition-all duration-300"
+              style={{
+                transform: `translateX(${
+                  activeMainTab === 'chart' ? '0%' : activeMainTab === 'table' ? '100%' : '200%'
+                })`,
+              }}
+            />
+            <TabsTrigger value="chart" className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent">Chart</TabsTrigger>
+            <TabsTrigger value="table" className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent">Cumulative</TabsTrigger>
+            <TabsTrigger value="breakdown" className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent">Breakdown</TabsTrigger>
           </TabsList>
           <TabsContent value="chart" className="pt-4">
             <h3 className="text-lg font-semibold mb-4 font-headline">
               Annual Cost Breakdown
             </h3>
-            <Tabs defaultValue="onprem-chart">
-              <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="onprem-chart">On-Premise</TabsTrigger>
-                <TabsTrigger value="cloud-chart">Cloud</TabsTrigger>
+            <Tabs value={activeChartTab} onValueChange={setActiveChartTab}>
+              <TabsList className="relative grid w-full grid-cols-2 p-1 font-semibold">
+                <div
+                  className="absolute top-1 left-1 h-[calc(100%-0.5rem)] w-[calc(50%-0.25rem)] bg-primary rounded-md transition-all duration-300"
+                  style={{
+                    transform: `translateX(${activeChartTab === 'cloud-chart' ? '100%' : '0%'})`,
+                  }}
+                />
+                <TabsTrigger value="onprem-chart" className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent">On-Premise</TabsTrigger>
+                <TabsTrigger value="cloud-chart" className="relative z-10 data-[state=active]:text-primary-foreground data-[state=active]:bg-transparent">Cloud</TabsTrigger>
               </TabsList>
               <TabsContent value="onprem-chart" className="pt-4">
                 <CostChart data={yearlyCosts} type="onprem" />
