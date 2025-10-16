@@ -28,7 +28,7 @@ export const metadata: Metadata = {
     siteName: 'InfraWise',
     images: [
       {
-        url: 'https://infrawise.sagyamthapa.com.np/og-image.png',
+        url: './og-image.png',
         width: 1200,
         height: 630,
       },
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     description:
       'Make informed infrastructure decisions. Compare cloud vs. on-premise TCO with this tool.',
     // creator: '@sagyam21',
-    images: ['https://infrawise.sagyamthapa.com.np/og-image.png'],
+    images: ['./og-image.png'],
   },
 }
 
