@@ -6,6 +6,7 @@ import {
   Code,
   Cpu,
   HardDrive,
+  LineChart,
   ListTree,
   Network,
   PieChart,
@@ -44,7 +45,11 @@ const sections = [
       { title: 'Networking', icon: Network, id: 'networking' },
       { title: 'Human Cost', icon: Users, id: 'human-cost' },
       { title: 'Software', icon: Code, id: 'software' },
-      { title: 'Security & Compliance', icon: Shield, id: 'security-compliance' },
+      {
+        title: 'Security & Compliance',
+        icon: Shield,
+        id: 'security-compliance',
+      },
     ],
   },
   {
@@ -53,6 +58,7 @@ const sections = [
       { title: 'Charts', icon: PieChart, id: 'results-charts' },
       { title: 'Cumulative', icon: BarChart3, id: 'results-cumulative' },
       { title: 'Breakdown', icon: ListTree, id: 'results-breakdown' },
+      { title: 'Sensitivity', icon: LineChart, id: 'sensitivity-analysis' },
     ],
   },
 ]

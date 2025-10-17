@@ -16,6 +16,9 @@ export const generalDefaults: GeneralValues = {
   analysisPeriod: 5,
   inflationRate: 3.0,
   calculationMode: 'tco',
+  enableSensitivityAnalysis: true,
+  sensitivityVariable: undefined,
+  sensitivityRangePercent: 20,
 }
 
 export const onPremComputeDefaults: OnPremComputeValues = {

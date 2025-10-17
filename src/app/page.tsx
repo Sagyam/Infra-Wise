@@ -180,7 +180,8 @@ export default function Home() {
                         handleStandardChange={handleStandardChange}
                       />
                       {!activeSection.startsWith('results-') &&
-                        activeSection !== 'presets' && (
+                        activeSection !== 'presets' &&
+                        activeSection !== 'sensitivity-analysis' && (
                           <div className="mt-8 flex flex-col gap-4 items-center">
                             <Button
                               type="submit"

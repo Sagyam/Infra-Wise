@@ -9,6 +9,7 @@ import { ResultsBreakdownSection } from '@/components/app/sections/results-break
 import { ResultsChartsSection } from '@/components/app/sections/results-charts-section'
 import { ResultsCumulativeSection } from '@/components/app/sections/results-cumulative-section'
 import { SecurityComplianceSection } from '@/components/app/sections/security-compliance-section'
+import { SensitivityAnalysisSection } from '@/components/app/sections/sensitivity-analysis-section'
 import { SoftwareSection } from '@/components/app/sections/software-section'
 import { StorageSection } from '@/components/app/sections/storage-section'
 import type { CalculationResult, CostFormValues } from '@/lib/types'
@@ -201,6 +202,8 @@ export function FormSectionRenderer({
       )
     case 'results-breakdown':
       return <ResultsBreakdownSection results={results} />
+    case 'sensitivity-analysis':
+      return <SensitivityAnalysisSection control={control} results={results} />
     default:
       return null
   }

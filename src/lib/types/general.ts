@@ -10,6 +10,9 @@ export const GeneralSchema = z.object({
     .min(0, 'Inflation must be a positive number.')
     .max(100, 'Inflation rate seems too high.'),
   calculationMode: z.enum(['tco', 'amortized']),
+  enableSensitivityAnalysis: z.boolean().default(false),
+  sensitivityVariable: z.string().optional(),
+  sensitivityRangePercent: z.number().min(1).max(100).default(20),
 })
 
 export type GeneralValues = z.infer<typeof GeneralSchema>

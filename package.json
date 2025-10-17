@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "private": false,
   "scripts": {
-    "dev": "next dev --turbopack -p 3000",
+    "dev": "next dev --turbopack -p 3100",
     "build": "NODE_ENV=production next build",
     "start": "next start",
     "lint": "biome lint src",
