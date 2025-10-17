@@ -7,6 +7,7 @@ import { useResultsCalculations } from '@/hooks/use-results-calculations'
 import type { CalculationResult, CostFormValues } from '@/lib/types'
 import { BreakdownTable } from './breakdown-table'
 import { CostChart } from './cost-chart'
+import { CapExOpExSummary } from './results/capex-opex-summary'
 import { ResultsCardHeader } from './results/results-card-header'
 import { ResultsEmptyState } from './results/results-empty-state'
 import { SummaryCards } from './results/summary-cards'
@@ -53,6 +54,13 @@ export function ResultsDisplay({
           savingsDisplay={savingsDisplay}
           winningOption={winningOption}
           calculationMode={calculationMode}
+        />
+
+        <CapExOpExSummary
+          totalOnPremCapEx={results.totalOnPremCapEx}
+          totalOnPremOpEx={results.totalOnPremOpEx}
+          calculationMode={calculationMode}
+          analysisPeriod={results.analysisPeriod}
         />
 
         <Tabs value={activeMainTab} onValueChange={setActiveMainTab}>

@@ -2,6 +2,15 @@ export type CostBreakdown = {
   [key: string]: number | undefined
 }
 
+export type ExpenseType = 'capex' | 'opex'
+
+export type CostBreakdownWithExpenseType = {
+  [key: string]: {
+    amount: number
+    expenseType: ExpenseType
+  }
+}
+
 export type YearlyCost = {
   year: number
   onPremCost: number
@@ -10,6 +19,10 @@ export type YearlyCost = {
   cumulativeCloud: number
   onPremBreakdown: CostBreakdown
   cloudBreakdown: CostBreakdown
+  onPremCapEx?: number
+  onPremOpEx?: number
+  cloudCapEx?: number
+  cloudOpEx?: number
 }
 
 export type CalculationResult = {
@@ -20,4 +33,8 @@ export type CalculationResult = {
   breakevenPoint: string | null
   calculationMode: 'tco' | 'amortized'
   analysisPeriod: number
+  totalOnPremCapEx?: number
+  totalOnPremOpEx?: number
+  totalCloudCapEx?: number
+  totalCloudOpEx?: number
 }
