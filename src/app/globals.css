@@ -27,8 +27,8 @@ body {
     --border: 40 15% 85%; /* #dbd7cc - warm border */
     --input: 40 15% 85%;
     --ring: 231 48% 48%;
-    --chart-1: 231 48% 48%; /* Blue */
-    --chart-2: 231 48% 48%; /* Blue - matches primary */
+    --chart-1: 231 48% 48%; /* Blue - On-Premise */
+    --chart-2: 27 87% 67%; /* Orange - Cloud */
     --chart-3: 0 72% 51%; /* Crimson/Red */
     --chart-4: 43 74% 66%; /* Yellow */
     --chart-5: 27 87% 67%; /* Orange */
@@ -65,8 +65,8 @@ body {
     --border: 217.2 32.6% 17.5%;
     --input: 217.2 32.6% 17.5%;
     --ring: 231 48% 48%;
-    --chart-1: 217 91% 60%; /* Light Blue */
-    --chart-2: 217 91% 60%; /* Light Blue - matches primary theme */
+    --chart-1: 217 91% 60%; /* Light Blue - On-Premise */
+    --chart-2: 25 95% 53%; /* Light Orange - Cloud */
     --chart-3: 0 84% 60%; /* Light Red/Coral */
     --chart-4: 48 96% 53%; /* Light Yellow */
     --chart-5: 25 95% 53%; /* Light Orange */
