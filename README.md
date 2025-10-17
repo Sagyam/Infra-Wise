@@ -1,4 +1,4 @@
-# InfraWise 📊
+# InfraWise - Infrastructure Cost Modeling Tool
 
 A comprehensive financial modeling tool for comparing Total Cost of Ownership (TCO) between cloud and on-premise infrastructure solutions. Make informed infrastructure decisions with detailed cost breakdowns, multi-year projections, and breakeven analysis across all aspects of your infrastructure stack.
 
