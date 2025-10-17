@@ -536,7 +536,7 @@ export function SensitivityAnalysisSection({
 
   // Use the sensitivity calculations hook
   const sensitivityData = useSensitivityCalculations(
-    !!enableSensitivityAnalysis,
+    enableSensitivityAnalysis,
     selectedVariable,
     formValues,
     formValues.sensitivityRangePercent || 20,
