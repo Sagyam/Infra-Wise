@@ -3,7 +3,7 @@
 A comprehensive financial modeling tool for comparing Total Cost of Ownership (TCO) between cloud and on-premise infrastructure solutions. Make informed infrastructure decisions with detailed cost breakdowns, multi-year projections, and breakeven analysis across all aspects of your infrastructure stack.
 
 ## 🎥 Video Demo
-[demo.webm](https://github.com/user-attachments/assets/71da08f1-70a2-46ec-bc1f-d6a5fd43b454)
+[demo.webm](https://github.com/Sagyam/Infra-Wise/raw/refs/heads/master/public/demo.mp4)
 
 ## ✨ Key Features
 
