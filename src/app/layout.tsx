@@ -41,7 +41,7 @@ export const metadata: Metadata = {
     title: 'InfraWise - Cloud vs. On-Prem Cost Analysis',
     description:
       'Make informed infrastructure decisions. Compare cloud vs. on-premise TCO with this tool.',
-    // creator: '@sagyam21',
+    creator: '@sagyam21',
     images: ['./og-image.png'],
   },
 }
