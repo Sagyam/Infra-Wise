@@ -2,8 +2,13 @@
 
 A comprehensive financial modeling tool for comparing Total Cost of Ownership (TCO) between cloud and on-premise infrastructure solutions. Make informed infrastructure decisions with detailed cost breakdowns, multi-year projections, and breakeven analysis across all aspects of your infrastructure stack.
 
-## 🎥 Video Demo
-[demo.webm](https://github.com/Sagyam/Infra-Wise/raw/refs/heads/master/public/demo.mp4)
+## Screenshots
+![Preset Screenshot](public/demo/preset.png)
+![Genenral Screenshot](public/demo/general.png)
+![Certifications Screenshot](public/demo/certs.png)
+![CapexOpex Screenshot](public/demo/capex-opex.png)
+![Sections Screenshot](public/demo/sections.png)
+
 
 ## ✨ Key Features
 
@@ -52,13 +57,6 @@ For detailed installation and usage instructions:
 - **Executive Reporting**: Comprehensive TCO analysis exports
 - **FinOps Teams**: Optimize spending with detailed breakdowns
 
-## 🤝 Contributing
-
-Contributions are welcome! See [CONTRIBUTING.md](docs/CONTRIBUTING.md) for guidelines.
-
-## 📄 License
-
-MIT License. See `LICENSE` for details.
 
 ## 🙏 Acknowledgments
 
