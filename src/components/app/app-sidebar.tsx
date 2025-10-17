@@ -11,6 +11,7 @@ import {
   PieChart,
   Settings,
   Shield,
+  Sparkles,
   Users,
   Zap,
 } from 'lucide-react'
@@ -28,6 +29,10 @@ import {
 } from '@/components/ui/sidebar'
 
 const sections = [
+  {
+    title: 'Quick Start',
+    items: [{ title: 'Presets', icon: Sparkles, id: 'presets' }],
+  },
   {
     title: 'Configuration',
     items: [

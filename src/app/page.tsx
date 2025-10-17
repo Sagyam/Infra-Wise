@@ -8,9 +8,11 @@ import { AppSidebar } from '@/components/app/app-sidebar'
 import { FormFieldSearch } from '@/components/app/form/form-field-search'
 import { FormSectionRenderer } from '@/components/app/form-section-renderer'
 import { Header } from '@/components/app/header'
+import { PresetSelector } from '@/components/app/preset-selector'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
+import { useToast } from '@/hooks/use-toast'
 import { useFormWatchers } from '@/hooks/use-form-watchers'
 import { useStorageCalculation } from '@/hooks/use-storage-calculation'
 import { useTierHandlers } from '@/hooks/use-tier-handlers'
@@ -29,8 +31,9 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null)
   const [calculationMode, setCalculationMode] =
     useState<CostFormValues['calculationMode']>('tco')
-  const [activeSection, setActiveSection] = useState('general')
+  const [activeSection, setActiveSection] = useState('presets')
   const [searchOpen, setSearchOpen] = useState(false)
+  const { toast } = useToast()
 
   // Map category names to section names
   const categoryToSection: Record<string, string> = {
@@ -43,6 +46,7 @@ export default function Home() {
     Software: 'software',
     'Security & Compliance': 'security-compliance',
     Storage: 'storage',
+    Presets: 'presets',
   }
 
   const handleFieldNavigation = (category: string, fieldId: string) => {
@@ -121,6 +125,26 @@ export default function Home() {
     setIsLoading(false)
   }
 
+  const handlePresetSelect = (presetValues: CostFormValues) => {
+    // Reset the form with preset values
+    form.reset(presetValues)
+
+    // Validate the form to check for errors
+    const validationResult = CostFormSchema.safeParse(presetValues)
+    if (!validationResult.success) {
+      console.error('Preset validation errors:', validationResult.error.errors)
+    }
+
+    // Show success toast
+    toast({
+      title: 'Preset Loaded',
+      description: 'The preset configuration has been applied successfully.',
+    })
+
+    // Navigate to general section to show the loaded values
+    setActiveSection('general')
+  }
+
   return (
     <SidebarProvider>
       <FormFieldSearch
@@ -138,40 +162,45 @@ export default function Home() {
           <Header onSearchClick={() => setSearchOpen(true)} />
           <main className="flex-1 p-6 flex flex-col items-center">
             <div className="w-full max-w-7xl">
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)}>
-                  <div>
-                    <FormSectionRenderer
-                      activeSection={activeSection}
-                      control={form.control}
-                      setValue={form.setValue}
-                      results={results}
-                      calculationMode={calculationMode}
-                      watchers={watchers}
-                      onCalculationModeChange={setCalculationMode}
-                      handleHotChange={handleHotChange}
-                      handleStandardChange={handleStandardChange}
-                    />
-                    {!activeSection.startsWith('results-') && (
-                      <div className="mt-8 flex flex-col gap-4 items-center">
-                        <Button
-                          type="submit"
-                          disabled={isLoading}
-                          size="lg"
-                          className="w-full max-w-md text-lg py-6"
-                        >
-                          {isLoading ? 'Calculating...' : 'Calculate'}
-                        </Button>
-                        {error && (
-                          <p className="text-sm text-destructive flex items-center">
-                            {error}
-                          </p>
+              {activeSection === 'presets' ? (
+                <PresetSelector onPresetSelect={handlePresetSelect} />
+              ) : (
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)}>
+                    <div>
+                      <FormSectionRenderer
+                        activeSection={activeSection}
+                        control={form.control}
+                        setValue={form.setValue}
+                        results={results}
+                        calculationMode={calculationMode}
+                        watchers={watchers}
+                        onCalculationModeChange={setCalculationMode}
+                        handleHotChange={handleHotChange}
+                        handleStandardChange={handleStandardChange}
+                      />
+                      {!activeSection.startsWith('results-') &&
+                        activeSection !== 'presets' && (
+                          <div className="mt-8 flex flex-col gap-4 items-center">
+                            <Button
+                              type="submit"
+                              disabled={isLoading}
+                              size="lg"
+                              className="w-full max-w-md text-lg py-6"
+                            >
+                              {isLoading ? 'Calculating...' : 'Calculate'}
+                            </Button>
+                            {error && (
+                              <p className="text-sm text-destructive flex items-center">
+                                {error}
+                              </p>
+                            )}
+                          </div>
                         )}
-                      </div>
-                    )}
-                  </div>
-                </form>
-              </Form>
+                    </div>
+                  </form>
+                </Form>
+              )}
             </div>
           </main>
           <footer className="py-6 text-center text-muted-foreground text-sm border-t">
