@@ -16,6 +16,7 @@ import {
   Users,
   Zap,
 } from 'lucide-react'
+import { Logo } from '@/components/icons/logo'
 import {
   Sidebar,
   SidebarContent,
@@ -83,9 +84,9 @@ export function AppSidebar({
   }
 
   return (
-    <Sidebar collapsible="offcanvas">
+    <Sidebar collapsible="icon">
       <SidebarHeader className="border-b px-6 py-4">
-        <div className="font-semibold text-lg">Menu</div>
+        <Logo className="h-8 w-auto text-accent" />
       </SidebarHeader>
       <SidebarContent>
         {sections.map((section) => (
