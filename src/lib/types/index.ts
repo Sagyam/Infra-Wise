@@ -10,6 +10,7 @@ export * from './human-resources'
 export * from './networking'
 export * from './software'
 export * from './storage'
+export * from './security-compliance'
 
 // Import schemas for combining
 import { GeneralSchema } from './general'
@@ -20,6 +21,7 @@ import { HumanResourcesSchema } from './human-resources'
 import { NetworkingSchema } from './networking'
 import { SoftwareSchema } from './software'
 import { StorageSchema } from './storage'
+import { SecurityComplianceSchema } from './security-compliance'
 
 // Combine all schemas into the main CostFormSchema
 export const CostFormSchema = GeneralSchema.merge(OnPremComputeSchema)
@@ -30,6 +32,7 @@ export const CostFormSchema = GeneralSchema.merge(OnPremComputeSchema)
   .merge(NetworkingSchema)
   .merge(SoftwareSchema)
   .merge(StorageSchema)
+  .merge(SecurityComplianceSchema)
   .refine(
     (data) =>
       data.cloudHotTier + data.cloudStandardTier + data.cloudArchiveTier === 100,

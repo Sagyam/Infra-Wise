@@ -6,6 +6,7 @@ export const onPremCategories = [
   'Networking',
   'Human',
   'Software',
+  'Security & Compliance',
 ]
 
 export const cloudCategories = [
@@ -15,4 +16,5 @@ export const cloudCategories = [
   'Networking',
   'Human',
   'Software',
+  'Security & Compliance',
 ]

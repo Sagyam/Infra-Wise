@@ -134,6 +134,7 @@ export async function calculateCosts(
         Networking: 0,
         Human: 0,
         Software: 0,
+        'Security & Compliance': 0,
       }
       const cloudBreakdown: CostBreakdown = {
         Storage: 0,
@@ -142,13 +143,14 @@ export async function calculateCosts(
         Networking: 0,
         Human: 0,
         Software: 0,
+        'Security & Compliance': 0,
       }
 
       // Track CapEx and OpEx for this year
       let yearOnPremCapEx = 0
       let yearOnPremOpEx = 0
       // Cloud typically has no CapEx (all OpEx for pay-as-you-go services)
-      const yearCloudCapEx = 0
+      let yearCloudCapEx = 0
       let yearCloudOpEx = 0
 
       // ENERGY COSTS
@@ -643,6 +645,106 @@ export async function calculateCosts(
       })
       cloudBreakdown.Software = inflatedCloudSoftware
       yearCloudOpEx += inflatedCloudSoftware
+
+      // SECURITY & COMPLIANCE COSTS
+      let securityComplianceCost = 0
+      let securityCapEx = 0
+      let securityOpEx = 0
+
+      // Helper function to add security costs based on type
+      const addSecurityCost = (
+        enabled: boolean,
+        cost: number,
+        costType: 'one-time' | 'recurring',
+      ) => {
+        if (!enabled || cost === 0) return
+
+        if (costType === 'one-time') {
+          // One-time costs are CapEx
+          if (calculationMode === 'tco' && year === 1) {
+            securityCapEx += cost
+          } else if (calculationMode === 'amortized') {
+            securityCapEx += cost / analysisPeriod
+          }
+        } else {
+          // Recurring costs are OpEx
+          securityOpEx += cost
+        }
+      }
+
+      // Certifications
+      addSecurityCost(
+        data.useCertSoc2,
+        data.certSoc2Cost,
+        data.certSoc2CostType,
+      )
+      addSecurityCost(
+        data.useCertIso27001,
+        data.certIso27001Cost,
+        data.certIso27001CostType,
+      )
+      addSecurityCost(
+        data.useCertHipaa,
+        data.certHipaaCost,
+        data.certHipaaCostType,
+      )
+      addSecurityCost(
+        data.useCertPciDss,
+        data.certPciDssCost,
+        data.certPciDssCostType,
+      )
+      addSecurityCost(data.useCertGdpr, data.certGdprCost, data.certGdprCostType)
+
+      // Security Features
+      addSecurityCost(
+        data.useDdosProtection,
+        data.ddosProtectionCost,
+        data.ddosProtectionCostType,
+      )
+      addSecurityCost(data.useWaf, data.wafCost, data.wafCostType)
+      addSecurityCost(
+        data.useBotProtection,
+        data.botProtectionCost,
+        data.botProtectionCostType,
+      )
+      addSecurityCost(
+        data.useSecurityAudits,
+        data.securityAuditsCost,
+        data.securityAuditsCostType,
+      )
+      addSecurityCost(
+        data.usePenetrationTesting,
+        data.penetrationTestingCost,
+        data.penetrationTestingCostType,
+      )
+
+      securityComplianceCost = securityCapEx + securityOpEx
+
+      const { inflatedCost: inflatedSecurityCompliance } = await modelInflation({
+        initialCost: securityComplianceCost,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+
+      // Security costs are shared across both on-prem and cloud
+      onPremBreakdown['Security & Compliance'] = inflatedSecurityCompliance
+      cloudBreakdown['Security & Compliance'] = inflatedSecurityCompliance
+
+      // Track CapEx/OpEx with inflation
+      const { inflatedCost: inflatedSecurityCapEx } = await modelInflation({
+        initialCost: securityCapEx,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+      const { inflatedCost: inflatedSecurityOpEx } = await modelInflation({
+        initialCost: securityOpEx,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+      yearOnPremCapEx += inflatedSecurityCapEx
+      yearOnPremOpEx += inflatedSecurityOpEx
+      yearCloudCapEx += inflatedSecurityCapEx
+      yearCloudOpEx += inflatedSecurityOpEx
 
       // Calculate totals
       const totalAnnualOnPremCost = Object.values(onPremBreakdown).reduce(

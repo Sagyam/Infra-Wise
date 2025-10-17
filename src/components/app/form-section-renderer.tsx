@@ -8,6 +8,7 @@ import { NetworkingSection } from '@/components/app/sections/networking-section'
 import { ResultsBreakdownSection } from '@/components/app/sections/results-breakdown-section'
 import { ResultsChartsSection } from '@/components/app/sections/results-charts-section'
 import { ResultsCumulativeSection } from '@/components/app/sections/results-cumulative-section'
+import { SecurityComplianceSection } from '@/components/app/sections/security-compliance-section'
 import { SoftwareSection } from '@/components/app/sections/software-section'
 import { StorageSection } from '@/components/app/sections/storage-section'
 import type { CalculationResult, CostFormValues } from '@/lib/types'
@@ -58,6 +59,16 @@ interface FormSectionRendererProps {
     useCloudTelemetry: boolean
     useCloudMonitoring: boolean
     useCloudSecurity: boolean
+    useCertSoc2: boolean
+    useCertIso27001: boolean
+    useCertHipaa: boolean
+    useCertPciDss: boolean
+    useCertGdpr: boolean
+    useDdosProtection: boolean
+    useWaf: boolean
+    useBotProtection: boolean
+    useSecurityAudits: boolean
+    usePenetrationTesting: boolean
   }
   onCalculationModeChange: (mode: CostFormValues['calculationMode']) => void
   handleHotChange: (value: number) => void
@@ -161,6 +172,22 @@ export function FormSectionRenderer({
           useCloudTelemetry={watchers.useCloudTelemetry}
           useCloudMonitoring={watchers.useCloudMonitoring}
           useCloudSecurity={watchers.useCloudSecurity}
+        />
+      )
+    case 'security-compliance':
+      return (
+        <SecurityComplianceSection
+          control={control}
+          useCertSoc2={watchers.useCertSoc2}
+          useCertIso27001={watchers.useCertIso27001}
+          useCertHipaa={watchers.useCertHipaa}
+          useCertPciDss={watchers.useCertPciDss}
+          useCertGdpr={watchers.useCertGdpr}
+          useDdosProtection={watchers.useDdosProtection}
+          useWaf={watchers.useWaf}
+          useBotProtection={watchers.useBotProtection}
+          useSecurityAudits={watchers.useSecurityAudits}
+          usePenetrationTesting={watchers.usePenetrationTesting}
         />
       )
     case 'results-charts':

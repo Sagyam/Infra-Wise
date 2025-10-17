@@ -41,6 +41,7 @@ export default function Home() {
     'Human Resources': 'human-cost',
     Networking: 'networking',
     Software: 'software',
+    'Security & Compliance': 'security-compliance',
     Storage: 'storage',
   }
 

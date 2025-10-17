@@ -10,6 +10,7 @@ import {
   Network,
   PieChart,
   Settings,
+  Shield,
   Users,
   Zap,
 } from 'lucide-react'
@@ -38,6 +39,7 @@ const sections = [
       { title: 'Networking', icon: Network, id: 'networking' },
       { title: 'Human Cost', icon: Users, id: 'human-cost' },
       { title: 'Software', icon: Code, id: 'software' },
+      { title: 'Security & Compliance', icon: Shield, id: 'security-compliance' },
     ],
   },
   {

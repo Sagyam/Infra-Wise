@@ -1008,6 +1008,112 @@ export const softwareFields: FormFieldItem[] = [
   },
 ]
 
+// Security & Compliance fields
+export const securityComplianceFields: FormFieldItem[] = [
+  // Certifications
+  {
+    id: 'useCertSoc2',
+    label: 'SOC 2 Compliance',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'certSoc2Cost',
+    label: 'SOC 2 Cost ($)',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'useCertIso27001',
+    label: 'ISO 27001 Certification',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'certIso27001Cost',
+    label: 'ISO 27001 Cost ($)',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'useCertHipaa',
+    label: 'HIPAA Compliance',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'certHipaaCost',
+    label: 'HIPAA Cost ($)',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'useCertPciDss',
+    label: 'PCI DSS Certification',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'certPciDssCost',
+    label: 'PCI DSS Cost ($)',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'useCertGdpr',
+    label: 'GDPR Compliance',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'certGdprCost',
+    label: 'GDPR Cost ($)',
+    category: 'Security & Compliance',
+  },
+  // Security Features
+  {
+    id: 'useDdosProtection',
+    label: 'DDoS Protection',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'ddosProtectionCost',
+    label: 'DDoS Protection Cost ($)',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'useWaf',
+    label: 'Web Application Firewall',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'wafCost',
+    label: 'WAF Cost ($)',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'useBotProtection',
+    label: 'Bot Protection',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'botProtectionCost',
+    label: 'Bot Protection Cost ($)',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'useSecurityAudits',
+    label: 'Security Audits',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'securityAuditsCost',
+    label: 'Security Audits Cost ($)',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'usePenetrationTesting',
+    label: 'Penetration Testing',
+    category: 'Security & Compliance',
+  },
+  {
+    id: 'penetrationTestingCost',
+    label: 'Penetration Testing Cost ($)',
+    category: 'Security & Compliance',
+  },
+]
+
 // Storage fields
 export const storageFields: FormFieldItem[] = [
   // On-Premise HDD
@@ -1151,5 +1257,6 @@ export const formFields: FormFieldItem[] = [
   ...humanResourcesFields,
   ...networkingFields,
   ...softwareFields,
+  ...securityComplianceFields,
   ...storageFields,
 ]

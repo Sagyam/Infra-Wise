@@ -6,6 +6,7 @@ import type {
   HumanResourcesValues,
   NetworkingValues,
   OnPremComputeValues,
+  SecurityComplianceValues,
   SoftwareValues,
   StorageValues,
 } from '@/lib/types'
@@ -251,6 +252,41 @@ export const storageDefaults: StorageValues = {
   cloudArchiveStorageCost: 0.0036,
 }
 
+export const securityComplianceDefaults: SecurityComplianceValues = {
+  // Certifications
+  useCertSoc2: false,
+  certSoc2CostType: 'recurring',
+  certSoc2Cost: 0,
+  useCertIso27001: false,
+  certIso27001CostType: 'recurring',
+  certIso27001Cost: 0,
+  useCertHipaa: false,
+  certHipaaCostType: 'recurring',
+  certHipaaCost: 0,
+  useCertPciDss: false,
+  certPciDssCostType: 'recurring',
+  certPciDssCost: 0,
+  useCertGdpr: false,
+  certGdprCostType: 'recurring',
+  certGdprCost: 0,
+  // Security Features
+  useDdosProtection: false,
+  ddosProtectionCostType: 'recurring',
+  ddosProtectionCost: 0,
+  useWaf: false,
+  wafCostType: 'recurring',
+  wafCost: 0,
+  useBotProtection: false,
+  botProtectionCostType: 'recurring',
+  botProtectionCost: 0,
+  useSecurityAudits: false,
+  securityAuditsCostType: 'recurring',
+  securityAuditsCost: 0,
+  usePenetrationTesting: false,
+  penetrationTestingCostType: 'recurring',
+  penetrationTestingCost: 0,
+}
+
 // Combined defaults for backward compatibility
 export const defaultValues: CostFormValues = {
   ...generalDefaults,
@@ -262,4 +298,5 @@ export const defaultValues: CostFormValues = {
   ...networkingDefaults,
   ...softwareDefaults,
   ...storageDefaults,
+  ...securityComplianceDefaults,
 }

@@ -103,6 +103,21 @@ export function useFormWatchers(control: Control<CostFormValues>) {
   const useCloudMonitoring = useWatch({ control, name: 'useCloudMonitoring' })
   const useCloudSecurity = useWatch({ control, name: 'useCloudSecurity' })
 
+  // Security & Compliance watchers
+  const useCertSoc2 = useWatch({ control, name: 'useCertSoc2' })
+  const useCertIso27001 = useWatch({ control, name: 'useCertIso27001' })
+  const useCertHipaa = useWatch({ control, name: 'useCertHipaa' })
+  const useCertPciDss = useWatch({ control, name: 'useCertPciDss' })
+  const useCertGdpr = useWatch({ control, name: 'useCertGdpr' })
+  const useDdosProtection = useWatch({ control, name: 'useDdosProtection' })
+  const useWaf = useWatch({ control, name: 'useWaf' })
+  const useBotProtection = useWatch({ control, name: 'useBotProtection' })
+  const useSecurityAudits = useWatch({ control, name: 'useSecurityAudits' })
+  const usePenetrationTesting = useWatch({
+    control,
+    name: 'usePenetrationTesting',
+  })
+
   return {
     // Storage
     useOnPremHdd,
@@ -159,5 +174,16 @@ export function useFormWatchers(control: Control<CostFormValues>) {
     useCloudTelemetry,
     useCloudMonitoring,
     useCloudSecurity,
+    // Security & Compliance
+    useCertSoc2,
+    useCertIso27001,
+    useCertHipaa,
+    useCertPciDss,
+    useCertGdpr,
+    useDdosProtection,
+    useWaf,
+    useBotProtection,
+    useSecurityAudits,
+    usePenetrationTesting,
   }
 }
