@@ -245,10 +245,10 @@ export async function calculateCosts(
         storageCapEx += onPremStorageHardwareCost / analysisPeriod
       }
 
+      // Apply salvage value in final year (not inflated)
+      let storageSalvage = 0
       if (calculationMode === 'tco' && year === analysisPeriod) {
-        const storageSalvage =
-          onPremStorageHardwareCost * (avgSalvagePercent / 100)
-        storageCapEx -= storageSalvage
+        storageSalvage = onPremStorageHardwareCost * (avgSalvagePercent / 100)
       }
 
       // Replacement costs are OpEx
@@ -285,7 +285,14 @@ export async function calculateCosts(
         inflationRate: inflationDecimal,
         analysisPeriod: year - 1,
       })
-      onPremBreakdown.Storage = inflatedOnPremStorage
+      const { inflatedCost: inflatedStorageOpEx } = await modelInflation({
+        initialCost: storageOpEx,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+
+      // Subtract salvage value after inflation to avoid double-inflating it
+      onPremBreakdown.Storage = inflatedOnPremStorage - storageSalvage
 
       // Track CapEx/OpEx with inflation
       const { inflatedCost: inflatedStorageCapEx } = await modelInflation({
@@ -293,12 +300,7 @@ export async function calculateCosts(
         inflationRate: inflationDecimal,
         analysisPeriod: year - 1,
       })
-      const { inflatedCost: inflatedStorageOpEx } = await modelInflation({
-        initialCost: storageOpEx,
-        inflationRate: inflationDecimal,
-        analysisPeriod: year - 1,
-      })
-      yearOnPremCapEx += inflatedStorageCapEx
+      yearOnPremCapEx += inflatedStorageCapEx - storageSalvage
       yearOnPremOpEx += inflatedStorageOpEx
 
       // Cloud Storage - All OpEx (recurring)
@@ -332,10 +334,10 @@ export async function calculateCosts(
         computeCapEx = onPremComputeHardwareCost / analysisPeriod
       }
 
+      // Apply salvage value in final year (not inflated)
+      let computeSalvage = 0
       if (calculationMode === 'tco' && year === analysisPeriod) {
-        const computeSalvage =
-          onPremComputeHardwareCost * (avgSalvagePercent / 100)
-        computeCapEx -= computeSalvage
+        computeSalvage = onPremComputeHardwareCost * (avgSalvagePercent / 100)
       }
 
       onPremComputeCost = computeCapEx
@@ -345,8 +347,10 @@ export async function calculateCosts(
         inflationRate: inflationDecimal,
         analysisPeriod: year - 1,
       })
-      onPremBreakdown.Compute = inflatedOnPremCompute
-      yearOnPremCapEx += inflatedOnPremCompute
+
+      // Subtract salvage value after inflation to avoid double-inflating it
+      onPremBreakdown.Compute = inflatedOnPremCompute - computeSalvage
+      yearOnPremCapEx += inflatedOnPremCompute - computeSalvage
 
       // Cloud Compute - All OpEx (recurring)
       let cloudComputeCost = 0
@@ -397,9 +401,10 @@ export async function calculateCosts(
         gpuCapEx = onPremGpuHardwareCost / analysisPeriod
       }
 
+      // Apply salvage value in final year (not inflated)
+      let gpuSalvage = 0
       if (calculationMode === 'tco' && year === analysisPeriod) {
-        const gpuSalvage = onPremGpuHardwareCost * (avgSalvagePercent / 100)
-        gpuCapEx -= gpuSalvage
+        gpuSalvage = onPremGpuHardwareCost * (avgSalvagePercent / 100)
       }
 
       onPremGpuCost = gpuCapEx
@@ -409,8 +414,10 @@ export async function calculateCosts(
         inflationRate: inflationDecimal,
         analysisPeriod: year - 1,
       })
-      onPremBreakdown.GPU = inflatedOnPremGpu
-      yearOnPremCapEx += inflatedOnPremGpu
+
+      // Subtract salvage value after inflation to avoid double-inflating it
+      onPremBreakdown.GPU = inflatedOnPremGpu - gpuSalvage
+      yearOnPremCapEx += inflatedOnPremGpu - gpuSalvage
 
       // Cloud GPU - All OpEx (recurring)
       let cloudGpuCost = 0
@@ -449,10 +456,10 @@ export async function calculateCosts(
         networkingCapEx = onPremNetworkingHardwareCost / analysisPeriod
       }
 
+      // Apply salvage value in final year (not inflated)
+      let networkingSalvage = 0
       if (calculationMode === 'tco' && year === analysisPeriod) {
-        const networkSalvage =
-          onPremNetworkingHardwareCost * (avgSalvagePercent / 100)
-        networkingCapEx -= networkSalvage
+        networkingSalvage = onPremNetworkingHardwareCost * (avgSalvagePercent / 100)
       }
 
       // Bandwidth and CDN costs are OpEx
@@ -475,7 +482,14 @@ export async function calculateCosts(
         inflationRate: inflationDecimal,
         analysisPeriod: year - 1,
       })
-      onPremBreakdown.Networking = inflatedOnPremNetworking
+      const { inflatedCost: inflatedNetworkingOpEx } = await modelInflation({
+        initialCost: networkingOpEx,
+        inflationRate: inflationDecimal,
+        analysisPeriod: year - 1,
+      })
+
+      // Subtract salvage value after inflation to avoid double-inflating it
+      onPremBreakdown.Networking = inflatedOnPremNetworking - networkingSalvage
 
       // Track CapEx/OpEx with inflation
       const { inflatedCost: inflatedNetworkingCapEx } = await modelInflation({
@@ -483,12 +497,7 @@ export async function calculateCosts(
         inflationRate: inflationDecimal,
         analysisPeriod: year - 1,
       })
-      const { inflatedCost: inflatedNetworkingOpEx } = await modelInflation({
-        initialCost: networkingOpEx,
-        inflationRate: inflationDecimal,
-        analysisPeriod: year - 1,
-      })
-      yearOnPremCapEx += inflatedNetworkingCapEx
+      yearOnPremCapEx += inflatedNetworkingCapEx - networkingSalvage
       yearOnPremOpEx += inflatedNetworkingOpEx
 
       // Cloud Networking - All OpEx (recurring)
@@ -787,17 +796,19 @@ export async function calculateCosts(
 
     const savings = cumulativeOnPremCost - cumulativeCloudCost
 
-    // Calculate breakeven point
+    // Calculate breakeven point (only meaningful for multi-year analysis)
     let breakevenPoint: string | null = null
     let breakevenYear = 0
-    for (let i = 0; i < yearlyData.length; i++) {
-      if (
-        yearlyData[i].cumulativeOnPrem < yearlyData[i].cumulativeCloud &&
-        breakevenYear === 0
-      ) {
-        breakevenYear = yearlyData[i].year
-        breakevenPoint = `Year ${breakevenYear}`
-        break
+    if (analysisPeriod > 1) {
+      for (let i = 0; i < yearlyData.length; i++) {
+        if (
+          yearlyData[i].cumulativeOnPrem < yearlyData[i].cumulativeCloud &&
+          breakevenYear === 0
+        ) {
+          breakevenYear = yearlyData[i].year
+          breakevenPoint = `Year ${breakevenYear}`
+          break
+        }
       }
     }
 
