@@ -1,6 +1,7 @@
 import React from 'react'
 import type { UseFormSetValue } from 'react-hook-form'
 import type { CostFormValues } from '@/lib/types'
+import { calculateUsableStorage } from '@/lib/storage-utils'
 
 interface UseStorageCalculationProps {
   useOnPremHdd: boolean
@@ -30,16 +31,20 @@ export function useStorageCalculation({
 
     // Calculate HDD usable storage
     if (useOnPremHdd) {
-      const hddRawSize = (onPremHddSizeTb || 0) * (onPremHddCount || 0)
-      const hddRaidOverhead = hddRawSize * ((onPremHddRaidFactor || 0) / 100)
-      totalUsableStorage += hddRawSize - hddRaidOverhead
+      totalUsableStorage += calculateUsableStorage(
+        onPremHddCount,
+        onPremHddSizeTb,
+        onPremHddRaidFactor,
+      )
     }
 
     // Calculate SSD usable storage
     if (useOnPremSsd) {
-      const ssdRawSize = (onPremSsdSizeTb || 0) * (onPremSsdCount || 0)
-      const ssdRaidOverhead = ssdRawSize * ((onPremSsdRaidFactor || 0) / 100)
-      totalUsableStorage += ssdRawSize - ssdRaidOverhead
+      totalUsableStorage += calculateUsableStorage(
+        onPremSsdCount,
+        onPremSsdSizeTb,
+        onPremSsdRaidFactor,
+      )
     }
 
     setValue('onPremBackupStorage', Math.max(0, totalUsableStorage))
