@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
+import { GeneralSchema } from '@/lib/types'
 import { CostFormSchema } from '../types'
-import { GeneralSchema } from '../types/general'
 
 describe('CostFormSchema', () => {
   describe('GeneralSchema validation', () => {

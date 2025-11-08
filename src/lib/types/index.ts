@@ -1,4 +1,4 @@
-import { z } from 'zod'
+import type { z } from 'zod'
 
 // Export all sub-schemas and types
 export * from './shared'
