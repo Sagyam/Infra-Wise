@@ -47,15 +47,15 @@ describe('calculateUsableStorage', () => {
     })
 
     it('should treat undefined count as 0', () => {
-      expect(calculateUsableStorage(undefined as any, 10, 20)).toBe(0)
+      expect(calculateUsableStorage(undefined as unknown as number, 10, 20)).toBe(0)
     })
 
     it('should treat undefined size as 0', () => {
-      expect(calculateUsableStorage(10, undefined as any, 20)).toBe(0)
+      expect(calculateUsableStorage(10, undefined as unknown as number, 20)).toBe(0)
     })
 
     it('should treat undefined RAID factor as 0', () => {
-      expect(calculateUsableStorage(10, 2, undefined as any)).toBe(20)
+      expect(calculateUsableStorage(10, 2, undefined as unknown as number)).toBe(20)
     })
   })
 

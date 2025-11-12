@@ -1,6 +1,6 @@
 'use client'
 
-import type { Control } from 'react-hook-form'
+import type { Control, FieldPath } from 'react-hook-form'
 import { Controller } from 'react-hook-form'
 import { FormInput } from '@/components/app/form/form-input'
 import { ToggleSection } from '@/components/app/form/toggle-section'
@@ -67,7 +67,7 @@ function SecurityItem({
           <Label htmlFor={costTypeName}>Cost Type</Label>
           <Controller
             control={control}
-            name={costTypeName as any}
+            name={costTypeName as FieldPath<CostFormValues>}
             render={({ field }) => (
               <Select
                 value={field.value}

@@ -93,7 +93,7 @@ describe('CostFormSchema', () => {
       const invalidData = {
         analysisPeriod: 5,
         inflationRate: 3,
-        calculationMode: 'invalid' as any,
+        calculationMode: 'invalid' as unknown,
       }
 
       const result = GeneralSchema.safeParse(invalidData)

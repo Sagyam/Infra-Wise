@@ -72,7 +72,7 @@ describe('calculateCosts - Amortized Mode', () => {
         const capexValues = yearlyCosts.map((y) => y.onPremCapEx)
 
         // All CapEx values should be equal (approximately, considering inflation)
-        const firstYearCapEx = capexValues[0]
+        const _firstYearCapEx = capexValues[0]
         for (const capex of capexValues) {
           // Each year should have similar CapEx (accounting for inflation)
           expect(capex).toBeGreaterThan(0)
