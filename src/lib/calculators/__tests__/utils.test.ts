@@ -269,7 +269,7 @@ describe('applyInflation', () => {
     })
 
     it('should return the inflated cost value', async () => {
-      const mockModelInflation = vi
+      const _mockModelInflation = vi
         .spyOn(inflationModule, 'modelInflation')
         .mockResolvedValue({ inflatedCost: 15000 })
 
@@ -428,7 +428,7 @@ describe('applyInflation', () => {
     })
 
     it('should handle energy cost inflation over 5 years', async () => {
-      const mockModelInflation = vi
+      const _mockModelInflation = vi
         .spyOn(inflationModule, 'modelInflation')
         .mockResolvedValue({ inflatedCost: 57881.25 })
 
@@ -446,7 +446,7 @@ describe('applyInflation', () => {
     })
 
     it('should handle salary inflation', async () => {
-      const mockModelInflation = vi
+      const _mockModelInflation = vi
         .spyOn(inflationModule, 'modelInflation')
         .mockResolvedValue({ inflatedCost: 110000 })
 

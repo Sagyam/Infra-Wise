@@ -532,7 +532,7 @@ describe('useSensitivityCalculations', () => {
         useSensitivityCalculations(
           true,
           'unknownVariable',
-          { ...mockFormValues, unknownVariable: 100 } as any,
+          { ...mockFormValues, unknownVariable: 100 } as Record<string, unknown>,
           20,
           baseOnPremTCO,
           baseCloudTCO,

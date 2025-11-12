@@ -268,7 +268,7 @@ describe('calculateCosts - TCO Mode', () => {
 
       expect(result.success).toBe(true)
       if (result.success) {
-        const { yearlyCosts, totalCloudCapEx, totalCloudOpEx } = result.data
+        const { yearlyCosts, totalCloudOpEx } = result.data
 
         // Cloud should have no CapEx (except security which is shared)
         // All compute costs should be OpEx
