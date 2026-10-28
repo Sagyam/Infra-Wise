@@ -1,10 +1,10 @@
 'use client'
 
 import { zodResolver } from '@hookform/resolvers/zod'
-import { Github } from 'lucide-react'
 import React, { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { AppSidebar } from '@/components/app/app-sidebar'
+import { Footer } from '@/components/app/footer'
 import { FormFieldSearch } from '@/components/app/form/form-field-search'
 import { FormSectionRenderer } from '@/components/app/form-section-renderer'
 import { Header } from '@/components/app/header'
@@ -12,10 +12,10 @@ import { PresetSelector } from '@/components/app/preset-selector'
 import { Button } from '@/components/ui/button'
 import { Form } from '@/components/ui/form'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
-import { useToast } from '@/hooks/use-toast'
 import { useFormWatchers } from '@/hooks/use-form-watchers'
 import { useStorageCalculation } from '@/hooks/use-storage-calculation'
 import { useTierHandlers } from '@/hooks/use-tier-handlers'
+import { useToast } from '@/hooks/use-toast'
 import { calculateCosts } from '@/lib/actions'
 import { defaultValues } from '@/lib/default-form-values'
 import { formFields } from '@/lib/form-fields'
@@ -160,7 +160,7 @@ export default function Home() {
         />
         <SidebarInset className="flex flex-col">
           <Header onSearchClick={() => setSearchOpen(true)} />
-          <main className="flex-1 p-6 flex flex-col items-center">
+          <main className="flex-1 px-4 py-8 sm:px-6 flex flex-col items-center">
             <div className="w-full max-w-7xl">
               {activeSection === 'presets' ? (
                 <PresetSelector onPresetSelect={handlePresetSelect} />
@@ -204,20 +204,7 @@ export default function Home() {
               )}
             </div>
           </main>
-          <footer className="py-6 text-center text-muted-foreground text-sm border-t">
-            <div className="container mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 px-6">
-              <div>Made with 💙 for infrastructure decision-makers!</div>
-              <a
-                href="https://github.com/Sagyam/Infra-Wise"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-2 hover:text-foreground transition-colors"
-              >
-                <Github className="h-4 w-4" />
-                View on GitHub
-              </a>
-            </div>
-          </footer>
+          <Footer />
         </SidebarInset>
       </div>
     </SidebarProvider>

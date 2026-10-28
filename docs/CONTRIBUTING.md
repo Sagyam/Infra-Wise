@@ -27,7 +27,7 @@ Thank you for considering contributing to InfraWise! This document provides guid
 ### Prerequisites
 
 - Node.js 22+
-- pnpm 10+
+- Bun 1.4+
 - Git
 - Familiarity with TypeScript, React, and Next.js
 
@@ -45,11 +45,11 @@ Thank you for considering contributing to InfraWise! This document provides guid
    ```
 4. **Install dependencies**:
    ```bash
-   pnpm install
+   bun install
    ```
 5. **Start development server**:
    ```bash
-   pnpm dev
+   bun dev
    ```
 
 ## Development Workflow
@@ -82,19 +82,19 @@ Before committing:
 
 ```bash
 # Run type checking
-pnpm typecheck
+bun typecheck
 
 # Run linting
-pnpm lint
+bun lint
 
 # Fix linting issues automatically
-pnpm lint --fix
+bun lint --fix
 
 # Format code
-pnpm format
+bun format
 
 # Test the application
-pnpm dev
+bun dev
 # Then manually test in browser
 ```
 
@@ -298,10 +298,10 @@ Example:
 
 ### Before Submitting
 
-1. ✅ Code passes all type checks (`pnpm typecheck`)
-2. ✅ Code passes linting (`pnpm lint`)
-3. ✅ Code is formatted (`pnpm format`)
-4. ✅ Application runs without errors (`pnpm dev`)
+1. ✅ Code passes all type checks (`bun typecheck`)
+2. ✅ Code passes linting (`bun lint`)
+3. ✅ Code is formatted (`bun format`)
+4. ✅ Application runs without errors (`bun dev`)
 5. ✅ Changes are tested manually
 6. ✅ Documentation is updated if needed
 7. ✅ Commit messages follow conventions
@@ -355,7 +355,7 @@ Add screenshots for UI changes
 2. **Verify it's a bug**: Confirm it's not expected behavior
 3. **Collect information**:
    - Node.js version
-   - pnpm version
+   - Bun version
    - Operating system
    - Browser (if UI issue)
    - Steps to reproduce
@@ -379,7 +379,7 @@ What actually happens
 
 ## Environment
 - Node.js version:
-- pnpm version:
+- Bun version:
 - OS:
 - Browser:
 

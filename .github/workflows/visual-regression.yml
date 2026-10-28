@@ -1,59 +1,42 @@
 name: Visual Regression Tests
 
+# Both jobs run inside the Playwright image, the same one `bun run test:e2e:docker` uses locally,
+# so screenshots are rendered with identical fonts and compare pixel for pixel.
+
 on:
   push:
-    branches: [main, master, develop]
+    branches: [master]
   pull_request:
-    branches: [main, master, develop]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
   test:
-    timeout-minutes: 60
+    if: github.event_name != 'workflow_dispatch'
+    timeout-minutes: 30
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [20.x]
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --ipc=host
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.local/share/pnpm/store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+      # setup-bun needs unzip, which the Playwright image lacks; bun's npm package ships the binary.
+      - name: Install Bun
+        run: npm install -g bun@1.4.4
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        run: bun install --frozen-lockfile
 
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps chromium
-
-      - name: Build application
-        run: pnpm run build
-        env:
-          NODE_ENV: production
-
+      # Playwright's webServer builds and starts the app.
       - name: Run Playwright tests
-        run: pnpm run test:e2e
+        run: bunx playwright test
         env:
           CI: true
 
-      - name: Upload test results
+      - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v4
         with:
@@ -61,7 +44,7 @@ jobs:
           path: playwright-report/
           retention-days: 30
 
-      - name: Upload screenshots
+      - name: Upload failure screenshots
         if: failure()
         uses: actions/upload-artifact@v4
         with:
@@ -69,19 +52,14 @@ jobs:
           path: test-results/
           retention-days: 30
 
-      - name: Upload baseline screenshots (on main branch)
-        if: github.ref == 'refs/heads/main' && success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: baseline-screenshots
-          path: e2e/**/*-snapshots/
-          retention-days: 90
-
   update-baselines:
-    # This job runs only when manually triggered and updates baseline screenshots
+    # Run by hand after an intended visual change: renders new baselines and commits them.
     if: github.event_name == 'workflow_dispatch'
-    timeout-minutes: 60
+    timeout-minutes: 30
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.64.1-noble
+      options: --ipc=host
     permissions:
       contents: write
 
@@ -89,44 +67,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.x
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      - name: Setup pnpm cache
-        uses: actions/cache@v4
-        with:
-          path: ~/.local/share/pnpm/store
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+      - name: Install Bun
+        run: npm install -g bun@1.4.4
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Install Playwright Browsers
-        run: pnpm exec playwright install --with-deps chromium
-
-      - name: Build application
-        run: pnpm run build
-        env:
-          NODE_ENV: production
+        run: bun install --frozen-lockfile
 
       - name: Update baseline screenshots
-        run: pnpm run test:e2e:update
+        run: bunx playwright test --update-snapshots
         env:
           CI: true
 
       - name: Commit and push updated baselines
         run: |
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          git add e2e/**/*-snapshots/
+          git add e2e/*-snapshots/
           git diff --staged --quiet || git commit -m "chore: update visual regression baselines"
           git push

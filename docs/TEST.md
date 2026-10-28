@@ -227,19 +227,19 @@ Create fixtures for common scenarios:
 
 ```bash
 # Run all tests
-pnpm test
+bun run test
 
 # Run with coverage
-pnpm test:coverage
+bun run test:coverage
 
 # Run specific test file
-pnpm test src/lib/calculators/__tests__/index.test.ts
+bun run test src/lib/calculators/__tests__/index.test.ts
 
 # Run in watch mode
-pnpm test:watch
+bun run test:watch
 
 # Run with UI
-pnpm test:ui
+bun run test:ui
 ```
 
 ## CI/CD Integration

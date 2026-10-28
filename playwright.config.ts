@@ -50,7 +50,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'npm run build && npm run start',
+    command: 'bun run build && bun run start',
     url: 'http://localhost:3100',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,

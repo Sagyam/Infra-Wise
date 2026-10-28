@@ -1,94 +1,212 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import 'tw-animate-css';
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
+@custom-variant dark (&:is(.dark *));
+
+@utility container {
+  margin-inline: auto;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
 }
 
+@theme {
+  /* The type of sagyamthapa.com.np. `body`, `headline` and `code` are the names the components use. */
+  --font-sans: var(--font-work-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-body: var(--font-work-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-headline: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+  --font-code: var(--font-jetbrains-mono), ui-monospace, monospace;
+
+  --color-edge: hsl(var(--edge));
+  --color-amber: hsl(var(--amber));
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+  --color-sidebar: hsl(var(--sidebar-background));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-primary: hsl(var(--sidebar-primary));
+  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-ring: hsl(var(--sidebar-ring));
+
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+}
+
+/*
+ * The palette of sagyamthapa.com.np, shared with the other portfolio projects. Values are bare HSL
+ * triplets because the charts read them as `hsl(var(--chart-1))`. Primary is the indigo of the
+ * InfraWise logo; `edge` is the ink for hairlines (navy on light, white on dark); amber is the accent.
+ */
 @layer base {
   :root {
-    --background: 42 30% 96%; /* #f8f6f1 - softer cream */
-    --foreground: 30 8% 15%; /* #262320 - warm dark brown */
-    --card: 40 25% 94%; /* #f3f0e9 - slightly darker cream */
-    --card-foreground: 30 8% 15%;
-    --popover: 40 25% 94%;
-    --popover-foreground: 30 8% 15%;
-    --primary: 231 48% 48%; /* #3F51B5 */
+    color-scheme: light;
+    --background: 210 40% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 240 52% 52%;
     --primary-foreground: 0 0% 100%;
-    --secondary: 40 18% 88%; /* #e4e1d6 - warmer secondary */
-    --secondary-foreground: 30 8% 20%;
-    --muted: 40 18% 88%;
-    --muted-foreground: 30 6% 45%; /* #6f6b65 - warm gray */
-    --accent: 231 48% 48%; /* #3F51B5 - matches primary */
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 40 15% 85%; /* #dbd7cc - warm border */
-    --input: 40 15% 85%;
-    --ring: 231 48% 48%;
-    --chart-1: 231 48% 48%; /* Blue - On-Premise */
-    --chart-2: 27 87% 67%; /* Orange - Cloud */
-    --chart-3: 0 72% 51%; /* Crimson/Red */
-    --chart-4: 43 74% 66%; /* Yellow */
-    --chart-5: 27 87% 67%; /* Orange */
-    --chart-6: 142 76% 36%; /* Green */
-    --chart-7: 174 100% 29%; /* Teal */
-    --chart-8: 340 82% 52%; /* Pink */
+    --secondary: 210 40% 94%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 210 40% 94%;
+    --muted-foreground: 215 19% 38%;
+    --accent: 210 40% 92%;
+    --accent-foreground: 222 47% 11%;
+    --destructive: 0 72% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 214 32% 88%;
+    --input: 214 32% 85%;
+    --ring: 240 52% 52%;
     --radius: 0.5rem;
-    --sidebar-background: 40 22% 93%; /* #f0ede3 - slightly darker sidebar */
-    --sidebar-foreground: 30 8% 25%;
-    --sidebar-primary: 30 8% 15%;
-    --sidebar-primary-foreground: 0 0% 98%;
-    --sidebar-accent: 40 18% 88%;
-    --sidebar-accent-foreground: 30 8% 15%;
-    --sidebar-border: 40 15% 87%;
-    --sidebar-ring: 231 48% 48%;
+    --edge: 222 47% 11%;
+    --amber: 26 90% 37%;
+    /* One hue per cost category; on-prem is indigo, cloud is orange in the two-series charts. */
+    --chart-1: 240 52% 52%;
+    --chart-2: 25 90% 50%;
+    --chart-3: 0 72% 51%;
+    --chart-4: 43 90% 46%;
+    --chart-5: 199 89% 40%;
+    --chart-6: 152 60% 36%;
+    --chart-7: 215 16% 50%;
+    --chart-8: 330 70% 50%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 222 47% 11%;
+    --sidebar-primary: 240 52% 52%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 210 40% 94%;
+    --sidebar-accent-foreground: 222 47% 11%;
+    --sidebar-border: 214 32% 90%;
+    --sidebar-ring: 240 52% 52%;
   }
   .dark {
-    --background: 222.2 84% 4.9%;
+    color-scheme: dark;
+    --background: 222 84% 5%;
     --foreground: 210 40% 98%;
-    --card: 220 20% 12%;
+    --card: 215 50% 9%;
     --card-foreground: 210 40% 98%;
-    --popover: 220 20% 12%;
+    --popover: 215 50% 12%;
     --popover-foreground: 210 40% 98%;
-    --primary: 231 48% 48%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 217.2 32.6% 17.5%;
+    --primary: 240 85% 76%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 231 48% 48%; /* #3F51B5 - matches primary */
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 231 48% 48%;
-    --chart-1: 217 91% 60%; /* Light Blue - On-Premise */
-    --chart-2: 25 95% 53%; /* Light Orange - Cloud */
-    --chart-3: 0 84% 60%; /* Light Red/Coral */
-    --chart-4: 48 96% 53%; /* Light Yellow */
-    --chart-5: 25 95% 53%; /* Light Orange */
-    --chart-6: 142 71% 45%; /* Light Green */
-    --chart-7: 174 72% 56%; /* Light Teal */
-    --chart-8: 340 82% 67%; /* Light Pink */
-    --sidebar-background: 222 35% 9%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 222 25% 14%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 222 25% 14%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 217 33% 22%;
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 72% 62%;
+    --destructive-foreground: 222 47% 11%;
+    --border: 217 33% 17%;
+    --input: 217 33% 17%;
+    --ring: 240 85% 76%;
+    --edge: 0 0% 100%;
+    --amber: 40 88% 58%;
+    --chart-1: 240 85% 72%;
+    --chart-2: 25 95% 58%;
+    --chart-3: 0 84% 65%;
+    --chart-4: 48 96% 56%;
+    --chart-5: 199 89% 60%;
+    --chart-6: 142 60% 50%;
+    --chart-7: 215 20% 68%;
+    --chart-8: 330 80% 68%;
+    --sidebar-background: 222 84% 5%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 240 85% 76%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 217 33% 15%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 14%;
+    --sidebar-ring: 240 85% 76%;
   }
 }
 
 @layer base {
   * {
-    @apply border-border;
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply scroll-smooth font-sans;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+  }
+  ::selection {
+    background: hsl(var(--primary) / 0.25);
+  }
+}
+
+@layer components {
+  .kbd {
+    @apply inline-flex h-5 min-w-5 items-center justify-center whitespace-nowrap rounded border border-edge/15 bg-edge/5 px-1 font-mono text-[11px] leading-none text-foreground;
+  }
+  .hero-glow {
+    background:
+      radial-gradient(60% 55% at 50% 0%, hsl(var(--primary) / 0.14), transparent 70%),
+      radial-gradient(35% 30% at 85% 10%, hsl(var(--amber) / 0.08), transparent 70%);
   }
 }

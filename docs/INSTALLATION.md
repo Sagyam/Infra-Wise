@@ -5,7 +5,7 @@
 Before installing InfraWise, ensure you have the following installed:
 
 - **Node.js**: Version 22 or higher ([Download](https://nodejs.org/))
-- **pnpm**: Version 10 or higher ([Installation Guide](https://pnpm.io/installation))
+- **Bun**: Version 1.4 or higher ([Installation Guide](https://bun.sh/docs/installation))
 
 ### Verify Prerequisites
 
@@ -13,23 +13,19 @@ Check your installed versions:
 
 ```bash
 node --version  # Should be v22.0.0 or higher
-pnpm --version  # Should be 10.0.0 or higher
+bun --version   # Should be 1.4.0 or higher
 ```
 
-### Installing pnpm
+### Installing Bun
 
-If you don't have pnpm installed, install it globally:
+If you don't have Bun installed:
 
 ```bash
-# Using npm
-npm install -g pnpm
+# macOS / Linux
+curl -fsSL https://bun.sh/install | bash
 
 # Using Homebrew (macOS)
-brew install pnpm
-
-# Using Corepack (Node.js 16.13+)
-corepack enable
-corepack prepare pnpm@latest --activate
+brew install oven-sh/bun/bun
 ```
 
 ## Installation Steps
@@ -44,11 +40,11 @@ cd infra-wise
 ### 2. Install Dependencies
 
 ```bash
-pnpm install
+bun install
 ```
 
 This will install all required packages including:
-- Next.js 15
+- Next.js 16
 - React 19
 - TypeScript
 - Tailwind CSS
@@ -61,22 +57,22 @@ This will install all required packages including:
 ### 3. Start Development Server
 
 ```bash
-pnpm dev
+bun dev
 ```
 
-The application will start on [http://localhost:3000](http://localhost:3000)
+The application will start on [http://localhost:3100](http://localhost:3100)
 
 You should see output similar to:
 
 ```
 ▲ Next.js 15.x.x
-- Local:        http://localhost:3000
+- Local:        http://localhost:3100
 - Ready in xxxms
 ```
 
 ### 4. Open in Browser
 
-Navigate to [http://localhost:3000](http://localhost:3000) in your web browser.
+Navigate to [http://localhost:3100](http://localhost:3100) in your web browser.
 
 You should see the InfraWise interface with default values pre-populated.
 
@@ -86,7 +82,7 @@ You should see the InfraWise interface with default values pre-populated.
 
 ```bash
 # Start development server with Turbopack
-pnpm dev
+bun dev
 ```
 
 Starts the development server with hot module replacement.
@@ -95,10 +91,10 @@ Starts the development server with hot module replacement.
 
 ```bash
 # Build for production
-pnpm build
+bun run build
 
 # Start production server
-pnpm start
+bun start
 ```
 
 Creates an optimized production build and starts the production server.
@@ -107,19 +103,19 @@ Creates an optimized production build and starts the production server.
 
 ```bash
 # Run ESLint with auto-fix
-pnpm lint
+bun lint
 
 # Check linting without fixes
-pnpm lint:check
+bun lint:check
 
 # Format code with Prettier
-pnpm format
+bun format
 
 # Check formatting without changes
-pnpm format:check
+bun format:check
 
 # Run TypeScript type checking
-pnpm typecheck
+bun typecheck
 ```
 
 ## Troubleshooting
@@ -136,36 +132,36 @@ nvm use 22
 # Or update Node.js from nodejs.org
 ```
 
-### pnpm Installation Issues
+### Bun Installation Issues
 
-If pnpm installation fails:
+If installation fails:
 
 ```bash
-# Clear pnpm cache
-pnpm store prune
+# Clear Bun's cache
+bun pm cache rm
 
 # Reinstall dependencies
-rm -rf node_modules pnpm-lock.yaml
-pnpm install
+rm -rf node_modules
+bun install
 ```
 
 ### Port Already in Use
 
-If port 3000 is already in use:
+If port 3100 is already in use:
 
 ```bash
 # Use a different port
-pnpm dev -- -p 3001
+bunx next dev -p 3101
 ```
 
-Or kill the process using port 3000:
+Or kill the process using port 3100:
 
 ```bash
 # macOS/Linux
-lsof -ti:3000 | xargs kill -9
+lsof -ti:3100 | xargs kill -9
 
 # Windows
-netstat -ano | findstr :3000
+netstat -ano | findstr :3100
 taskkill /PID <PID> /F
 ```
 
@@ -177,15 +173,15 @@ If you encounter build errors:
 # Clear Next.js cache
 rm -rf .next
 
-# Clear pnpm cache
-pnpm store prune
+# Clear Bun's cache
+bun pm cache rm
 
 # Reinstall dependencies
 rm -rf node_modules
-pnpm install
+bun install
 
 # Rebuild
-pnpm build
+bun run build
 ```
 
 ### TypeScript Errors
@@ -194,10 +190,10 @@ If you see TypeScript errors:
 
 ```bash
 # Run type checking
-pnpm typecheck
+bun typecheck
 
 # Ensure all dependencies are installed
-pnpm install
+bun install
 
 # Clear TypeScript cache
 rm -rf .next tsconfig.tsbuildinfo
@@ -276,8 +272,8 @@ InfraWise can be deployed on any platform that supports Next.js:
 - **DigitalOcean App Platform**: Node.js buildpack
 - **Self-Hosted**: Build and deploy with Node.js
 
-Build command: `pnpm build`
-Start command: `pnpm start`
+Build command: `bun run build`
+Start command: `bun start`
 Node version: 22+
 
 ## Next Steps
@@ -296,7 +292,7 @@ If you encounter issues:
 2. Search existing [GitHub Issues](https://github.com/Sagyam/Infra-Wise/issues)
 3. Open a new issue with:
    - Node.js version (`node --version`)
-   - pnpm version (`pnpm --version`)
+   - Bun version (`bun --version`)
    - Operating system
    - Error messages or screenshots
    - Steps to reproduce

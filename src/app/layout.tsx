@@ -1,16 +1,32 @@
 import { Analytics } from '@vercel/analytics/react'
 import type { Metadata } from 'next'
+import { JetBrains_Mono, Space_Grotesk, Work_Sans } from 'next/font/google'
 import { ThemeProvider } from '@/components/app/theme-provider'
 import { Toaster } from '@/components/ui/toaster'
 
 import './globals.css'
+
+// The type of sagyamthapa.com.np: Work Sans for text, Space Grotesk for headings, JetBrains Mono for figures.
+const workSans = Work_Sans({ variable: '--font-work-sans', subsets: ['latin'] })
+const spaceGrotesk = Space_Grotesk({
+  variable: '--font-space-grotesk',
+  subsets: ['latin'],
+})
+const jetbrainsMono = JetBrains_Mono({
+  variable: '--font-jetbrains-mono',
+  subsets: ['latin'],
+})
 
 export const metadata: Metadata = {
   title: 'InfraWise - Cloud vs. On-Prem Analysis',
   description:
     'InfraWise is an financial modeling tool to compare the Total Cost of Ownership (TCO) between cloud and on-premise infrastructure. Make informed decisions with detailed cost breakdowns and breakeven analysis.',
   icons: {
-    icon: '/favicon.png',
+    icon: [
+      { url: '/logo.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '32x32' },
+    ],
+    apple: '/apple-touch-icon.png',
   },
   keywords: [
     'TCO calculator',
@@ -52,21 +68,12 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link
-          rel="preconnect"
-          href="https://fonts.gstatic.com"
-          crossOrigin="anonymous"
-        />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Source+Code+Pro:wght@400;500&family=Space+Grotesk:wght@400;500;700&display=swap"
-          rel="stylesheet"
-        />
-        <title>InfraWise - Cloud vs. On-Prem Analysis</title>
-      </head>
-      <body className="font-body antialiased" suppressHydrationWarning>
+    <html
+      lang="en"
+      className={`${workSans.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
+    >
+      <body suppressHydrationWarning>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
