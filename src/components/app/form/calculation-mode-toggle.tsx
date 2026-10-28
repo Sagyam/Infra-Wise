@@ -14,6 +14,11 @@ interface CalculationModeToggleProps {
   onCalculationModeChange: (mode: CostFormValues['calculationMode']) => void
 }
 
+const modes = [
+  { value: 'tco', label: 'Total cost (TCO)' },
+  { value: 'amortized', label: 'Amortized per year' },
+] as const
+
 export function CalculationModeToggle({
   control,
   onCalculationModeChange,
@@ -23,48 +28,36 @@ export function CalculationModeToggle({
       control={control}
       name="calculationMode"
       render={({ field }) => (
-        <FormItem className="space-y-3">
-          <FormLabel>Calculation Mode</FormLabel>
+        <FormItem className="space-y-2">
+          <FormLabel className="block text-[13px] font-medium text-foreground/80">
+            Calculation mode
+          </FormLabel>
           <FormControl>
-            <div className="relative grid grid-cols-2 rounded-lg border p-1 font-semibold">
-              <div
-                className="absolute top-1 left-1 h-[calc(100%-0.5rem)] w-[calc(50%-0.25rem)] bg-primary rounded-md transition-all duration-300"
-                style={{
-                  transform: `translateX(${
-                    field.value === 'amortized' ? '100%' : '0%'
-                  })`,
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  field.onChange('tco')
-                  onCalculationModeChange('tco')
-                }}
-                className={`relative z-10 p-2 rounded-md text-center transition-colors ${
-                  field.value === 'tco' ? 'text-primary-foreground' : ''
-                }`}
-              >
-                TCO
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  field.onChange('amortized')
-                  onCalculationModeChange('amortized')
-                }}
-                className={`relative z-10 p-2 rounded-md text-center transition-colors ${
-                  field.value === 'amortized' ? 'text-primary-foreground' : ''
-                }`}
-              >
-                Amortized
-              </button>
-            </div>
+            {/* A segmented control, styled like the footer's theme switch. */}
+            <fieldset
+              aria-label="Calculation mode"
+              className="inline-flex rounded-lg border border-edge/10 bg-edge/[0.03] p-0.5"
+            >
+              {modes.map(({ value, label }) => (
+                <button
+                  key={value}
+                  type="button"
+                  aria-pressed={field.value === value}
+                  onClick={() => {
+                    field.onChange(value)
+                    onCalculationModeChange(value)
+                  }}
+                  className="inline-flex h-8 items-center rounded-md px-3.5 text-sm text-muted-foreground transition-colors hover:text-foreground aria-pressed:bg-background aria-pressed:font-medium aria-pressed:text-foreground aria-pressed:shadow-sm aria-pressed:ring-1 aria-pressed:ring-edge/10"
+                >
+                  {label}
+                </button>
+              ))}
+            </fieldset>
           </FormControl>
           <FormDescription>
             {field.value === 'tco'
-              ? 'Total Cost of Ownership (TCO) shows the cumulative cost over the entire analysis period.'
-              : 'Amortized Cost shows the average cost per year, spreading the initial investment over time.'}
+              ? 'Adds up every cost over the whole analysis period.'
+              : 'Spreads the up-front spend evenly, giving an average cost per year.'}
           </FormDescription>
           <FormMessage />
         </FormItem>

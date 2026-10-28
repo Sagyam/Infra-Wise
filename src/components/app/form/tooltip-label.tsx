@@ -1,4 +1,3 @@
-import { Info } from 'lucide-react'
 import type React from 'react'
 import {
   Tooltip,
@@ -13,14 +12,17 @@ interface TooltipLabelProps {
   icon?: React.ReactNode
 }
 
+/** A label whose dotted underline says there is more to read on hover or focus. */
 export function TooltipLabel({ label, tooltip, icon }: TooltipLabelProps) {
   return (
-    <TooltipProvider>
+    <TooltipProvider delayDuration={300}>
       <Tooltip>
         <TooltipTrigger asChild>
-          <span className="flex items-center gap-2 cursor-help">
-            {icon} {label}{' '}
-            <Info className="h-4 w-4 md:h-3 md:w-3 text-muted-foreground" />
+          <span className="inline-flex cursor-help items-center gap-2">
+            {icon}
+            <span className="underline decoration-muted-foreground/40 decoration-dotted underline-offset-4">
+              {label}
+            </span>
           </span>
         </TooltipTrigger>
         <TooltipContent>

@@ -1,7 +1,8 @@
-@import 'tailwindcss';
-@import 'tw-animate-css';
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "../styles/sagyam.css";
 
-@custom-variant dark (&:is(.dark *));
+/* The shared design language lives in src/styles/sagyam.css; what follows is InfraWise's own. */
 
 @utility container {
   margin-inline: auto;
@@ -13,200 +14,16 @@
   }
 }
 
-@theme {
-  /* The type of sagyamthapa.com.np. `body`, `headline` and `code` are the names the components use. */
-  --font-sans: var(--font-work-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-body: var(--font-work-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-heading: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --font-headline: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
-  --font-code: var(--font-jetbrains-mono), ui-monospace, monospace;
-
-  --color-edge: hsl(var(--edge));
-  --color-amber: hsl(var(--amber));
-
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-
-  --color-card: hsl(var(--card));
-  --color-card-foreground: hsl(var(--card-foreground));
-
-  --color-popover: hsl(var(--popover));
-  --color-popover-foreground: hsl(var(--popover-foreground));
-
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-
-  --color-secondary: hsl(var(--secondary));
-  --color-secondary-foreground: hsl(var(--secondary-foreground));
-
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-
-  --color-accent: hsl(var(--accent));
-  --color-accent-foreground: hsl(var(--accent-foreground));
-
-  --color-destructive: hsl(var(--destructive));
-  --color-destructive-foreground: hsl(var(--destructive-foreground));
-
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--ring));
-
-  --color-chart-1: hsl(var(--chart-1));
-  --color-chart-2: hsl(var(--chart-2));
-  --color-chart-3: hsl(var(--chart-3));
-  --color-chart-4: hsl(var(--chart-4));
-  --color-chart-5: hsl(var(--chart-5));
-
-  --color-sidebar: hsl(var(--sidebar-background));
-  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
-  --color-sidebar-primary: hsl(var(--sidebar-primary));
-  --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
-  --color-sidebar-accent: hsl(var(--sidebar-accent));
-  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
-  --color-sidebar-border: hsl(var(--sidebar-border));
-  --color-sidebar-ring: hsl(var(--sidebar-ring));
-
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-
-  --animate-accordion-down: accordion-down 0.2s ease-out;
-  --animate-accordion-up: accordion-up 0.2s ease-out;
-
-  @keyframes accordion-down {
-    from {
-      height: 0;
-    }
-    to {
-      height: var(--radix-accordion-content-height);
-    }
-  }
-  @keyframes accordion-up {
-    from {
-      height: var(--radix-accordion-content-height);
-    }
-    to {
-      height: 0;
-    }
-  }
-}
-
 /*
- * The palette of sagyamthapa.com.np, shared with the other portfolio projects. Values are bare HSL
- * triplets because the charts read them as `hsl(var(--chart-1))`. Primary is the indigo of the
- * InfraWise logo; `edge` is the ink for hairlines (navy on light, white on dark); amber is the accent.
+ * The two sides every chart compares. On-prem takes the brand sky, cloud the next categorical slot,
+ * so the pair is the palette's validated first two and reads the same in every chart and table.
  */
-@layer base {
-  :root {
-    color-scheme: light;
-    --background: 210 40% 98%;
-    --foreground: 222 47% 11%;
-    --card: 0 0% 100%;
-    --card-foreground: 222 47% 11%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222 47% 11%;
-    --primary: 240 52% 52%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 94%;
-    --secondary-foreground: 222 47% 11%;
-    --muted: 210 40% 94%;
-    --muted-foreground: 215 19% 38%;
-    --accent: 210 40% 92%;
-    --accent-foreground: 222 47% 11%;
-    --destructive: 0 72% 45%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 214 32% 88%;
-    --input: 214 32% 85%;
-    --ring: 240 52% 52%;
-    --radius: 0.5rem;
-    --edge: 222 47% 11%;
-    --amber: 26 90% 37%;
-    /* One hue per cost category; on-prem is indigo, cloud is orange in the two-series charts. */
-    --chart-1: 240 52% 52%;
-    --chart-2: 25 90% 50%;
-    --chart-3: 0 72% 51%;
-    --chart-4: 43 90% 46%;
-    --chart-5: 199 89% 40%;
-    --chart-6: 152 60% 36%;
-    --chart-7: 215 16% 50%;
-    --chart-8: 330 70% 50%;
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 222 47% 11%;
-    --sidebar-primary: 240 52% 52%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 210 40% 94%;
-    --sidebar-accent-foreground: 222 47% 11%;
-    --sidebar-border: 214 32% 90%;
-    --sidebar-ring: 240 52% 52%;
-  }
-  .dark {
-    color-scheme: dark;
-    --background: 222 84% 5%;
-    --foreground: 210 40% 98%;
-    --card: 215 50% 9%;
-    --card-foreground: 210 40% 98%;
-    --popover: 215 50% 12%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 240 85% 76%;
-    --primary-foreground: 222 47% 11%;
-    --secondary: 217 33% 17%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 217 33% 17%;
-    --muted-foreground: 215 20% 65%;
-    --accent: 217 33% 22%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 72% 62%;
-    --destructive-foreground: 222 47% 11%;
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
-    --ring: 240 85% 76%;
-    --edge: 0 0% 100%;
-    --amber: 40 88% 58%;
-    --chart-1: 240 85% 72%;
-    --chart-2: 25 95% 58%;
-    --chart-3: 0 84% 65%;
-    --chart-4: 48 96% 56%;
-    --chart-5: 199 89% 60%;
-    --chart-6: 142 60% 50%;
-    --chart-7: 215 20% 68%;
-    --chart-8: 330 80% 68%;
-    --sidebar-background: 222 84% 5%;
-    --sidebar-foreground: 210 40% 98%;
-    --sidebar-primary: 240 85% 76%;
-    --sidebar-primary-foreground: 222 47% 11%;
-    --sidebar-accent: 217 33% 15%;
-    --sidebar-accent-foreground: 210 40% 98%;
-    --sidebar-border: 217 33% 14%;
-    --sidebar-ring: 240 85% 76%;
-  }
+:root {
+  --on-prem: var(--chart-1);
+  --cloud: var(--chart-2);
 }
 
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  html {
-    @apply scroll-smooth font-sans;
-  }
-  body {
-    @apply bg-background text-foreground antialiased;
-  }
-  ::selection {
-    background: hsl(var(--primary) / 0.25);
-  }
-}
-
-@layer components {
-  .kbd {
-    @apply inline-flex h-5 min-w-5 items-center justify-center whitespace-nowrap rounded border border-edge/15 bg-edge/5 px-1 font-mono text-[11px] leading-none text-foreground;
-  }
-  .hero-glow {
-    background:
-      radial-gradient(60% 55% at 50% 0%, hsl(var(--primary) / 0.14), transparent 70%),
-      radial-gradient(35% 30% at 85% 10%, hsl(var(--amber) / 0.08), transparent 70%);
-  }
+@theme inline {
+  --color-on-prem: var(--on-prem);
+  --color-cloud: var(--cloud);
 }

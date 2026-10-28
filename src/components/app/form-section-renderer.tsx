@@ -6,8 +6,7 @@ import { GpuSection } from '@/components/app/sections/gpu-section'
 import { HumanCostSection } from '@/components/app/sections/human-cost-section'
 import { NetworkingSection } from '@/components/app/sections/networking-section'
 import { ResultsBreakdownSection } from '@/components/app/sections/results-breakdown-section'
-import { ResultsChartsSection } from '@/components/app/sections/results-charts-section'
-import { ResultsCumulativeSection } from '@/components/app/sections/results-cumulative-section'
+import { ResultsOverviewSection } from '@/components/app/sections/results-overview-section'
 import { SecurityComplianceSection } from '@/components/app/sections/security-compliance-section'
 import { SensitivityAnalysisSection } from '@/components/app/sections/sensitivity-analysis-section'
 import { SoftwareSection } from '@/components/app/sections/software-section'
@@ -19,7 +18,6 @@ interface FormSectionRendererProps {
   control: Control<CostFormValues>
   setValue: UseFormSetValue<CostFormValues>
   results: CalculationResult | null
-  calculationMode: CostFormValues['calculationMode']
   watchers: {
     useOnPremBandwidth: boolean
     useOnPremCdn: boolean
@@ -81,7 +79,6 @@ export function FormSectionRenderer({
   control,
   setValue,
   results,
-  calculationMode,
   watchers,
   onCalculationModeChange,
   handleHotChange,
@@ -191,15 +188,8 @@ export function FormSectionRenderer({
           usePenetrationTesting={watchers.usePenetrationTesting}
         />
       )
-    case 'results-charts':
-      return <ResultsChartsSection results={results} />
-    case 'results-cumulative':
-      return (
-        <ResultsCumulativeSection
-          results={results}
-          calculationMode={calculationMode}
-        />
-      )
+    case 'results-overview':
+      return <ResultsOverviewSection results={results} />
     case 'results-breakdown':
       return <ResultsBreakdownSection results={results} />
     case 'sensitivity-analysis':

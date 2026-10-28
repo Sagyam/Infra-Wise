@@ -1,6 +1,6 @@
 import type { Control, FieldPath } from 'react-hook-form'
-import { FormSwitch } from '@/components/app/form/form-switch'
 import { PersonnelFieldGroup } from '@/components/app/form/personnel-field-group'
+import { ToggleSection } from '@/components/app/form/toggle-section'
 import type { CostFormValues } from '@/lib/types'
 
 interface PersonnelToggleSectionProps {
@@ -19,12 +19,13 @@ export function PersonnelToggleSection({
   isEnabled,
 }: PersonnelToggleSectionProps) {
   return (
-    <div className="space-y-4 p-4 border rounded-lg">
-      <div className="flex items-center justify-between">
-        <h4 className="font-semibold text-sm">{title}</h4>
-        <FormSwitch control={control} name={name} label="" />
-      </div>
-      {isEnabled && <PersonnelFieldGroup control={control} prefix={prefix} />}
-    </div>
+    <ToggleSection
+      control={control}
+      name={name}
+      label={title}
+      isEnabled={isEnabled}
+    >
+      <PersonnelFieldGroup control={control} prefix={prefix} />
+    </ToggleSection>
   )
 }

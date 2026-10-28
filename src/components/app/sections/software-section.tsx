@@ -1,5 +1,6 @@
 'use client'
 
+import { ColumnHeading } from '@/components/app/form/column-heading'
 import type { Control } from 'react-hook-form'
 import { LicenseFieldGroup } from '@/components/app/form/license-field-group'
 import { MonthlyCostField } from '@/components/app/form/monthly-cost-field'
@@ -47,17 +48,17 @@ export function SoftwareSection({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-headline">Software & Licensing</CardTitle>
+        <CardTitle className="font-heading">Software & Licensing</CardTitle>
         <CardDescription>
           Configure software licensing and subscription costs for your
           infrastructure.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col md:flex-row justify-evenly gap-6">
+        <div className="grid gap-x-8 gap-y-10 lg:grid-cols-2">
           {/* On-Premise Column */}
-          <div className="space-y-4 flex-1 max-w-xl">
-            <h3 className="text-lg font-semibold">On-Premise Licensing</h3>
+          <div className="min-w-0 space-y-3">
+            <ColumnHeading side="on-prem">On-Premise Licensing</ColumnHeading>
 
             <ToggleSection
               control={control}
@@ -130,8 +131,8 @@ export function SoftwareSection({
           </div>
 
           {/* Cloud Column */}
-          <div className="space-y-4 flex-1 max-w-xl">
-            <h3 className="text-lg font-semibold">Cloud Services</h3>
+          <div className="min-w-0 space-y-3">
+            <ColumnHeading side="cloud">Cloud Services</ColumnHeading>
             <p className="text-sm text-muted-foreground">
               Cloud software and SaaS subscription costs for infrastructure
               services.

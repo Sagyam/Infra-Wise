@@ -9,7 +9,7 @@ import { FormFieldSearch } from '@/components/app/form/form-field-search'
 import { FormSectionRenderer } from '@/components/app/form-section-renderer'
 import { Header } from '@/components/app/header'
 import { PresetSelector } from '@/components/app/preset-selector'
-import { Button } from '@/components/ui/button'
+import { LiveSummary } from '@/components/app/results/live-summary'
 import { Form } from '@/components/ui/form'
 import { SidebarInset, SidebarProvider } from '@/components/ui/sidebar'
 import { useFormWatchers } from '@/hooks/use-form-watchers'
@@ -111,19 +111,34 @@ export default function Home() {
     calculateDefaultResults()
   }, [])
 
-  const onSubmit = async (values: CostFormValues) => {
-    setIsLoading(true)
-    setError(null)
-    const result = await calculateCosts(values)
-    if (result.success) {
-      setResults(result.data)
-      setCalculationMode(result.data.calculationMode)
-      setActiveSection('results-charts')
-    } else {
-      setError(result.error)
+  // Recalculate as the form changes, a moment after the last edit. A slow answer to an older edit
+  // never overwrites a newer one.
+  React.useEffect(() => {
+    let timer: ReturnType<typeof setTimeout> | undefined
+    let latest = 0
+    const subscription = form.watch(() => {
+      clearTimeout(timer)
+      timer = setTimeout(async () => {
+        const run = ++latest
+        setIsLoading(true)
+        const result = await calculateCosts(form.getValues())
+        if (run !== latest) return
+        setIsLoading(false)
+        if (result.success) {
+          setResults(result.data)
+          setError(null)
+        } else {
+          setError(result.error)
+        }
+      }, 400)
+    })
+    return () => {
+      subscription.unsubscribe()
+      clearTimeout(timer)
     }
-    setIsLoading(false)
-  }
+  }, [form])
+
+  const onSubmit = () => setActiveSection('results-overview')
 
   const handlePresetSelect = (presetValues: CostFormValues) => {
     // Reset the form with preset values
@@ -173,7 +188,6 @@ export default function Home() {
                         control={form.control}
                         setValue={form.setValue}
                         results={results}
-                        calculationMode={calculationMode}
                         watchers={watchers}
                         onCalculationModeChange={setCalculationMode}
                         handleHotChange={handleHotChange}
@@ -182,21 +196,12 @@ export default function Home() {
                       {!activeSection.startsWith('results-') &&
                         activeSection !== 'presets' &&
                         activeSection !== 'sensitivity-analysis' && (
-                          <div className="mt-8 flex flex-col gap-4 items-center">
-                            <Button
-                              type="submit"
-                              disabled={isLoading}
-                              size="lg"
-                              className="w-full max-w-md text-lg py-6"
-                            >
-                              {isLoading ? 'Calculating...' : 'Calculate'}
-                            </Button>
-                            {error && (
-                              <p className="text-sm text-destructive flex items-center">
-                                {error}
-                              </p>
-                            )}
-                          </div>
+                          <LiveSummary
+                            results={results}
+                            isCalculating={isLoading}
+                            error={error}
+                            onShowResults={onSubmit}
+                          />
                         )}
                     </div>
                   </form>
