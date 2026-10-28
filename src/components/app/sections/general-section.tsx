@@ -24,36 +24,38 @@ export function GeneralSection({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-headline">General Settings</CardTitle>
+        <CardTitle className="font-heading">General Settings</CardTitle>
         <CardDescription>
           Configure analysis parameters and calculation methodology.
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-6">
         <CalculationModeToggle
           control={control}
           onCalculationModeChange={onCalculationModeChange}
         />
 
-        <FormInput
-          control={control}
-          name="analysisPeriod"
-          label="Analysis Period (Years)"
-          tooltip="Number of years to project costs"
-          type="number"
-          step={1}
-          min={1}
-          max={20}
-        />
+        <div className="grid max-w-md grid-cols-2 gap-4">
+          <FormInput
+            control={control}
+            name="analysisPeriod"
+            label="Analysis Period (Years)"
+            tooltip="Number of years to project costs"
+            type="number"
+            step={1}
+            min={1}
+            max={20}
+          />
 
-        <FormInput
-          control={control}
-          name="inflationRate"
-          label="Inflation Rate (%)"
-          tooltip="Expected annual inflation rate for costs"
-          type="number"
-          step={0.1}
-        />
+          <FormInput
+            control={control}
+            name="inflationRate"
+            label="Inflation Rate (%)"
+            tooltip="Expected annual inflation rate for costs"
+            type="number"
+            step={0.1}
+          />
+        </div>
       </CardContent>
     </Card>
   )

@@ -69,16 +69,15 @@ function SecurityItem({
             control={control}
             name={costTypeName as FieldPath<CostFormValues>}
             render={({ field }) => (
-              <Select
-                value={field.value}
-                onValueChange={field.onChange}
-              >
+              <Select value={field.value} onValueChange={field.onChange}>
                 <SelectTrigger id={costTypeName}>
                   <SelectValue placeholder="Select cost type" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="one-time">One-time Cost</SelectItem>
-                  <SelectItem value="recurring">Recurring Cost (Annual)</SelectItem>
+                  <SelectItem value="recurring">
+                    Recurring Cost (Annual)
+                  </SelectItem>
                 </SelectContent>
               </Select>
             )}
@@ -115,7 +114,7 @@ export function SecurityComplianceSection({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-headline">Security & Compliance</CardTitle>
+        <CardTitle className="font-heading">Security & Compliance</CardTitle>
         <CardDescription>
           Configure security features and compliance certifications for your
           infrastructure. All costs will be included in TCO calculations and
@@ -123,9 +122,9 @@ export function SecurityComplianceSection({
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col md:flex-row justify-evenly gap-6">
+        <div className="grid gap-x-8 gap-y-10 lg:grid-cols-2">
           {/* Certifications Column */}
-          <div className="space-y-4 flex-1 max-w-xl">
+          <div className="min-w-0 space-y-3">
             <h3 className="text-lg font-semibold">Compliance Certifications</h3>
 
             <SecurityItem
@@ -180,7 +179,7 @@ export function SecurityComplianceSection({
           </div>
 
           {/* Security Features Column */}
-          <div className="space-y-4 flex-1 max-w-xl">
+          <div className="min-w-0 space-y-3">
             <h3 className="text-lg font-semibold">Security Features</h3>
 
             <SecurityItem

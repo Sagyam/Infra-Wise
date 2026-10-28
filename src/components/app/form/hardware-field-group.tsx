@@ -1,5 +1,6 @@
 import type { Control, FieldPath } from 'react-hook-form'
 import { FormInput } from '@/components/app/form/form-input'
+import { LineTotal } from '@/components/app/form/line-total'
 import type { CostFormValues } from '@/lib/types'
 
 interface HardwareFieldGroupProps {
@@ -51,6 +52,20 @@ export function HardwareFieldGroup({
           max={100}
         />
       )}
+      <LineTotal
+        control={control}
+        factors={[
+          {
+            name: `${prefix}Quantity` as FieldPath<CostFormValues>,
+            format: 'count',
+          },
+          {
+            name: `${prefix}UnitCost` as FieldPath<CostFormValues>,
+            format: 'dollars',
+          },
+        ]}
+        per="up front"
+      />
     </>
   )
 }

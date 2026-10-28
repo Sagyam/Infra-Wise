@@ -1,15 +1,14 @@
 'use client'
 
 import {
-  BarChart3,
   Boxes,
   Code,
   Cpu,
+  Gauge,
   HardDrive,
   LineChart,
   ListTree,
   Network,
-  PieChart,
   Settings,
   Shield,
   Sparkles,
@@ -56,8 +55,7 @@ const sections = [
   {
     title: 'Analysis',
     items: [
-      { title: 'Charts', icon: PieChart, id: 'results-charts' },
-      { title: 'Cumulative', icon: BarChart3, id: 'results-cumulative' },
+      { title: 'Overview', icon: Gauge, id: 'results-overview' },
       { title: 'Breakdown', icon: ListTree, id: 'results-breakdown' },
       { title: 'Sensitivity', icon: LineChart, id: 'sensitivity-analysis' },
     ],

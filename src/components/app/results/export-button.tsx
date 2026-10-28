@@ -3,6 +3,17 @@ import { Button } from '@/components/ui/button'
 import type { YearlyCost } from '@/lib/types'
 import { jsonToCSV } from '@/lib/utils'
 
+const CATEGORIES = [
+  'Energy',
+  'Storage',
+  'Compute',
+  'GPU',
+  'Networking',
+  'Human',
+  'Software',
+  'Security & Compliance',
+]
+
 interface ExportButtonProps {
   yearlyCosts: YearlyCost[]
 }
@@ -15,16 +26,12 @@ export function ExportButton({ yearlyCosts }: ExportButtonProps) {
       'Cloud Cost': y.cloudCost,
       'Cumulative On-Prem': y.cumulativeOnPrem,
       'Cumulative Cloud': y.cumulativeCloud,
-      'On-Prem Hardware': y.onPremBreakdown.Hardware || 0,
-      'On-Prem Software': y.onPremBreakdown.Software || 0,
-      'On-Prem Power': y.onPremBreakdown.Power || 0,
-      'On-Prem Bandwidth': y.onPremBreakdown.Bandwidth || 0,
-      'On-Prem CDN': y.onPremBreakdown.CDN || 0,
-      'On-Prem Backup': y.onPremBreakdown.Backup || 0,
-      'Cloud Hot Storage': y.cloudBreakdown['Hot Storage'] || 0,
-      'Cloud Standard Storage': y.cloudBreakdown['Standard Storage'] || 0,
-      'Cloud Archive Storage': y.cloudBreakdown['Archive Storage'] || 0,
-      'Cloud Bandwidth (Egress)': y.cloudBreakdown['Bandwidth (Egress)'] || 0,
+      ...Object.fromEntries(
+        CATEGORIES.flatMap((category) => [
+          [`On-Prem ${category}`, y.onPremBreakdown[category] ?? 0],
+          [`Cloud ${category}`, y.cloudBreakdown[category] ?? 0],
+        ]),
+      ),
     }))
     const csv = jsonToCSV(flattenedData)
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })

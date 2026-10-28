@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card'
 import type { CalculationResult } from '@/lib/types'
 import { BreakdownTable } from '../breakdown-table'
+import { ResultsEmptyState } from '../results/results-empty-state'
 
 interface ResultsBreakdownSectionProps {
   results: CalculationResult | null
@@ -18,16 +19,7 @@ export function ResultsBreakdownSection({
   results,
 }: ResultsBreakdownSectionProps) {
   if (!results) {
-    return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="font-headline">No Results Yet</CardTitle>
-          <CardDescription>
-            Please fill in the form and click Calculate to see results.
-          </CardDescription>
-        </CardHeader>
-      </Card>
-    )
+    return <ResultsEmptyState />
   }
 
   const yearlyCosts = results.yearlyCosts ?? []
@@ -36,9 +28,9 @@ export function ResultsBreakdownSection({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-headline">Detailed Cost Breakdown</CardTitle>
+        <CardTitle className="font-heading">Cost breakdown</CardTitle>
         <CardDescription>
-          Itemized cost breakdown over {analysisPeriod} years
+          Every category, year by year, over {analysisPeriod} years.
         </CardDescription>
       </CardHeader>
       <CardContent>

@@ -315,7 +315,7 @@ describe('chartConfig', () => {
 
   it('should use hsl color format', () => {
     Object.values(chartConfig).forEach((config) => {
-      expect(config.color).toMatch(/^hsl\(var\(--chart-\d+\)\)$/)
+      expect(config.color).toMatch(/^var\(--chart-\d+\)$/)
     })
   })
 
@@ -333,14 +333,14 @@ describe('chartConfig', () => {
 
   it('should use sequential chart color variables', () => {
     const expectedColors = [
-      'hsl(var(--chart-1))', // Energy
-      'hsl(var(--chart-2))', // Storage
-      'hsl(var(--chart-3))', // Compute
-      'hsl(var(--chart-4))', // GPU
-      'hsl(var(--chart-5))', // Networking
-      'hsl(var(--chart-6))', // Human
-      'hsl(var(--chart-7))', // Software
-      'hsl(var(--chart-8))', // Security & Compliance
+      'var(--chart-1)', // Energy
+      'var(--chart-2)', // Storage
+      'var(--chart-3)', // Compute
+      'var(--chart-4)', // GPU
+      'var(--chart-5)', // Networking
+      'var(--chart-6)', // Human
+      'var(--chart-7)', // Software
+      'var(--chart-8)', // Security & Compliance
     ]
 
     const actualColors = [

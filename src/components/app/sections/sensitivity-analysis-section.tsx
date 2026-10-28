@@ -475,11 +475,11 @@ const SENSITIVITY_VARIABLES: SensitivityVariable[] = [
 const chartConfig = {
   onPrem: {
     label: 'On-Premise',
-    color: 'hsl(var(--chart-1))',
+    color: 'var(--on-prem)',
   },
   cloud: {
     label: 'Cloud',
-    color: 'hsl(var(--chart-2))',
+    color: 'var(--cloud)',
   },
 } satisfies ChartConfig
 
@@ -492,7 +492,7 @@ function CustomTooltip({
   if (!active || !payload || !payload.length) return null
 
   return (
-    <div className="rounded-lg border bg-background p-3 shadow-lg">
+    <div className="rounded-lg border bg-popover px-3 py-2.5 text-sm shadow-lg">
       <div className="mb-2 font-medium">Change: {label}%</div>
       <div className="space-y-1">
         {payload.map((entry) => (
@@ -502,7 +502,7 @@ function CustomTooltip({
               style={{ backgroundColor: entry.color }}
             />
             <span className="text-sm text-muted-foreground">{entry.name}:</span>
-            <span className="ml-auto font-mono font-medium">
+            <span className="figures ml-auto">
               {formatCurrency(entry.value || 0)}
             </span>
           </div>
@@ -565,7 +565,7 @@ export function SensitivityAnalysisSection({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-headline">Sensitivity Analysis</CardTitle>
+        <CardTitle className="font-heading">Sensitivity Analysis</CardTitle>
         <CardDescription>
           See how changes in key variables impact the total cost of ownership
         </CardDescription>
@@ -664,8 +664,9 @@ export function SensitivityAnalysisSection({
                   data={sensitivityData}
                   margin={{ left: 10, right: 10, top: 20, bottom: 20 }}
                 >
-                  <CartesianGrid strokeDasharray="3 3" />
+                  <CartesianGrid vertical={false} stroke="var(--border)" />
                   <XAxis
+                    className="figures"
                     dataKey="change"
                     tickLine={false}
                     axisLine={false}
@@ -677,6 +678,7 @@ export function SensitivityAnalysisSection({
                     }}
                   />
                   <YAxis
+                    className="figures"
                     tickFormatter={formatCurrency}
                     axisLine={false}
                     tickLine={false}
@@ -703,10 +705,14 @@ export function SensitivityAnalysisSection({
                     strokeWidth={2}
                     dot={{
                       fill: chartConfig.onPrem.color,
-                      r: 4,
+                      stroke: 'var(--card)',
+                      strokeWidth: 2,
+                      r: 3,
                     }}
                     activeDot={{
-                      r: 6,
+                      r: 5,
+                      stroke: 'var(--card)',
+                      strokeWidth: 2,
                     }}
                     name={chartConfig.onPrem.label}
                   />
@@ -717,10 +723,14 @@ export function SensitivityAnalysisSection({
                     strokeWidth={2}
                     dot={{
                       fill: chartConfig.cloud.color,
-                      r: 4,
+                      stroke: 'var(--card)',
+                      strokeWidth: 2,
+                      r: 3,
                     }}
                     activeDot={{
-                      r: 6,
+                      r: 5,
+                      stroke: 'var(--card)',
+                      strokeWidth: 2,
                     }}
                     name={chartConfig.cloud.label}
                   />

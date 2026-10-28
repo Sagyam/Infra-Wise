@@ -50,7 +50,7 @@ test.describe('Visual regression', () => {
     })
   }
 
-  for (const section of ['Charts', 'Cumulative', 'Breakdown']) {
+  for (const section of ['Overview', 'Breakdown']) {
     test(`${section.toLowerCase()} results`, async ({ page }) => {
       // A full-page capture resizes the page mid-shot and Recharts redraws at the wrong height,
       // so results are captured in a viewport tall enough to hold them instead.

@@ -9,9 +9,9 @@ export function ResultsEmptyState() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-headline">No Results Yet</CardTitle>
+        <CardTitle className="font-heading">No results yet</CardTitle>
         <CardDescription>
-          Please fill in the form and click Calculate to see results.
+          Pick a preset or fill in the form; the results update as you type.
         </CardDescription>
       </CardHeader>
     </Card>

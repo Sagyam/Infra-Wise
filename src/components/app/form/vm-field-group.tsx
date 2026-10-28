@@ -1,5 +1,6 @@
 import type { Control, FieldPath } from 'react-hook-form'
 import { FormInput } from '@/components/app/form/form-input'
+import { LineTotal } from '@/components/app/form/line-total'
 import type { CostFormValues } from '@/lib/types'
 
 interface VmFieldGroupProps {
@@ -34,6 +35,24 @@ export function VmFieldGroup({ control, prefix }: VmFieldGroupProps) {
         type="number"
         step={1}
         max={744}
+      />
+      <LineTotal
+        control={control}
+        factors={[
+          {
+            name: `${prefix}Count` as FieldPath<CostFormValues>,
+            format: 'count',
+          },
+          {
+            name: `${prefix}HourlyRate` as FieldPath<CostFormValues>,
+            format: 'dollars',
+          },
+          {
+            name: `${prefix}HoursPerMonth` as FieldPath<CostFormValues>,
+            format: 'count',
+          },
+        ]}
+        per="a month"
       />
     </>
   )

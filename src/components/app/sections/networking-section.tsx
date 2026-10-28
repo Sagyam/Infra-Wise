@@ -1,5 +1,6 @@
 'use client'
 
+import { ColumnHeading } from '@/components/app/form/column-heading'
 import type { Control } from 'react-hook-form'
 import { useWatch } from 'react-hook-form'
 import { FormInput } from '@/components/app/form/form-input'
@@ -41,16 +42,16 @@ export function NetworkingSection({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="font-headline">Networking</CardTitle>
+        <CardTitle className="font-heading">Networking</CardTitle>
         <CardDescription>
           Configure bandwidth, CDN, and data transfer costs.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col md:flex-row justify-evenly gap-6">
+        <div className="grid gap-x-8 gap-y-10 lg:grid-cols-2">
           {/* On-Premise Column */}
-          <div className="space-y-4 flex-1 max-w-xl">
-            <h3 className="text-lg font-semibold">On-Premise Networking</h3>
+          <div className="min-w-0 space-y-3">
+            <ColumnHeading side="on-prem">On-Premise Networking</ColumnHeading>
 
             <ToggleSection
               control={control}
@@ -215,8 +216,8 @@ export function NetworkingSection({
           </div>
 
           {/* Cloud Column */}
-          <div className="space-y-4 flex-1 max-w-xl">
-            <h3 className="text-lg font-semibold">Cloud Networking</h3>
+          <div className="min-w-0 space-y-3">
+            <ColumnHeading side="cloud">Cloud Networking</ColumnHeading>
             <p className="text-sm text-muted-foreground">
               Cloud providers typically charge for data transfer out (egress)
               and sometimes for data transfer in (ingress).
