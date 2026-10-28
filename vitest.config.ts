@@ -8,6 +8,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
+    exclude: ['e2e/**', 'node_modules/**'], // Playwright specs run via `test:e2e`
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
