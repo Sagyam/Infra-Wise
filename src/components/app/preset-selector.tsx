@@ -1,13 +1,6 @@
 'use client'
 
-import { Sparkles } from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card'
+import { ArrowRight } from 'lucide-react'
 import { presets } from '@/lib/presets'
 import type { CostFormValues } from '@/lib/types'
 
@@ -17,52 +10,57 @@ interface PresetSelectorProps {
 
 export function PresetSelector({ onPresetSelect }: PresetSelectorProps) {
   return (
-    <div className="space-y-6">
-      <div className="space-y-2">
-        <div className="flex items-center gap-2">
-          <Sparkles className="h-6 w-6 text-primary" />
-          <h2 className="text-2xl font-bold tracking-tight">Load a Preset</h2>
-        </div>
-        <p className="text-muted-foreground">
-          Get started quickly with pre-configured scenarios tailored to common
-          infrastructure needs
+    <div className="space-y-12">
+      <section className="relative isolate -mx-4 -mt-8 overflow-hidden px-4 pt-12 pb-4 text-center sm:-mx-6 sm:px-6">
+        <div className="hero-glow pointer-events-none absolute inset-0 -z-10" />
+        <p className="inline-flex items-center gap-2 rounded-full border border-edge/10 bg-edge/5 px-3 py-1 text-xs text-muted-foreground">
+          <span className="size-1.5 rounded-full bg-amber" />
+          Cloud vs. on-prem total cost of ownership
         </p>
-      </div>
+        <h1 className="mx-auto mt-5 max-w-4xl font-heading text-4xl font-bold tracking-tight text-balance sm:text-5xl">
+          Find the year{' '}
+          <span className="text-primary">owning beats renting</span>.
+        </h1>
+        <p className="mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
+          Model energy, storage, compute, GPUs, network, people and compliance
+          on both sides, then see where the two cost curves cross.
+        </p>
+      </section>
 
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-        {presets.map((preset) => (
-          <Card
-            key={preset.id}
-            className="cursor-pointer transition-all hover:shadow-md hover:border-primary/50"
-            onClick={() => onPresetSelect(preset.values)}
-          >
-            <CardHeader>
-              <div className="flex items-start justify-between">
-                <div className="space-y-1 flex-1">
-                  <CardTitle className="flex items-center gap-2 text-lg">
-                    <span className="text-2xl">{preset.icon}</span>
-                    {preset.name}
-                  </CardTitle>
-                  <CardDescription className="text-sm">
-                    {preset.description}
-                  </CardDescription>
-                </div>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                className="mt-4 w-full"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onPresetSelect(preset.values)
-                }}
-              >
-                Load Preset
-              </Button>
-            </CardHeader>
-          </Card>
-        ))}
-      </div>
+      <section className="space-y-5">
+        <div>
+          <p className="flex items-center gap-x-3 text-xs font-bold tracking-widest text-muted-foreground uppercase">
+            <span className="h-px w-8 bg-muted-foreground" />
+            Start from a preset
+          </p>
+          <p className="mt-3 text-muted-foreground">
+            Pick the scenario closest to yours. Every value stays editable.
+          </p>
+        </div>
+
+        <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+          {presets.map((preset) => (
+            <button
+              key={preset.id}
+              type="button"
+              onClick={() => onPresetSelect(preset.values)}
+              className="group flex flex-col items-start gap-3 rounded-xl border border-edge/10 bg-card p-5 text-left shadow-xs transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-md focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              <span className="flex size-10 items-center justify-center rounded-lg bg-edge/5 text-xl">
+                {preset.icon}
+              </span>
+              <span className="font-heading font-semibold">{preset.name}</span>
+              <span className="text-sm leading-relaxed text-muted-foreground">
+                {preset.description}
+              </span>
+              <span className="mt-auto inline-flex items-center gap-1 pt-1 text-sm font-medium text-primary">
+                Load preset
+                <ArrowRight className="size-3.5 transition-transform group-hover:translate-x-0.5" />
+              </span>
+            </button>
+          ))}
+        </div>
+      </section>
     </div>
   )
 }

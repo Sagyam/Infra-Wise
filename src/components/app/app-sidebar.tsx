@@ -85,10 +85,10 @@ export function AppSidebar({
 
   return (
     <Sidebar collapsible="icon">
-      <SidebarHeader className="border-b px-6 py-4">
+      <SidebarHeader className="h-14 justify-center border-b border-edge/5 px-4 group-data-[collapsible=icon]:px-2">
         <div className="flex items-center gap-2.5">
-          <Logo className="size-8 shrink-0" id="sidebar-logo" />
-          <span className="text-lg font-bold tracking-tight group-data-[collapsible=icon]:hidden">
+          <Logo className="size-7 shrink-0" id="sidebar-logo" />
+          <span className="font-heading text-lg font-bold tracking-tight group-data-[collapsible=icon]:hidden">
             InfraWise
           </span>
         </div>
@@ -96,7 +96,9 @@ export function AppSidebar({
       <SidebarContent>
         {sections.map((section) => (
           <SidebarGroup key={section.title}>
-            <SidebarGroupLabel>{section.title}</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-[11px] font-bold tracking-widest uppercase">
+              {section.title}
+            </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {section.items.map((item) => (
@@ -105,7 +107,7 @@ export function AppSidebar({
                       isActive={activeSection === item.id}
                       onClick={() => handleSectionChange(item.id)}
                       tooltip={item.title}
-                      className="md:text-base text-lg"
+                      className="text-base md:text-sm data-[active=true]:font-medium"
                     >
                       <item.icon />
                       <span>{item.title}</span>
