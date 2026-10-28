@@ -86,7 +86,12 @@ export function AppSidebar({
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader className="border-b px-6 py-4">
-        <Logo className="h-8 w-auto text-accent" />
+        <div className="flex items-center gap-2.5">
+          <Logo className="size-8 shrink-0" id="sidebar-logo" />
+          <span className="text-lg font-bold tracking-tight group-data-[collapsible=icon]:hidden">
+            InfraWise
+          </span>
+        </div>
       </SidebarHeader>
       <SidebarContent>
         {sections.map((section) => (

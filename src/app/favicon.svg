@@ -1,7 +1,17 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-  <path d="M20 20h-4V4h4v16zM12 20h-4V12h4v8zM4 20H2v-4a2 2 0 012-2h2v6z" />
-  <path d="M2 10h12" />
-  <path d="M18 8h2" />
-  <path d="M18 12h4" />
-  <path d="M18 16h2" />
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="InfraWise">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5b5bd6"/>
+      <stop offset="1" stop-color="#1f1d4f"/>
+    </linearGradient>
+  </defs>
+  <rect width="256" height="256" rx="58" fill="url(#bg)"/>
+  <!-- the chart: years along, total cost up -->
+  <path d="M56 52 V200 H208" fill="none" stroke="#f4f1ea" stroke-opacity="0.35" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <!-- cloud: starts cheap, climbs every year -->
+  <path d="M84 180 L204 72" fill="none" stroke="#f4f1ea" stroke-width="22" stroke-linecap="round"/>
+  <!-- on-prem: paid up front, then nearly flat -->
+  <path d="M84 112 L204 136" fill="none" stroke="#f2b134" stroke-width="22" stroke-linecap="round"/>
+  <!-- where they cross: breakeven -->
+  <circle cx="146" cy="124" r="21" fill="#f2b134" stroke="#2f2d78" stroke-width="9"/>
 </svg>
