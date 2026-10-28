@@ -17,8 +17,9 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:debug": "playwright test --debug",
-    "test:e2e:update": "playwright test --update-snapshots",
-    "test:e2e:report": "playwright show-report"
+    "test:e2e:update": "sh e2e/docker.sh --update-snapshots",
+    "test:e2e:report": "playwright show-report",
+    "test:e2e:docker": "sh e2e/docker.sh"
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.3",

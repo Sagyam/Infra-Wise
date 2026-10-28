@@ -1,160 +1,44 @@
-# Visual Regression Testing
+# Visual regression tests
 
-This directory contains visual regression tests for the InfraWise application using Playwright.
+Playwright screenshots of every main view, in light and dark, compared against baselines in
+`visual-regression.spec.ts-snapshots/`.
 
-## Overview
+| View | Captured |
+| --- | --- |
+| Presets, General, Compute, Storage | full page |
+| Charts, Cumulative, Breakdown (E-commerce preset loaded) | 1280×1000 viewport |
 
-Visual regression tests automatically capture screenshots of the application in both **light** and **dark** modes and compare them against baseline images to detect unintended visual changes.
+A functional test also checks that the footer's theme switch overrides the OS theme.
 
-## What's Tested
+## Why Docker
 
-The test suite covers:
+Screenshots depend on the fonts and renderer of the machine that takes them. Baselines are
+rendered in the official Playwright image, `mcr.microsoft.com/playwright:v1.64.1-noble`, and CI
+runs in the same image, so they match pixel for pixel. Run the suite through Docker locally too.
+A bare `bun run test:e2e` on your own OS will report differences that are not real.
 
-- **Homepage** (light & dark modes)
-- **Presets Section** (light & dark modes)
-- **General Section** (light & dark modes)
-- **Compute Section** (light & dark modes)
-- **Storage Section** (light & dark modes)
-- **Results Display** (light & dark modes)
-- **Theme Toggle** functionality
+## Running
 
-## Running Tests
-
-### Prerequisites
-
-```bash
-# Install dependencies
-npm install
-
-# Install Playwright browsers (one-time setup)
-npx playwright install chromium
-```
-
-### Run Tests
+Start the app, then run the suite in the container:
 
 ```bash
-# Run all visual regression tests
-npm run test:e2e
-
-# Run tests with UI mode (interactive)
-npm run test:e2e:ui
-
-# Run tests in debug mode
-npm run test:e2e:debug
-
-# View test report
-npm run test:e2e:report
+bun run build && bun start      # terminal 1, serves http://localhost:3100
+bun run test:e2e:docker         # terminal 2, compares against the baselines
+bun run test:e2e:report         # open the HTML report
 ```
 
-### Update Baseline Screenshots
+Pass Playwright arguments through, for example `bun run test:e2e:docker -g presets`.
 
-When you intentionally make visual changes to the application, you'll need to update the baseline screenshots:
+## Updating baselines
+
+After an intended visual change:
 
 ```bash
-# Update all baselines
-npm run test:e2e:update
-
-# Update specific test baselines
-npx playwright test --update-snapshots visual-regression.spec.ts
+bun run test:e2e:update         # renders new baselines in the container
 ```
 
-**Important**: Review the visual changes carefully before committing updated baselines!
+Review the changed PNGs before committing them. In CI, running the **Visual Regression Tests**
+workflow by hand does the same and commits the result.
 
-## CI/CD Integration
-
-Visual regression tests run automatically in GitHub Actions on:
-
-- Push to `main`, `master`, or `develop` branches
-- Pull requests to `main`, `master`, or `develop` branches
-- Manual workflow dispatch
-
-### Viewing Test Results in CI
-
-When tests run in CI:
-
-1. **Test Reports**: Available as artifacts in the GitHub Actions run
-2. **Screenshots**: Failure screenshots are uploaded as artifacts
-3. **Baseline Updates**: Can be triggered via manual workflow dispatch
-
-### Updating Baselines in CI
-
-To update baselines through GitHub Actions:
-
-1. Go to **Actions** tab in your repository
-2. Select **Visual Regression Tests** workflow
-3. Click **Run workflow**
-4. The workflow will update baselines and commit them automatically
-
-## Test Structure
-
-```
-e2e/
-├── README.md                          # This file
-├── visual-regression.spec.ts          # Visual regression test suite
-└── visual-regression.spec.ts-snapshots/  # Baseline screenshots (git-tracked)
-    ├── chromium-light/
-    │   ├── homepage-light.png
-    │   ├── presets-section-light.png
-    │   └── ...
-    └── chromium-dark/
-        ├── homepage-dark.png
-        ├── presets-section-dark.png
-        └── ...
-```
-
-## How It Works
-
-1. **Test Execution**: Playwright launches a Chromium browser and navigates to the application
-2. **Theme Application**: Tests explicitly set light or dark mode via CSS classes
-3. **Screenshot Capture**: Full-page screenshots are captured for each test scenario
-4. **Comparison**: Screenshots are compared against baseline images
-5. **Reporting**: Any differences are highlighted in the test report
-
-## Configuration
-
-The tests are configured in `playwright.config.ts`:
-
-- **Browser**: Chromium (Chrome-based)
-- **Viewport**: Desktop Chrome default (1280x720)
-- **Color Schemes**: Light and Dark modes tested separately
-- **Threshold**: 0.2 (20% pixel difference tolerance)
-- **Max Diff Pixels**: 100 pixels
-
-## Troubleshooting
-
-### Tests Fail Due to Minor Differences
-
-If tests fail due to minor pixel differences:
-
-1. Check the test report: `npm run test:e2e:report`
-2. Review the visual diff images
-3. If changes are expected, update baselines: `npm run test:e2e:update`
-
-### Tests Timeout
-
-If tests timeout during execution:
-
-- Ensure the development server is not already running on port 3100
-- Increase timeout in `playwright.config.ts` if needed
-- Check for build errors: `npm run build`
-
-### Baselines Look Different Locally vs CI
-
-This can happen due to font rendering differences between operating systems:
-
-- Generate baselines in CI using the manual workflow
-- Or use Docker to match the CI environment
-
-## Best Practices
-
-1. **Review Visual Changes**: Always review screenshot diffs before updating baselines
-2. **Commit Baselines**: Baseline screenshots should be committed to version control
-3. **Test on CI**: Run tests on CI before merging to catch platform-specific issues
-4. **Keep Tests Fast**: Avoid testing every possible state; focus on key user journeys
-5. **Update Regularly**: Keep Playwright and browsers up to date
-
-## Learn More
-
-- [Playwright Documentation](https://playwright.dev/)
-- [Visual Comparison Testing Guide](https://playwright.dev/docs/test-snapshots)
-- [Best Practices for Visual Testing](https://playwright.dev/docs/best-practices)
+If you bump `@playwright/test`, bump the image tag in `docker.sh` and
+`.github/workflows/visual-regression.yml` to the same version, then update the baselines.
